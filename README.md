@@ -12,3 +12,4 @@
 
 * Follow [these URI patterns](https://docs.google.com/document/d/187nVDaKn_e24goqnwExCyiDZowDfnEoqauRWyu55G7M/edit).
 * [XSLT for British ContractsFinder](https://github.com/opendatacz/GB-PCO/blob/master/notices2pc.xslt) might be helpful.
+* Functions from [XSLT for Czech public contracts](https://github.com/opendatacz/VVZ_extractor/blob/master/xslt/pc.xsl) might be reused.
