@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 ####################################################################################
-#  Author:  Tomas Posepny
+#  Author:                      Tomas Posepny
 #  Compatible TED XSD release:  R2.0.8.S02.E01
-#  Compatible XSDs: F02_CONTRACT
+#  Supported XSDs:              F02_CONTRACT, F03_CONTRACT_AWARD
 ####################################################################################
  -->
 <xsl:stylesheet 
@@ -49,25 +49,30 @@
     <xsl:variable name="pc_award_criteria_combination_uri_1" select="concat($pc_uri, '/combination-of-contract-award-criteria/1')"/>
     <xsl:variable name="pc_criterion_lowest_price_uri" select="concat($pc_criteria_nm,'LowestPrice')"/>
     <xsl:variable name="pc_identifier_uri_1" select="concat($pc_uri, '/identifier/1')"/>
-    <xsl:variable name="pc_documentation_price_uri_1" select="concat($pc_uri, '/documentation-price/1')"/>
-    <xsl:variable name="tenders_opening_place_uri_1" select="concat($pc_uri,'/tenders-opening-place/1')" />
+    <xsl:variable name="pc_documentation_price_uri" select="concat($pc_uri, '/documentation-price')"/>
+    <xsl:variable name="tenders_opening_place_uri" select="concat($pc_uri,'/tenders-opening-place')"/>
+    <xsl:variable name="pc_agreed_price_uri" select="concat($pc_uri, '/agreed-price')"/>
 
     <!-- OTHER VARIABLES -->
+    <xsl:variable name="formCode" select="TED_EXPORT/FORM_SECTION/*[1]/@FORM"/>
+    <xsl:variable name="supportedFormCodes" select="tokenize('2,3', ',')"/>
     <xsl:variable name="doc_id" select="/TED_EXPORT/@DOC_ID"/>
     <xsl:variable name="lang" select="/TED_EXPORT/CODED_DATA_SECTION/NOTICE_DATA/LG_ORIG/text()"/>
      
     
     <!--
     *********************************************************
-    *** TEMPLATES
+    *** ROOT TEMPLATES
     *********************************************************
     -->
     
     <!-- ROOT -->
     <xsl:template match="/">
-        <rdf:RDF>
-            <xsl:apply-templates select="TED_EXPORT/FORM_SECTION/CONTRACT[@CATEGORY='ORIGINAL']"/>
-        </rdf:RDF>
+        <xsl:if test="$formCode=$supportedFormCodes">
+            <rdf:RDF>
+                <xsl:apply-templates select="TED_EXPORT/FORM_SECTION/*[self::CONTRACT or self::CONTRACT_AWARD][@CATEGORY='ORIGINAL']"/>
+            </rdf:RDF>
+        </xsl:if>
     </xsl:template>
 
     <!-- F02 CONTRACT -->
@@ -75,24 +80,45 @@
         <pc:Contract rdf:about="{$pc_uri}">
             <xsl:apply-templates select="FD_CONTRACT"/>
         </pc:Contract>
-        
         <!-- tenders opening -->
-        <xsl:apply-templates select="FD_CONTRACT/PROCEDURE_DEFINITION_CONTRACT_NOTICE/ADMINISTRATIVE_INFORMATION_CONTRACT_NOTICE/CONDITIONS_FOR_OPENING_TENDERS"/>
-      
+        <xsl:apply-templates select="FD_CONTRACT/PROCEDURE_DEFINITION_CONTRACT_NOTICE/ADMINISTRATIVE_INFORMATION_CONTRACT_NOTICE/CONDITIONS_FOR_OPENING_TENDERS"/>     
     </xsl:template>
 
     <xsl:template match="FD_CONTRACT">
         <!-- contract kind -->
         <pc:kind rdf:resource="{f:getContractKind(@CTYPE)}"/>
-
         <xsl:apply-templates select="CONTRACTING_AUTHORITY_INFORMATION"/>
         <xsl:apply-templates select="OBJECT_CONTRACT_INFORMATION"/>
         <xsl:apply-templates select="PROCEDURE_DEFINITION_CONTRACT_NOTICE"/>
     </xsl:template>
-
+    
+    
+    <!-- F03 CONTRACT AWARD -->
+    <xsl:template match="CONTRACT_AWARD[@CATEGORY='ORIGINAL']">
+        <pc:Contract rdf:about="{$pc_uri}">
+            <xsl:apply-templates select="FD_CONTRACT_AWARD"/>
+        </pc:Contract>
+    </xsl:template>
+    
+    <xsl:template match="FD_CONTRACT_AWARD">
+        <!-- contract kind -->
+        <pc:kind rdf:resource="{f:getContractKind(@CTYPE)}"/>
+        <xsl:apply-templates select="CONTRACTING_AUTHORITY_INFORMATION_CONTRACT_AWARD"/>
+        <xsl:apply-templates select="OBJECT_CONTRACT_INFORMATION_CONTRACT_AWARD_NOTICE"/>
+        <xsl:apply-templates select="PROCEDURE_DEFINITION_CONTRACT_AWARD_NOTICE"/>
+        <xsl:choose>
+            <xsl:when test="count(AWARD_OF_CONTRACT) &gt; 1">
+                <xsl:apply-templates select="AWARD_OF_CONTRACT" mode="lot"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="AWARD_OF_CONTRACT"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
 
     <!--
     *********************************************************
+    *** F02 CONTRACT AWARD
     *** SECTION I: CONTRACTING AUTHORITY
     *********************************************************
     -->
@@ -120,60 +146,19 @@
 
     <!-- contract contact -->
     <xsl:template match="NAME_ADDRESSES_CONTACT_CONTRACT" mode="contact">
-        <xsl:if test="CA_CE_CONCESSIONAIRE_PROFILE/(CONTACT_POINT|ATTENTION|(E_MAILS/E_MAIL)|PHONE|FAX)/text()">
-            <pc:contact>
-                <vcard:VCard>
-                    <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE/CONTACT_POINT"/>
-                    <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE/ATTENTION"/>
-                    <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE/PHONE"/>
-                    <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE/E_MAILS/E_MAIL"/>
-                    <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE/FAX"/>
-                </vcard:VCard>
-            </pc:contact>
-        </xsl:if>
+        <xsl:call-template name="contractContact"/>
     </xsl:template>
-
-    <xsl:template match="CA_CE_CONCESSIONAIRE_PROFILE" mode="legalNameAndAddress">
-        <xsl:call-template name="legalName"/>
-        <xsl:call-template name="postalAddress"/>
-    </xsl:template>
-
-    <!-- contracting authority buyer profile url -->
-    <xsl:template match="URL_BUYER">
-        <xsl:if test="text()">
-            <pc:buyerProfile rdf:resource="{text()}"/>
-        </xsl:if>
-    </xsl:template>
-
-    <!-- contracting authority kind and main activity  -->
-    <xsl:template match="TYPE_AND_ACTIVITIES">
-        <xsl:if test="TYPE_OF_CONTRACTING_AUTHORITY">
-            <pc:authorityKind rdf:resource="{f:getAuthorityKind(TYPE_OF_CONTRACTING_AUTHORITY/@VALUE)}"/>
-        </xsl:if>
-        <xsl:if test="TYPE_OF_ACTIVITY">
-            <pc:mainActivity rdf:resource="{f:getAuthorityActivity(TYPE_OF_ACTIVITY[1]/@VALUE)}"/>
-        </xsl:if>
-    </xsl:template>
-
-    <!-- on behalf of -->
-    <xsl:template match="CONTACT_DATA_OTHER_BEHALF_CONTRACTING_AUTORITHY">
-        <pc:onBehalfOf>
-            <gr:BusinessEntity>
-                <xsl:call-template name="legalName"/>
-                <xsl:call-template name="postalAddress"/>
-            </gr:BusinessEntity>
-        </pc:onBehalfOf>
-    </xsl:template>
-
+ 
 
     <!--
     *********************************************************
+    *** F02 CONTRACT AWARD
     *** SECTION II: OBJECT OF THE CONTRACT + B_ANNEX
     *********************************************************
     -->
     <xsl:template match="OBJECT_CONTRACT_INFORMATION">
         <xsl:apply-templates select="DESCRIPTION_CONTRACT_INFORMATION"/>
-        <xsl:apply-templates select="QUANTITY_SCOPE/NATURE_QUANTITY_SCOPE"/>
+        <xsl:apply-templates select="QUANTITY_SCOPE/NATURE_QUANTITY_SCOPE/COSTS_RANGE_AND_CURRENCY"/>
         <xsl:apply-templates select="PERIOD_WORK_DATE_STARTING"/>
     </xsl:template>
    
@@ -185,33 +170,7 @@
         <xsl:apply-templates select="CPV"/> 
         <xsl:apply-templates select="F02_DIVISION_INTO_LOTS/F02_DIV_INTO_LOT_YES/F02_ANNEX_B"/> 
     </xsl:template>
-
-    <!-- contract title -->
-    <xsl:template match="TITLE_CONTRACT|LOT_TITLE">
-        <dcterms:title xml:lang="{$lang}">
-            <xsl:value-of select="normalize-space(.)"/>
-        </dcterms:title>
-        <rdfs:label xml:lang="{$lang}">
-            <xsl:value-of select="normalize-space(.)"/>
-        </rdfs:label>
-    </xsl:template>
-
-    <!-- contract location -->
-    <xsl:template match="LOCATION_NUTS">
-        <xsl:if test="LOCATION">    
-            <pc:location>
-                <s:Place>
-                        <s:description>
-                            <xsl:value-of select="normalize-space(LOCATION)"/>
-                        </s:description>
-                    <xsl:if test="NUTS">
-                        <pceu:hasParentRegion rdf:resource="{f:getNutsUri(NUTS/@CODE)}"/>
-                    </xsl:if>
-                </s:Place>
-            </pc:location>
-        </xsl:if>
-    </xsl:template>
-    
+   
     <!-- framework agreement -->
     <xsl:template match="F02_FRAMEWORK">
         <pc:frameworkAgreement>
@@ -228,11 +187,6 @@
                 </pc:expectedNumberOfOperators>
             </pc:FrameworkAgreement>
         </pc:frameworkAgreement>
-    </xsl:template>
-    
-    <!-- contract description -->
-    <xsl:template match="SHORT_CONTRACT_DESCRIPTION|LOT_DESCRIPTION">
-            <xsl:call-template name="description"/>
     </xsl:template>
     
     <!-- contract part (lot) -->
@@ -257,29 +211,9 @@
                 </pc:Contract>
             </pc:lot>    
     </xsl:template>
-    
-    <!-- cpv codes -->
-    <xsl:template match="CPV">
-        <xsl:apply-templates select="CPV_MAIN"/>
-        <xsl:apply-templates select="CPV_ADDITIONAL"/>
-    </xsl:template>
-    
-    <!-- main cpv -->
-    <xsl:template match="CPV_MAIN">
-        <pc:mainObject rdf:resource="{f:getCpvUri(CPV_CODE/@CODE)}"/>
-    </xsl:template>
-    
-    <!-- additional cpv -->
-    <xsl:template match="CPV_ADDITIONAL">
-        <pc:additionalObject rdf:resource="{f:getCpvUri(CPV_CODE/@CODE)}"/>
-    </xsl:template>
        
     <!-- estimated price -->
-    <xsl:template match="NATURE_QUANTITY_SCOPE">
-        <xsl:apply-templates select="COSTS_RANGE_AND_CURRENCY"/>
-    </xsl:template>
-    
-    <xsl:template match="COSTS_RANGE_AND_CURRENCY">
+    <xsl:template match="NATURE_QUANTITY_SCOPE/COSTS_RANGE_AND_CURRENCY">
         <pc:estimatedPrice>
             <gr:PriceSpecification rdf:about="{concat($pc_estimated_price_nm, position())}">
                 <xsl:apply-templates select="VALUE_COST"/>
@@ -291,24 +225,7 @@
             </gr:PriceSpecification>
         </pc:estimatedPrice>
     </xsl:template>
-
-    <!-- price value -->
-    <xsl:template match="VALUE_COST">
-        <xsl:call-template name="priceValue">
-            <xsl:with-param name="value" select="@FMTVAL"/>
-        </xsl:call-template>
-    </xsl:template>
-    
-    <!-- price range min and max values -->
-    <xsl:template match="RANGE_VALUE_COST">
-        <gr:hasMinCurrencyValue rdf:datatype="xsd:decimal">
-            <xsl:value-of select="LOW_VALUE/@FMTVAL"/>
-        </gr:hasMinCurrencyValue>
-        <gr:hasMaxCurrencyValue rdf:datatype="xsd:decimal">
-            <xsl:value-of select="HIGH_VALUE/@FMTVAL"/>
-        </gr:hasMaxCurrencyValue>
-    </xsl:template>
-    
+  
     <!-- contract expected duration --> 
     <xsl:template match="PERIOD_WORK_DATE_STARTING">
         <xsl:apply-templates select="DAYS"/>
@@ -352,6 +269,7 @@
     
     <!--
     *********************************************************
+    *** F02 CONTRACT AWARD 
     *** SECTION IV: PROCEDURE
     *********************************************************
     -->
@@ -389,45 +307,6 @@
         </pc:awardCriteriaCombination>
     </xsl:template>
     
-    <!-- criterion lowest price -->
-    <xsl:template match="LOWEST_PRICE">
-        <xsl:call-template name="awardCriterion">
-            <xsl:with-param name="isLowestPrice" select="true()"/>
-            <xsl:with-param name="id" select="1"/>
-        </xsl:call-template>
-    </xsl:template>
-    
-    <!-- criterion most economically advantageous tender -->
-    <xsl:template match="CRITERIA_DEFINITION">
-        <xsl:variable name="id">
-                <xsl:choose>
-                    <xsl:when test="ORDER_C">
-                        <xsl:value-of select="ORDER_C"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="position()"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-        </xsl:variable>
-        <xsl:call-template name="awardCriterion">
-            <xsl:with-param name="isLowestPrice" select="false()"/>
-            <xsl:with-param name="name" select="CRITERIA"/>
-            <xsl:with-param name="weight" select="WEIGHTING"/>
-            <xsl:with-param name="id" select="$id"/>
-        </xsl:call-template>
-    </xsl:template>
-    
-    <!-- contract file identifier -->
-    <xsl:template match="FILE_REFERENCE_NUMBER">
-        <adms:identifier>
-            <adms:Identifier rdf:about="{$pc_identifier_uri_1}">
-                <skos:notation>
-                    <xsl:value-of select="normalize-space(.)" />
-                </skos:notation>
-            </adms:Identifier>
-        </adms:identifier>
-    </xsl:template>
-    
     <!-- contract documentation request deadline -->
     <xsl:template match="TIME_LIMIT">
         <pc:documentationRequestDeadline rdf:datatype="xsd:dateTime">
@@ -438,7 +317,7 @@
     <!-- contract documentation price -->
     <xsl:template match="PAYABLE_DOCUMENTS/DOCUMENT_COST">
         <pc:documentationPrice>
-            <gr:PriceSpecification rdf:about="{$pc_documentation_price_uri_1}">
+            <gr:PriceSpecification rdf:about="{$pc_documentation_price_uri}">
                 <xsl:call-template name="priceValue">
                     <xsl:with-param name="value" select="@FMTVAL"/>
                 </xsl:call-template>
@@ -495,7 +374,7 @@
     <!-- tenders opening place -->
     <xsl:template match="CONDITIONS_FOR_OPENING_TENDERS/PLACE_OPENING">
         <s:location>
-            <s:Place rdf:about="{$tenders_opening_place_uri_1}">
+            <s:Place rdf:about="{$tenders_opening_place_uri}">
                 <xsl:call-template name="postalAddress"></xsl:call-template>
                 <xsl:apply-templates select="PLACE_NOT_STRUCTURED"/>
             </s:Place>
@@ -511,9 +390,176 @@
     
     <!--
     *********************************************************
+    *** F03 CONTRACT AWARD
+    *** SECTION I: CONTRACTING AUTHORITY
+    *********************************************************
+    -->
+    <xsl:template match="CONTRACTING_AUTHORITY_INFORMATION_CONTRACT_AWARD">
+        <xsl:apply-templates select="NAME_ADDRESSES_CONTACT_CONTRACT_AWARD" mode="contractingAuthority"/>
+        <xsl:apply-templates select="NAME_ADDRESSES_CONTACT_CONTRACT_AWARD" mode="contact"/>
+        <xsl:apply-templates select="TYPE_AND_ACTIVITIES_AND_PURCHASING_ON_BEHALF/PURCHASING_ON_BEHALF/PURCHASING_ON_BEHALF_YES/CONTACT_DATA_OTHER_BEHALF_CONTRACTING_AUTORITHY"/>
+    </xsl:template>
+    
+    <!-- contracting authority -->
+    <xsl:template match="NAME_ADDRESSES_CONTACT_CONTRACT_AWARD" mode="contractingAuthority">
+        <xsl:variable name="countryCode" select="CA_CE_CONCESSIONAIRE_PROFILE/COUNTRY/@VALUE"/>
+        <xsl:variable name="organisationId" select="CA_CE_CONCESSIONAIRE_PROFILE/ORGANISATION/NATIONALID"/>
+        <xsl:variable name="contractingAuthorityUri">
+            <xsl:value-of select="f:getBusinessEntityId($countryCode, $organisationId)"/>
+        </xsl:variable>
+        <pc:contractingAuthority>
+            <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm, $contractingAuthorityUri)}">
+                <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE" mode="legalNameAndAddress"/>
+                <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_AWARD/URL_BUYER"/>
+                <xsl:apply-templates select="../TYPE_AND_ACTIVITIES_AND_PURCHASING_ON_BEHALF/TYPE_AND_ACTIVITIES"/>
+            </gr:BusinessEntity>
+        </pc:contractingAuthority>
+    </xsl:template>
+    
+    <!-- contract contact -->
+    <xsl:template match="NAME_ADDRESSES_CONTACT_CONTRACT_AWARD" mode="contact">
+        <xsl:call-template name="contractContact"/>
+    </xsl:template>
+    
+    
+    <!--
+    *********************************************************
+    *** SECTION II: OBJECT OF THE CONTRACT
+    *********************************************************
+    -->
+    <xsl:template match="OBJECT_CONTRACT_INFORMATION_CONTRACT_AWARD_NOTICE">
+        <xsl:apply-templates select="DESCRIPTION_AWARD_NOTICE_INFORMATION"/>
+        <xsl:apply-templates select="TOTAL_FINAL_VALUE/COSTS_RANGE_AND_CURRENCY_WITH_VAT_RATE"/>
+    </xsl:template>
+    
+    <xsl:template match="DESCRIPTION_AWARD_NOTICE_INFORMATION">
+        <xsl:apply-templates select="TITLE_CONTRACT"/>
+        <xsl:apply-templates select="LOCATION_NUTS"/>
+        <xsl:apply-templates select="NOTICE_INVOLVES_DESC/CONCLUSION_FRAMEWORK_AGREEMENT"/>
+        <xsl:apply-templates select="SHORT_CONTRACT_DESCRIPTION"/>
+        <xsl:apply-templates select="CPV"/> 
+    </xsl:template>
+    
+    <xsl:template match="CONCLUSION_FRAMEWORK_AGREEMENT">
+        <!-- TODO: framework agreement -->
+    </xsl:template>
+    
+    <!-- contract agreed price -->
+    <xsl:template match="TOTAL_FINAL_VALUE/COSTS_RANGE_AND_CURRENCY_WITH_VAT_RATE">
+        <pc:agreedPrice>
+            <xsl:call-template name="price">
+                <xsl:with-param name="priceUri" select="$pc_agreed_price_uri"/>
+            </xsl:call-template>
+        </pc:agreedPrice>
+    </xsl:template>
+    
+    
+    <!--
+    *********************************************************
+    *** F03 CONTRACT AWARD
+    *** SECTION IV: PROCEDURE
+    *********************************************************
+    -->
+    <xsl:template match="PROCEDURE_DEFINITION_CONTRACT_AWARD_NOTICE">
+        <xsl:apply-templates select="TYPE_OF_PROCEDURE_DEF"/>
+        <xsl:apply-templates select="AWARD_CRITERIA_CONTRACT_AWARD_NOTICE_INFORMATION/AWARD_CRITERIA_DETAIL_F03"/>
+        <xsl:apply-templates select="ADMINISTRATIVE_INFORMATION_CONTRACT_AWARD/FILE_REFERENCE_NUMBER"/>
+    </xsl:template>
+    
+    <!-- contract procedure type -->
+    <xsl:template match="TYPE_OF_PROCEDURE_DEF">
+        <xsl:call-template name="procedureType">
+            <xsl:with-param name="ptElementName" select="local-name(*)"/>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <!-- contract criteria -->
+    <xsl:template match="AWARD_CRITERIA_DETAIL_F03">
+        <pc:awardCriteriaCombination> 
+            <pc:AwardCriteriaCombination rdf:about="{$pc_award_criteria_combination_uri_1}">
+                <xsl:apply-templates select="LOWEST_PRICE|MOST_ECONOMICALLY_ADVANTAGEOUS_TENDER_SHORT/CRITERIA_DEFINITION"/>
+            </pc:AwardCriteriaCombination>
+        </pc:awardCriteriaCombination>
+    </xsl:template>
+    
+    
+    <!--
+    *********************************************************
+    *** F03 CONTRACT AWARD
+    *** SECTION V: AWARD OF CONTRACT
+    *********************************************************
+    -->
+    
+    <!-- contract part (lot) with awarded tender -->
+    <xsl:template match="AWARD_OF_CONTRACT" mode="lot">
+        <xsl:variable name="lotNumber">
+            <xsl:choose>
+                <xsl:when test="LOT_NUMBER castable as xsd:integer">
+                    <xsl:value-of select="xsd:integer(LOT_NUMBER)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="position()"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <pc:lot>
+            <pc:Contract rdf:about="{concat($pc_lot_nm, $lotNumber)}">
+                <xsl:apply-templates select="CONTRACT_TITLE"/>
+                <xsl:apply-templates select="CONTRACT_AWARD_DATE"/>
+                <xsl:apply-templates select="OFFERS_RECEIVED_NUMBER"/>
+                <xsl:call-template name="awardedTender">
+                    <xsl:with-param name="contractUri" select="concat($pc_lot_nm, $lotNumber)"/>
+                    <xsl:with-param name="lotNumber" select="LOT_NUMBER"/>
+                </xsl:call-template>
+            </pc:Contract>
+        </pc:lot>    
+    </xsl:template>
+    
+    <!-- awarded tender -->
+    <xsl:template match="AWARD_OF_CONTRACT">
+        <xsl:apply-templates select="CONTRACT_AWARD_DATE"/>
+        <xsl:apply-templates select="OFFERS_RECEIVED_NUMBER"/>
+        <xsl:call-template name="awardedTender">
+            <xsl:with-param name="contractUri" select="$pc_uri"/>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <!-- contract award date -->
+    <xsl:template match="CONTRACT_AWARD_DATE">
+        <pc:awardDate rdf:datatype="xsd:date">
+            <xsl:value-of select="f:getDate(YEAR, MONTH, DAY)"/>
+        </pc:awardDate>
+    </xsl:template>
+    
+    <!-- number of received tenders -->
+    <xsl:template match="OFFERS_RECEIVED_NUMBER">
+        <pc:numberOfTenders rdf:datatype="xsd:nonNegativeInteger">
+            <xsl:value-of select="text()"/>
+        </pc:numberOfTenders>
+    </xsl:template>
+    
+    <!-- tenderer info -->
+    <xsl:template match="CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME">
+        <xsl:call-template name="basicBusinessEntity"/>
+    </xsl:template>
+    
+    <!-- tender offered price -->
+    <xsl:template match="COSTS_RANGE_AND_CURRENCY_WITH_VAT_RATE" mode="offeredPrice">
+        <xsl:param name="tenderUri"/>
+        <pc:offeredPrice>
+            <xsl:call-template name="price">
+                <xsl:with-param name="priceUri" select="concat($tenderUri, '/offered-price')"/>
+            </xsl:call-template>
+        </pc:offeredPrice>
+    </xsl:template>
+    
+    
+    <!--
+    *********************************************************
     *** NAMED TEMPLATES
     *********************************************************
     -->
+    
     <xsl:template name="legalName">
         <gr:legalName>
             <xsl:value-of select="normalize-space(ORGANISATION/OFFICIALNAME/text())"/>
@@ -533,10 +579,48 @@
         </xsl:if>
     </xsl:template>
     
+    <xsl:template name="contractContact">
+        <xsl:if test="CA_CE_CONCESSIONAIRE_PROFILE/(CONTACT_POINT|ATTENTION|(E_MAILS/E_MAIL)|PHONE|FAX)/text()">
+            <pc:contact>
+                <vcard:VCard>
+                    <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE/CONTACT_POINT"/>
+                    <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE/ATTENTION"/>
+                    <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE/PHONE"/>
+                    <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE/E_MAILS/E_MAIL"/>
+                    <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE/FAX"/>
+                </vcard:VCard>
+            </pc:contact>
+        </xsl:if>
+    </xsl:template>
+    
     <xsl:template name="description">
         <dcterms:description xml:lang="{$lang}">
             <xsl:value-of select="normalize-space(.)"/>
         </dcterms:description> 
+    </xsl:template>
+    
+    <xsl:template name="price">
+        <xsl:param name="priceUri"/>
+        <xsl:variable name="isTaxIncluded">
+            <xsl:choose>
+                <xsl:when test="INCLUDING_VAT">
+                    <xsl:value-of select="'true'"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="'false'"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <gr:PriceSpecification rdf:about="{$priceUri}">
+            <xsl:apply-templates select="VALUE_COST"/>
+            <xsl:apply-templates select="RANGE_VALUE_COST"/>
+            <xsl:call-template name="currency">
+                <xsl:with-param name="currencyCode" select="@CURRENCY"/>
+            </xsl:call-template>
+            <gr:valueAddedTaxIncluded rdf:datatype="xsd:boolean">
+                <xsl:value-of select="$isTaxIncluded"/>
+            </gr:valueAddedTaxIncluded>
+        </gr:PriceSpecification>
     </xsl:template>
     
     <xsl:template name="priceValue">
@@ -600,12 +684,89 @@
         </xsl:if>
     </xsl:template>
     
+    <xsl:template name="awardedTender">
+        <xsl:param name="contractUri"/>
+        <xsl:param name="lotNumber"/>
+        <xsl:variable name="tenderIndex" as="xsd:integer">
+            <xsl:number count="AWARD_OF_CONTRACT[LOT_NUMBER = $lotNumber or not(LOT_NUMBER)]"/>
+        </xsl:variable>
+        <xsl:variable name="tenderUri" select="concat($contractUri, '/tender/', $tenderIndex)"/>
+         <pc:awardedTender>
+            <pc:Tender rdf:about="{$tenderUri}">
+                <pc:bidder>
+                    <xsl:apply-templates select="ECONOMIC_OPERATOR_NAME_ADDRESS/CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME"/>
+                </pc:bidder>
+                <xsl:apply-templates select="CONTRACT_VALUE_INFORMATION/COSTS_RANGE_AND_CURRENCY_WITH_VAT_RATE" mode="offeredPrice">
+                    <xsl:with-param name="tenderUri" select="$tenderUri"/>
+                </xsl:apply-templates>
+            </pc:Tender>
+        </pc:awardedTender>
+    </xsl:template>
+    
+    <xsl:template name="basicBusinessEntity">
+        <xsl:variable name="countryCode" select="COUNTRY/@VALUE"/>
+        <xsl:variable name="organisationId" select="ORGANISATION/NATIONALID"/>
+        <xsl:variable name="businessEntityId">
+            <xsl:value-of select="f:getBusinessEntityId($countryCode, $organisationId)"/>
+        </xsl:variable>
+        <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm, $businessEntityId)}">
+            <xsl:call-template name="legalName"/>
+            <xsl:call-template name="postalAddress"/>
+            <xsl:call-template name="contactPoint"/>
+        </gr:BusinessEntity>
+    </xsl:template>
+    
+    <xsl:template name="contactPoint">
+        <s:contactPoint>
+            <s:ContactPoint>
+                <xsl:apply-templates select="PHONE" mode="contactPoint"/>
+                <xsl:apply-templates select="E_MAILS/E_MAIL" mode="contactPoint"/>
+                <xsl:apply-templates select="FAX" mode="contactPoint"/>
+            </s:ContactPoint>
+        </s:contactPoint>
+    </xsl:template>
+    
     
     <!--
     *********************************************************
     *** COMMON TEMPLATES
     *********************************************************
     -->
+    
+    <!-- contracting authority name and address -->
+    <xsl:template match="CA_CE_CONCESSIONAIRE_PROFILE" mode="legalNameAndAddress">
+        <xsl:call-template name="legalName"/>
+        <xsl:call-template name="postalAddress"/>
+    </xsl:template>
+    
+    <!-- contracting authority buyer profile url -->
+    <xsl:template match="URL_BUYER">
+        <xsl:if test="text()">
+            <pc:buyerProfile rdf:resource="{text()}"/>
+        </xsl:if>
+    </xsl:template>
+    
+    <!-- contracting authority kind and main activity  -->
+    <xsl:template match="TYPE_AND_ACTIVITIES">
+        <xsl:if test="TYPE_OF_CONTRACTING_AUTHORITY">
+            <pc:authorityKind rdf:resource="{f:getAuthorityKind(TYPE_OF_CONTRACTING_AUTHORITY/@VALUE)}"/>
+        </xsl:if>
+        <xsl:if test="TYPE_OF_ACTIVITY">
+            <pc:mainActivity rdf:resource="{f:getAuthorityActivity(TYPE_OF_ACTIVITY[1]/@VALUE)}"/>
+        </xsl:if>
+    </xsl:template>
+    
+    <!-- on behalf of -->
+    <xsl:template match="CONTACT_DATA_OTHER_BEHALF_CONTRACTING_AUTORITHY">
+        <pc:onBehalfOf>
+            <gr:BusinessEntity>
+                <xsl:call-template name="legalName"/>
+                <xsl:call-template name="postalAddress"/>
+            </gr:BusinessEntity>
+        </pc:onBehalfOf>
+    </xsl:template>
+    
+    
     <xsl:template match="ADDRESS">
         <xsl:if test="text()">
             <s:streetAddress>
@@ -659,6 +820,14 @@
             <vcard:email rdf:resource="{concat('mailto:', text())}"/>
         </xsl:if>
     </xsl:template>
+    
+    <xsl:template match="E_MAIL" mode="contactPoint">
+        <xsl:if test="text()">
+            <s:email>
+                <xsl:value-of select="text()"/>
+            </s:email>
+        </xsl:if>
+    </xsl:template>
 
     <xsl:template match="PHONE">
         <xsl:if test="text()">
@@ -669,6 +838,14 @@
                     </rdf:value>
                 </vcard:Work>
             </vcard:tel>
+        </xsl:if>
+    </xsl:template>
+    
+    <xsl:template match="PHONE" mode="contactPoint">
+        <xsl:if test="text()">
+            <s:telephone>
+                <xsl:value-of select="text()"/>
+            </s:telephone>
         </xsl:if>
     </xsl:template>
 
@@ -683,14 +860,126 @@
             </vcard:tel>
         </xsl:if>
     </xsl:template>
+    
+    <xsl:template match="FAX" mode="contactPoint">
+        <xsl:if test="text()">
+            <s:faxNumber>
+                <xsl:value-of select="text()"/>
+            </s:faxNumber>
+        </xsl:if>
+    </xsl:template>
 
+    <!-- contract title -->
+    <xsl:template match="TITLE_CONTRACT|CONTRACT_TITLE|LOT_TITLE">
+        <dcterms:title xml:lang="{$lang}">
+            <xsl:value-of select="normalize-space(.)"/>
+        </dcterms:title>
+        <rdfs:label xml:lang="{$lang}">
+            <xsl:value-of select="normalize-space(.)"/>
+        </rdfs:label>
+    </xsl:template>
+    
+    <!-- contract location -->
+    <xsl:template match="LOCATION_NUTS">
+        <xsl:if test="LOCATION">    
+            <pc:location>
+                <s:Place>
+                    <s:description>
+                        <xsl:value-of select="normalize-space(LOCATION)"/>
+                    </s:description>
+                    <xsl:if test="NUTS">
+                        <pceu:hasParentRegion rdf:resource="{f:getNutsUri(NUTS/@CODE)}"/>
+                    </xsl:if>
+                </s:Place>
+            </pc:location>
+        </xsl:if>
+    </xsl:template>
 
-
+    <!-- contract description -->
+    <xsl:template match="SHORT_CONTRACT_DESCRIPTION|LOT_DESCRIPTION">
+        <xsl:call-template name="description"/>
+    </xsl:template>
+    
+    <!-- cpv codes -->
+    <xsl:template match="CPV">
+        <xsl:apply-templates select="CPV_MAIN"/>
+        <xsl:apply-templates select="CPV_ADDITIONAL"/>
+    </xsl:template>
+    
+    <!-- main cpv -->
+    <xsl:template match="CPV_MAIN">
+        <pc:mainObject rdf:resource="{f:getCpvUri(CPV_CODE/@CODE)}"/>
+    </xsl:template>
+    
+    <!-- additional cpv -->
+    <xsl:template match="CPV_ADDITIONAL">
+        <pc:additionalObject rdf:resource="{f:getCpvUri(CPV_CODE/@CODE)}"/>
+    </xsl:template>
+    
+    <!-- price value -->
+    <xsl:template match="VALUE_COST">
+        <xsl:call-template name="priceValue">
+            <xsl:with-param name="value" select="@FMTVAL"/>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <!-- price range min and max values -->
+    <xsl:template match="RANGE_VALUE_COST">
+        <gr:hasMinCurrencyValue rdf:datatype="xsd:decimal">
+            <xsl:value-of select="LOW_VALUE/@FMTVAL"/>
+        </gr:hasMinCurrencyValue>
+        <gr:hasMaxCurrencyValue rdf:datatype="xsd:decimal">
+            <xsl:value-of select="HIGH_VALUE/@FMTVAL"/>
+        </gr:hasMaxCurrencyValue>
+    </xsl:template>
+    
+    <!-- criterion lowest price -->
+    <xsl:template match="LOWEST_PRICE">
+        <xsl:call-template name="awardCriterion">
+            <xsl:with-param name="isLowestPrice" select="true()"/>
+            <xsl:with-param name="id" select="1"/>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <!-- criterion most economically advantageous tender -->
+    <xsl:template match="CRITERIA_DEFINITION">
+        <xsl:variable name="id">
+            <xsl:choose>
+                <xsl:when test="ORDER_C">
+                    <xsl:value-of select="ORDER_C"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="position()"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:call-template name="awardCriterion">
+            <xsl:with-param name="isLowestPrice" select="false()"/>
+            <xsl:with-param name="name" select="CRITERIA"/>
+            <xsl:with-param name="weight" select="WEIGHTING"/>
+            <xsl:with-param name="id" select="$id"/>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <!-- contract file identifier -->
+    <xsl:template match="FILE_REFERENCE_NUMBER">
+        <adms:identifier>
+            <adms:Identifier rdf:about="{$pc_identifier_uri_1}">
+                <skos:notation>
+                    <xsl:value-of select="normalize-space(.)" />
+                </skos:notation>
+            </adms:Identifier>
+        </adms:identifier>
+    </xsl:template>
+    
+    
     <!--
     *********************************************************
     *** EMPTY TEMPLATES
     *********************************************************
     -->
     <xsl:template match="text()|@*"/>
-
+    
+   
+    
 </xsl:stylesheet>

@@ -152,23 +152,32 @@
     <xsl:function name="f:getProcedureType" as="xs:string">
         <xsl:param name="procedureTypeElementName" as="xs:string"/>       
         <xsl:choose>
-            <xsl:when test="matches($procedureTypeElementName,'PT_OPEN')">
+            <xsl:when test="matches($procedureTypeElementName,'OPEN')">
                 <xsl:sequence select="concat($procedure_type_nm, 'Open')" />
             </xsl:when>
-            <xsl:when test="matches($procedureTypeElementName,'PT_RESTRICTED')">
-                <xsl:sequence select="concat($procedure_type_nm, 'Restricted')" />
-            </xsl:when>
-            <xsl:when test="matches($procedureTypeElementName,'PT_ACCELERATED_RESTRICTED')">
+            <xsl:when test="matches($procedureTypeElementName,'ACCELERATED_RESTRICTED')">
                 <xsl:sequence select="concat($procedure_type_nm, 'AcceleratedRestricted')" />
             </xsl:when>
-            <xsl:when test="matches($procedureTypeElementName,'PT_NEGOTIATED')">
-                <xsl:sequence select="concat($procedure_type_nm, 'Negotiated')" />
+            <xsl:when test="matches($procedureTypeElementName,'RESTRICTED')">
+                <xsl:sequence select="concat($procedure_type_nm, 'Restricted')" />
             </xsl:when>
-            <xsl:when test="matches($procedureTypeElementName,'PT_ACCELERATED_NEGOTIATED')">
+            <xsl:when test="matches($procedureTypeElementName,'ACCELERATED_NEGOTIATED')">
                 <xsl:sequence select="concat($procedure_type_nm, 'AcceleratedNegotiated')" />
             </xsl:when>
-            <xsl:when test="matches($procedureTypeElementName,'PT_COMPETITIVE_DIALOGUE')">
+            <xsl:when test="matches($procedureTypeElementName,'NEGOTIATED_WITH_COMPETITION')">
+                <xsl:sequence select="concat($procedure_type_nm, 'NegotiatedWithCompetition')" />
+            </xsl:when>
+            <xsl:when test="matches($procedureTypeElementName,'NEGOTIATED_WITHOUT_COMPETITION')">
+                <xsl:sequence select="concat($procedure_type_nm, 'NegotiatedWithoutCompetition')" />
+            </xsl:when>
+            <xsl:when test="matches($procedureTypeElementName,'NEGOTIATED')">
+                <xsl:sequence select="concat($procedure_type_nm, 'Negotiated')" />
+            </xsl:when>
+            <xsl:when test="matches($procedureTypeElementName,'COMPETITIVE_DIALOGUE')">
                 <xsl:sequence select="concat($procedure_type_nm, 'CompetitiveDialogue')" />
+            </xsl:when>
+            <xsl:when test="matches($procedureTypeElementName,'AWARD_WITHOUT_PRIOR_PUBLICATION')">
+                <xsl:sequence select="concat($procedure_type_nm, 'AwardWithoutPriorPublication')" />
             </xsl:when>
         </xsl:choose>
     </xsl:function>
