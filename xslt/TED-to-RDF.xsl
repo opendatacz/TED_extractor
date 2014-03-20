@@ -54,10 +54,11 @@
     <xsl:variable name="pc_agreed_price_uri" select="concat($pc_uri, '/agreed-price')"/>
 
     <!-- OTHER VARIABLES -->
-    <xsl:variable name="formCode" select="TED_EXPORT/FORM_SECTION/*[1]/@FORM"/>
-    <xsl:variable name="supportedFormCodes" select="tokenize('2,3', ',')"/>
-    <xsl:variable name="doc_id" select="/TED_EXPORT/@DOC_ID"/>
+    <xsl:variable name="form_code" select="TED_EXPORT/FORM_SECTION/*[1]/@FORM"/>
+    <xsl:variable name="supported_form_codes" select="tokenize('2,3', ',')"/>
+    <xsl:variable name="country_code" select="TED_EXPORT/CODED_DATA_SECTION/NOTICE_DATA/ISO_COUNTRY/@VALUE"/>
     <xsl:variable name="lang" select="/TED_EXPORT/CODED_DATA_SECTION/NOTICE_DATA/LG_ORIG/text()"/>
+    <xsl:variable name="doc_id" select="/TED_EXPORT/@DOC_ID"/>
      
     
     <!--
@@ -68,7 +69,7 @@
     
     <!-- ROOT -->
     <xsl:template match="/">
-        <xsl:if test="$formCode=$supportedFormCodes">
+        <xsl:if test="$form_code=$supported_form_codes">
             <rdf:RDF>
                 <xsl:apply-templates select="TED_EXPORT/FORM_SECTION/*[self::CONTRACT or self::CONTRACT_AWARD][@CATEGORY='ORIGINAL']"/>
             </rdf:RDF>
@@ -107,7 +108,7 @@
         <xsl:apply-templates select="OBJECT_CONTRACT_INFORMATION_CONTRACT_AWARD_NOTICE"/>
         <xsl:apply-templates select="PROCEDURE_DEFINITION_CONTRACT_AWARD_NOTICE"/>
         <xsl:choose>
-            <xsl:when test="count(AWARD_OF_CONTRACT) &gt; 1">
+            <xsl:when test="count(AWARD_OF_CONTRACT[LOT_NUMBER]) &gt; 0">
                 <xsl:apply-templates select="AWARD_OF_CONTRACT" mode="lot"/>
             </xsl:when>
             <xsl:otherwise>
@@ -130,10 +131,10 @@
 
     <!-- contracting authority -->
     <xsl:template match="NAME_ADDRESSES_CONTACT_CONTRACT" mode="contractingAuthority">
-        <xsl:variable name="countryCode" select="CA_CE_CONCESSIONAIRE_PROFILE/COUNTRY/@VALUE"/>
+        <xsl:variable name="country" select="(CA_CE_CONCESSIONAIRE_PROFILE/COUNTRY/@VALUE, $country_code)[1]"/>
         <xsl:variable name="organisationId" select="CA_CE_CONCESSIONAIRE_PROFILE/ORGANISATION/NATIONALID"/>
         <xsl:variable name="contractingAuthorityUri">
-            <xsl:value-of select="f:getBusinessEntityId($countryCode, $organisationId)"/>
+            <xsl:value-of select="f:getBusinessEntityId($country, $organisationId)"/>
         </xsl:variable>
         <pc:contractingAuthority>
             <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm, $contractingAuthorityUri)}">
@@ -191,16 +192,16 @@
     
     <!-- contract part (lot) -->
     <xsl:template match="F02_ANNEX_B">
-            <xsl:variable name="lotNumber">
-                <xsl:choose>
-                    <xsl:when test="LOT_NUMBER">
-                        <xsl:value-of select="LOT_NUMBER"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="position()"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:variable>
+        <xsl:variable name="lotNumber">
+            <xsl:choose>
+                <xsl:when test="LOT_NUMBER castable as xsd:integer">
+                    <xsl:value-of select="xsd:integer(LOT_NUMBER)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="position()"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
             <pc:lot>
                 <pc:Contract rdf:about="{concat($pc_lot_nm, $lotNumber)}">
                     <xsl:apply-templates select="LOT_TITLE"/>
@@ -402,10 +403,10 @@
     
     <!-- contracting authority -->
     <xsl:template match="NAME_ADDRESSES_CONTACT_CONTRACT_AWARD" mode="contractingAuthority">
-        <xsl:variable name="countryCode" select="CA_CE_CONCESSIONAIRE_PROFILE/COUNTRY/@VALUE"/>
+        <xsl:variable name="country" select="(CA_CE_CONCESSIONAIRE_PROFILE/COUNTRY/@VALUE, $country_code)[1]"/>
         <xsl:variable name="organisationId" select="CA_CE_CONCESSIONAIRE_PROFILE/ORGANISATION/NATIONALID"/>
         <xsl:variable name="contractingAuthorityUri">
-            <xsl:value-of select="f:getBusinessEntityId($countryCode, $organisationId)"/>
+            <xsl:value-of select="f:getBusinessEntityId($country, $organisationId)"/>
         </xsl:variable>
         <pc:contractingAuthority>
             <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm, $contractingAuthorityUri)}">
@@ -492,36 +493,48 @@
     
     <!-- contract part (lot) with awarded tender -->
     <xsl:template match="AWARD_OF_CONTRACT" mode="lot">
-        <xsl:variable name="lotNumber">
-            <xsl:choose>
-                <xsl:when test="LOT_NUMBER castable as xsd:integer">
-                    <xsl:value-of select="xsd:integer(LOT_NUMBER)"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="position()"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <pc:lot>
-            <pc:Contract rdf:about="{concat($pc_lot_nm, $lotNumber)}">
-                <xsl:apply-templates select="CONTRACT_TITLE"/>
-                <xsl:apply-templates select="CONTRACT_AWARD_DATE"/>
-                <xsl:apply-templates select="OFFERS_RECEIVED_NUMBER"/>
-                <xsl:call-template name="awardedTender">
-                    <xsl:with-param name="contractUri" select="concat($pc_lot_nm, $lotNumber)"/>
-                    <xsl:with-param name="lotNumber" select="LOT_NUMBER"/>
-                </xsl:call-template>
-            </pc:Contract>
-        </pc:lot>    
+        <xsl:for-each select="LOT_NUMBER">
+            <xsl:variable name="position" select="position()"/>
+            <xsl:variable name="lotNumber">
+                <xsl:choose>
+                    <xsl:when test="text() castable as xsd:integer">
+                        <xsl:value-of select="xsd:integer(text())"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="position()"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <pc:lot>
+                <pc:Contract rdf:about="{concat($pc_lot_nm, $lotNumber)}">
+                    <xsl:apply-templates select="../CONTRACT_TITLE[$position]"/>
+                    <xsl:apply-templates select="../CONTRACT_AWARD_DATE"/>
+                    <xsl:apply-templates select="../OFFERS_RECEIVED_NUMBER"/>
+                    <xsl:call-template name="awardedTender">
+                        <xsl:with-param name="awardNode" select=".."/>
+                        <xsl:with-param name="contractUri" select="concat($pc_lot_nm, $lotNumber)"/>
+                        <xsl:with-param name="lotNumber" select="text()"/>
+                    </xsl:call-template>
+                </pc:Contract>
+            </pc:lot>    
+        </xsl:for-each>
     </xsl:template>
     
     <!-- awarded tender -->
     <xsl:template match="AWARD_OF_CONTRACT">
-        <xsl:apply-templates select="CONTRACT_AWARD_DATE"/>
-        <xsl:apply-templates select="OFFERS_RECEIVED_NUMBER"/>
-        <xsl:call-template name="awardedTender">
-            <xsl:with-param name="contractUri" select="$pc_uri"/>
-        </xsl:call-template>
+        <xsl:choose>
+            <xsl:when test="LOT_NUMBER">
+                <xsl:apply-templates select="." mode="lot"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="CONTRACT_AWARD_DATE"/>
+                <xsl:apply-templates select="OFFERS_RECEIVED_NUMBER"/>
+                <xsl:call-template name="awardedTender">
+                    <xsl:with-param name="awardNode" select="."/>
+                    <xsl:with-param name="contractUri" select="$pc_uri"/>
+                </xsl:call-template>        
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     <!-- contract award date -->
@@ -685,18 +698,26 @@
     </xsl:template>
     
     <xsl:template name="awardedTender">
+        <xsl:param name="awardNode" as="node()"/>
         <xsl:param name="contractUri"/>
         <xsl:param name="lotNumber"/>
-        <xsl:variable name="tenderIndex" as="xsd:integer">
-            <xsl:number count="AWARD_OF_CONTRACT[LOT_NUMBER = $lotNumber or not(LOT_NUMBER)]"/>
+        <xsl:variable name="tenderIndex" >
+            <xsl:choose>
+                <xsl:when test="$lotNumber">
+                    <xsl:number count="AWARD_OF_CONTRACT[LOT_NUMBER = $lotNumber]"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:number count="AWARD_OF_CONTRACT[not(LOT_NUMBER)]"/>
+                </xsl:otherwise>
+            </xsl:choose>    
         </xsl:variable>
         <xsl:variable name="tenderUri" select="concat($contractUri, '/tender/', $tenderIndex)"/>
-         <pc:awardedTender>
+        <pc:awardedTender>
             <pc:Tender rdf:about="{$tenderUri}">
                 <pc:bidder>
-                    <xsl:apply-templates select="ECONOMIC_OPERATOR_NAME_ADDRESS/CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME"/>
+                    <xsl:apply-templates select="$awardNode/ECONOMIC_OPERATOR_NAME_ADDRESS/CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME"/>
                 </pc:bidder>
-                <xsl:apply-templates select="CONTRACT_VALUE_INFORMATION/COSTS_RANGE_AND_CURRENCY_WITH_VAT_RATE" mode="offeredPrice">
+                <xsl:apply-templates select="$awardNode/CONTRACT_VALUE_INFORMATION/COSTS_RANGE_AND_CURRENCY_WITH_VAT_RATE" mode="offeredPrice">
                     <xsl:with-param name="tenderUri" select="$tenderUri"/>
                 </xsl:apply-templates>
             </pc:Tender>
@@ -704,10 +725,10 @@
     </xsl:template>
     
     <xsl:template name="basicBusinessEntity">
-        <xsl:variable name="countryCode" select="COUNTRY/@VALUE"/>
+        <xsl:variable name="country" select="(COUNTRY/@VALUE, $country_code)[1]"/>
         <xsl:variable name="organisationId" select="ORGANISATION/NATIONALID"/>
         <xsl:variable name="businessEntityId">
-            <xsl:value-of select="f:getBusinessEntityId($countryCode, $organisationId)"/>
+            <xsl:value-of select="f:getBusinessEntityId($country, $organisationId)"/>
         </xsl:variable>
         <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm, $businessEntityId)}">
             <xsl:call-template name="legalName"/>
@@ -888,7 +909,7 @@
                         <xsl:value-of select="normalize-space(LOCATION)"/>
                     </s:description>
                     <xsl:if test="NUTS">
-                        <pceu:hasParentRegion rdf:resource="{f:getNutsUri(NUTS/@CODE)}"/>
+                        <pceu:hasParentRegion rdf:resource="{f:getNutsUri(NUTS[1]/@CODE)}"/>
                     </xsl:if>
                 </s:Place>
             </pc:location>
@@ -943,16 +964,7 @@
     
     <!-- criterion most economically advantageous tender -->
     <xsl:template match="CRITERIA_DEFINITION">
-        <xsl:variable name="id">
-            <xsl:choose>
-                <xsl:when test="ORDER_C">
-                    <xsl:value-of select="ORDER_C"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="position()"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
+        <xsl:variable name="id" select="(ORDER_C, position())[1]"/>
         <xsl:call-template name="awardCriterion">
             <xsl:with-param name="isLowestPrice" select="false()"/>
             <xsl:with-param name="name" select="CRITERIA"/>

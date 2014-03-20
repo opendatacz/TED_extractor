@@ -12,7 +12,7 @@
     <xsl:variable name="contract_kinds_nm" select="'http://purl.org/procurement/public-contracts-kinds#'"/>
     <xsl:variable name="authority_activities_nm" select="'http://purl.org/procurement/public-contracts-activities#'"/>
     <xsl:variable name="nuts_nm" select="'http://ec.europa.eu/eurostat/ramon/rdfdata/nuts2008/'"/>
-    <xsl:variable name="cpv_nm" select="'http://purl.org/weso/cpv/2008/'"/>
+    <xsl:variable name="cpv_nm" select="'http://linked.opendata.cz/resource/cpv-2008/concept/'"/>
     <xsl:variable name="procedure_type_nm" select="'http://purl.org/procurement/public-contracts-procedure-types#'"/>
     
     <!-- get business entity id -->
@@ -139,12 +139,19 @@
         <xsl:variable name="time">
             <xsl:choose>
                 <xsl:when test="$hoursMinutes">
-                    <xsl:value-of select="concat($hoursMinutes, ':00')"/>
+                    <xsl:analyze-string select="$hoursMinutes" regex="^(\d+):(\d+)$">
+                        <xsl:matching-substring>
+                            <xsl:value-of select="concat(format-number(xs:integer(regex-group(1)), '00'), ':', format-number(xs:integer(regex-group(2)), '00'), ':', '00')"/>
+                        </xsl:matching-substring>
+                        <xsl:non-matching-substring>
+                            <xsl:value-of select="'00:00:00'"/>
+                        </xsl:non-matching-substring>
+                    </xsl:analyze-string>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="'00:00:00'"/>
                 </xsl:otherwise>
-            </xsl:choose>
+            </xsl:choose>         
         </xsl:variable>
         <xsl:sequence select="xs:dateTime(concat($date, 'T', $time))"/>
     </xsl:function>
