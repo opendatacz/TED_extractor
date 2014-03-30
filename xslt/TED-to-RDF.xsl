@@ -6,21 +6,10 @@
 #  Supported XSDs:              F02_CONTRACT, F03_CONTRACT_AWARD
 ####################################################################################
  -->
-<xsl:stylesheet 
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-    xmlns:gr="http://purl.org/goodrelations/v1#" 
-    xmlns:dcterms="http://purl.org/dc/terms/"
-    xmlns:pc="http://purl.org/procurement/public-contracts#" 
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
-    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" 
-    xmlns:s="http://schema.org/"
-    xmlns:vcard="http://www.w3.org/2006/vcard/ns#" 
-    xmlns:pceu="http://purl.org/procurement/public-contracts-eu#" 
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-    xmlns:skos="http://www.w3.org/2004/02/skos/core#" 
-    xmlns:adms="http://www.w3.org/ns/adms#" 
-    xmlns:f="http://opendata.cz/xslt/functions#" 
-    exclude-result-prefixes="f"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:gr="http://purl.org/goodrelations/v1#" xmlns:dcterms="http://purl.org/dc/terms/"
+    xmlns:pc="http://purl.org/procurement/public-contracts#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:s="http://schema.org/"
+    xmlns:vcard="http://www.w3.org/2006/vcard/ns#" xmlns:pceu="http://purl.org/procurement/public-contracts-eu#" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:adms="http://www.w3.org/ns/adms#" xmlns:f="http://opendata.cz/xslt/functions#" exclude-result-prefixes="f"
     xpath-default-namespace="http://publications.europa.eu/TED_schema/Export" version="2.0">
 
     <xsl:import href="functions.xsl"/>
@@ -40,9 +29,12 @@
     <xsl:variable name="ted_nm" select="concat($lod_nm, 'ted.europa.eu/')"/>
     <xsl:variable name="ted_business_entity_nm" select="concat($ted_nm, 'business-entity/')"/>
     <xsl:variable name="ted_pc_nm" select="concat($ted_nm, 'public-contract/')"/>
+    <xsl:variable name="ted_postal_address_nm" select="concat($ted_nm, 'postal-address/')"/>
+    <xsl:variable name="ted_contact_point_nm" select="concat($ted_nm, 'contact-point/')"/>
     <xsl:variable name="pc_lot_nm" select="concat($pc_uri, '/lot/')"/>
     <xsl:variable name="pc_estimated_price_nm" select="concat($pc_uri, '/estimated-price/')"/>
-    <xsl:variable name="pc_weighted_criterion_nm" select="concat($pc_award_criteria_combination_uri_1, '/weighted_criterion/')"/>
+    <xsl:variable name="pc_weighted_criterion_nm" select="concat($pc_uri, '/weighted_criterion/')"/>
+    <xsl:variable name="pc_criterion_weighting_nm" select="concat($pc_uri, '/criterion-weighting/')"/>
     <xsl:variable name="pc_criteria_nm" select="'http://purl.org/procurement/public-contracts-criteria#'"/>
 
     <!-- URIS -->
@@ -54,12 +46,16 @@
     <xsl:variable name="xsd_non_negative_integer_uri" select="concat($xsd_nm, 'nonNegativeInteger')"/>
     <xsl:variable name="pcdt_percentage_uri" select="concat($pcdt_nm, 'percentage')"/>
     <xsl:variable name="pc_uri" select="concat($ted_pc_nm, $doc_id)"/>
+    <xsl:variable name="pc_location_place_uri" select="concat($pc_uri, '/location-place/1')"/>
     <xsl:variable name="pc_award_criteria_combination_uri_1" select="concat($pc_uri, '/combination-of-contract-award-criteria/1')"/>
     <xsl:variable name="pc_criterion_lowest_price_uri" select="concat($pc_criteria_nm,'LowestPrice')"/>
     <xsl:variable name="pc_identifier_uri_1" select="concat($pc_uri, '/identifier/1')"/>
-    <xsl:variable name="pc_documentation_price_uri" select="concat($pc_uri, '/documentation-price')"/>
-    <xsl:variable name="tenders_opening_place_uri" select="concat($pc_uri,'/tenders-opening-place')"/>
-    <xsl:variable name="pc_agreed_price_uri" select="concat($pc_uri, '/agreed-price')"/>
+    <xsl:variable name="pc_documentation_price_uri" select="concat($pc_uri, '/documentation-price/1')"/>
+    <xsl:variable name="tenders_opening_uri" select="concat($pc_uri,'/tenders-opening/1')"/>
+    <xsl:variable name="tenders_opening_place_uri" select="concat($pc_uri,'/tenders-opening-place/1')"/>
+    <xsl:variable name="pc_agreed_price_uri" select="concat($pc_uri, '/agreed-price/1')"/>
+    <xsl:variable name="framework_agreement_uri" select="concat($pc_uri, '/framework-agreement/1')"/>
+
 
     <!-- OTHER VARIABLES -->
     <xsl:variable name="form_code" select="TED_EXPORT/FORM_SECTION/*[1]/@FORM"/>
@@ -77,11 +73,11 @@
 
     <!-- ROOT -->
     <xsl:template match="/">
-        <xsl:if test="$form_code=$supported_form_codes">
-            <rdf:RDF>
+        <rdf:RDF>
+            <xsl:if test="$form_code=$supported_form_codes">
                 <xsl:apply-templates select="TED_EXPORT/FORM_SECTION/*[self::CONTRACT or self::CONTRACT_AWARD][@CATEGORY='ORIGINAL']"/>
-            </rdf:RDF>
-        </xsl:if>
+            </xsl:if>
+        </rdf:RDF>
     </xsl:template>
 
     <!-- F02 CONTRACT -->
@@ -182,20 +178,7 @@
 
     <!-- framework agreement -->
     <xsl:template match="F02_FRAMEWORK">
-        <pc:frameworkAgreement>
-            <pc:FrameworkAgreement>
-                <pc:expectedNumberOfOperators>
-                    <xsl:choose>
-                        <xsl:when test="SINGLE_OPERATOR">
-                            <!-- TODO: -->
-                        </xsl:when>
-                        <xsl:when test="SEVERAL_OPERATORS">
-                            <!-- TODO: -->
-                        </xsl:when>
-                    </xsl:choose>
-                </pc:expectedNumberOfOperators>
-            </pc:FrameworkAgreement>
-        </pc:frameworkAgreement>
+        <xsl:call-template name="frameworkAgreement"/>
     </xsl:template>
 
     <!-- contract part (lot) -->
@@ -365,7 +348,7 @@
     <!-- tenders opening (is outside of Contract element!) -->
     <xsl:template match="CONDITIONS_FOR_OPENING_TENDERS">
         <xsl:if test="DATE_TIME|PLACE_OPENING">
-            <pc:TendersOpening>
+            <pc:TendersOpening rdf:about="{$tenders_opening_uri}">
                 <pc:Contract rdf:resource="{$pc_uri}"/>
                 <xsl:apply-templates select="DATE_TIME"/>
                 <xsl:apply-templates select="PLACE_OPENING"/>
@@ -433,6 +416,7 @@
 
     <!--
     *********************************************************
+    *** F03 CONTRACT AWARD
     *** SECTION II: OBJECT OF THE CONTRACT
     *********************************************************
     -->
@@ -449,8 +433,17 @@
         <xsl:apply-templates select="CPV"/>
     </xsl:template>
 
+    <xsl:template match="NOTICE_INVOLVES_DESC">
+        <xsl:apply-templates select="CONCLUSION_FRAMEWORK_AGREEMENT"/>
+        <xsl:apply-templates select="CONTRACTS_DPS"/>
+    </xsl:template>
+
     <xsl:template match="CONCLUSION_FRAMEWORK_AGREEMENT">
-        <!-- TODO: framework agreement -->
+        <xsl:call-template name="frameworkAgreement"/>
+    </xsl:template>
+
+    <xsl:template match="CONTRACTS_DPS">
+        <!-- TODO: DPS -->
     </xsl:template>
 
     <!-- contract agreed price -->
@@ -569,7 +562,7 @@
         <xsl:param name="tenderUri"/>
         <pc:offeredPrice>
             <xsl:call-template name="price">
-                <xsl:with-param name="priceUri" select="concat($tenderUri, '/offered-price')"/>
+                <xsl:with-param name="priceUri" select="concat($tenderUri, '/offered-price/1')"/>
             </xsl:call-template>
         </pc:offeredPrice>
     </xsl:template>
@@ -590,7 +583,7 @@
     <xsl:template name="postalAddress">
         <xsl:if test="(ADDRESS|TOWN|POSTAL_CODE|COUNTRY)/text()">
             <s:address>
-                <s:PostalAddress>
+                <s:PostalAddress rdf:about="{concat($ted_postal_address_nm, f:getUuid())}">
                     <xsl:apply-templates select="ADDRESS"/>
                     <xsl:apply-templates select="TOWN"/>
                     <xsl:apply-templates select="POSTAL_CODE"/>
@@ -603,13 +596,13 @@
     <xsl:template name="contractContact">
         <xsl:if test="CA_CE_CONCESSIONAIRE_PROFILE/(CONTACT_POINT|ATTENTION|(E_MAILS/E_MAIL)|PHONE|FAX)/text()">
             <pc:contact>
-                <vcard:VCard>
+                <s:ContactPoint rdf:about="{concat($ted_contact_point_nm, f:getUuid())}">
                     <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE/CONTACT_POINT"/>
                     <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE/ATTENTION"/>
                     <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE/PHONE"/>
                     <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE/E_MAILS/E_MAIL"/>
                     <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE/FAX"/>
-                </vcard:VCard>
+                </s:ContactPoint>
             </pc:contact>
         </xsl:if>
     </xsl:template>
@@ -669,7 +662,7 @@
         <xsl:param name="weight"/>
         <xsl:param name="id" required="yes"/>
         <pc:awardCriterion>
-            <pc:CriterionWeighting>
+            <pc:CriterionWeighting rdf:about="{concat($pc_criterion_weighting_nm, $id)}">
                 <xsl:choose>
                     <xsl:when test="$isLowestPrice = true()">
                         <pc:weightedCriterion rdf:resource="{$pc_criterion_lowest_price_uri}"/>
@@ -725,9 +718,16 @@
         <xsl:variable name="tenderUri" select="concat($contractUri, '/tender/', $tenderIndex)"/>
         <pc:awardedTender>
             <pc:Tender rdf:about="{$tenderUri}">
-                <pc:bidder>
-                    <xsl:apply-templates select="$awardNode/ECONOMIC_OPERATOR_NAME_ADDRESS/CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME"/>
-                </pc:bidder>
+                <xsl:choose>
+                    <xsl:when test="$awardNode/ECONOMIC_OPERATOR_NAME_ADDRESS/CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME">
+                        <pc:bidder>
+                            <xsl:apply-templates select="$awardNode/ECONOMIC_OPERATOR_NAME_ADDRESS/CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME"/>
+                        </pc:bidder>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <pc:bidder rdf:resource="{concat($ted_business_entity_nm, f:getUuid())}"/>
+                    </xsl:otherwise>
+                </xsl:choose>
                 <xsl:apply-templates select="$awardNode/CONTRACT_VALUE_INFORMATION/COSTS_RANGE_AND_CURRENCY_WITH_VAT_RATE" mode="offeredPrice">
                     <xsl:with-param name="tenderUri" select="$tenderUri"/>
                 </xsl:apply-templates>
@@ -751,15 +751,34 @@
     <xsl:template name="contactPoint">
         <xsl:if test="(PHONE|E_MAILS/E_MAIL|FAX)/text()">
             <s:contactPoint>
-                <s:ContactPoint>
-                    <xsl:apply-templates select="PHONE" mode="contactPoint"/>
-                    <xsl:apply-templates select="E_MAILS/E_MAIL" mode="contactPoint"/>
-                    <xsl:apply-templates select="FAX" mode="contactPoint"/>
+                <s:ContactPoint rdf:about="{concat($ted_contact_point_nm, f:getUuid())}">
+                    <xsl:apply-templates select="PHONE"/>
+                    <xsl:apply-templates select="E_MAILS/E_MAIL"/>
+                    <xsl:apply-templates select="FAX"/>
                 </s:ContactPoint>
             </s:contactPoint>
         </xsl:if>
     </xsl:template>
 
+    <xsl:template name="frameworkAgreement">
+        <pc:frameworkAgreement>
+            <pc:FrameworkAgreement rdf:about="{$framework_agreement_uri}">
+                <pc:expectedNumberOfOperators>
+                    <xsl:choose>
+                        <xsl:when test="SINGLE_OPERATOR">
+                            <!-- TODO: -->
+                        </xsl:when>
+                        <xsl:when test="SEVERAL_OPERATORS">
+                            <!-- TODO: -->
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <!-- TODO: -->
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </pc:expectedNumberOfOperators>
+            </pc:FrameworkAgreement>
+        </pc:frameworkAgreement>
+    </xsl:template>
 
     <!--
     *********************************************************
@@ -793,10 +812,7 @@
     <!-- on behalf of -->
     <xsl:template match="CONTACT_DATA_OTHER_BEHALF_CONTRACTING_AUTORITHY">
         <pc:onBehalfOf>
-            <gr:BusinessEntity>
-                <xsl:call-template name="legalName"/>
-                <xsl:call-template name="postalAddress"/>
-            </gr:BusinessEntity>
+            <xsl:call-template name="basicBusinessEntity"/>
         </pc:onBehalfOf>
     </xsl:template>
 
@@ -835,29 +851,21 @@
 
     <xsl:template match="CONTACT_POINT">
         <xsl:if test="text()">
-            <vcard:note>
+            <s:name>
                 <xsl:value-of select="text()"/>
-            </vcard:note>
+            </s:name>
         </xsl:if>
     </xsl:template>
 
     <xsl:template match="ATTENTION">
         <xsl:if test="text()">
-            <vcard:fn>
+            <s:description>
                 <xsl:value-of select="text()"/>
-            </vcard:fn>
+            </s:description>
         </xsl:if>
     </xsl:template>
 
     <xsl:template match="E_MAIL">
-        <xsl:if test="text()">
-            <vcard:email>
-                <xsl:value-of select="text()"/>
-            </vcard:email>
-        </xsl:if>
-    </xsl:template>
-
-    <xsl:template match="E_MAIL" mode="contactPoint">
         <xsl:if test="text()">
             <s:email>
                 <xsl:value-of select="text()"/>
@@ -867,18 +875,6 @@
 
     <xsl:template match="PHONE">
         <xsl:if test="text()">
-            <vcard:tel>
-                <vcard:Work>
-                    <rdf:value>
-                        <xsl:value-of select="text()"/>
-                    </rdf:value>
-                </vcard:Work>
-            </vcard:tel>
-        </xsl:if>
-    </xsl:template>
-
-    <xsl:template match="PHONE" mode="contactPoint">
-        <xsl:if test="text()">
             <s:telephone>
                 <xsl:value-of select="text()"/>
             </s:telephone>
@@ -886,18 +882,6 @@
     </xsl:template>
 
     <xsl:template match="FAX">
-        <xsl:if test="text()">
-            <vcard:tel>
-                <vcard:Fax>
-                    <rdf:value>
-                        <xsl:value-of select="text()"/>
-                    </rdf:value>
-                </vcard:Fax>
-            </vcard:tel>
-        </xsl:if>
-    </xsl:template>
-
-    <xsl:template match="FAX" mode="contactPoint">
         <xsl:if test="text()">
             <s:faxNumber>
                 <xsl:value-of select="text()"/>
@@ -916,7 +900,7 @@
     <xsl:template match="LOCATION_NUTS">
         <xsl:if test="LOCATION">
             <pc:location>
-                <s:Place>
+                <s:Place rdf:about="{$pc_location_place_uri}">
                     <s:description>
                         <xsl:value-of select="normalize-space(LOCATION)"/>
                     </s:description>

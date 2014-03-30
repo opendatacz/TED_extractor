@@ -15,6 +15,11 @@
     <xsl:variable name="cpv_nm" select="'http://linked.opendata.cz/resource/cpv-2008/concept/'"/>
     <xsl:variable name="procedure_type_nm" select="'http://purl.org/procurement/public-contracts-procedure-types#'"/>
     
+    <!-- get UUID -->
+    <xsl:function name="f:getUuid">
+        <xsl:sequence select="uuid:get-uuid()"/>
+    </xsl:function>
+    
     <!-- get business entity id -->
     <xsl:function name="f:getBusinessEntityId" as="xs:string">
         <xsl:param name="countryCode" as="xs:string"/>
