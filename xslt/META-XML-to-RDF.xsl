@@ -37,6 +37,7 @@
     <xsl:variable name="pcAwardCriteria">http://purl.org/procurement/public-contracts-criteria#</xsl:variable>
     
     <!-- URIs -->
+    <xsl:variable name="xsd_boolean_uri" select="concat($xsd_nm, 'boolean')"/>
     <xsl:variable name="xsd_date_uri" select="concat($xsd_nm, 'date')"/>
     <xsl:variable name="xsd_datetime_uri" select="concat($xsd_nm, 'dateTime')"/>
     <xsl:variable name="pcdt_percentage_uri" select="concat($pcdt_nm, 'percentage')"/>
@@ -156,7 +157,8 @@
     </xsl:template>
     
     <xsl:template match="datedisp">
-        <dcterms:issued rdf:datatype="{$xsd_date_uri}"><xsl:value-of select="f:parseDateTime(text())"/></dcterms:issued>
+        <!-- Document dispatch -->
+        <dcterms:dateSubmitted rdf:datatype="{$xsd_date_uri}"><xsl:value-of select="f:parseDateTime(text())"/></dcterms:dateSubmitted>
     </xsl:template>
     
     <xsl:template match="refnotice">
@@ -283,14 +285,54 @@
         <xsl:apply-templates mode="contractObject"/>
     </xsl:template>
     
-    <xsl:template mode="contractObject" match="marklist/mlioccur[timark[contains(., 'Title attributed to the contract by the contracting authority')]]/txtmark/p">
+    <xsl:template mode="contractObject" match="marklist/mlioccur[timark[contains(lower-case(.), 'title attributed to the contract by the contracting authority')]]/txtmark/p">
         <xsl:param name="lang" tunnel="yes"/>
         <dcterms:title xml:lang="{$lang}"><xsl:value-of select="."/></dcterms:title>
     </xsl:template>
     
-    <xsl:template mode="contractObject" match="marklist/mlioccur[timark[contains(., 'Short description of the contract or purchase(s)')]]/txtmark">
+    <xsl:template mode="contractObject" match="marklist/mlioccur[timark[contains(lower-case(.), 'short description of the contract or purchase(s)')]]/txtmark">
         <xsl:param name="lang" tunnel="yes"/>
         <dcterms:description xml:lang="{$lang}"><xsl:value-of select="p"/></dcterms:description>
+    </xsl:template>
+    
+    <xsl:template mode="contractObject" match="marklist/mlioccur[timark[contains(lower-case(.), 'total final value of contract')]]/txtmark">
+        <xsl:message><xsl:value-of select="."/></xsl:message>
+        <pc:aggreedPrice>
+            <s:PriceSpecification rdf:about="{f:getClassInstanceURI('Price specification')}">
+                <xsl:apply-templates mode="contractPrice"/>
+            </s:PriceSpecification>
+        </pc:aggreedPrice>
+    </xsl:template>
+    
+    <xsl:template mode="contractPrice" match="p">
+        <xsl:variable name="text" select="lower-case(text())"/>
+        
+        <xsl:if test="matches($text, 'vat')">
+            <xsl:choose>
+                <xsl:when test="contains($text, 'includ')">
+                    <s:valueAddedTaxIncluded rdf:datatype="{$xsd_boolean_uri}">true</s:valueAddedTaxIncluded>
+                </xsl:when>
+                <xsl:when test="contains($text, 'exclud')">
+                    <s:valueAddedTaxIncluded rdf:datatype="{$xsd_boolean_uri}">false</s:valueAddedTaxIncluded> 
+                </xsl:when>
+            </xsl:choose>
+        </xsl:if>
+    
+        <xsl:if test="matches($text, '^value')">
+            <xsl:analyze-string select="$text" regex="^value\s([\d\s]+,?\d*)\s*([a-z]{{3}})$">
+                <xsl:matching-substring>
+                    <s:hasCurrencyValue>
+                        <xsl:value-of select="xsd:decimal(translate(replace(regex-group(1), '\s', ''), ',', '.'))"/>
+                    </s:hasCurrencyValue>
+                    <s:hasCurrency>
+                        <xsl:value-of select="upper-case(regex-group(2))"/>
+                    </s:hasCurrency>
+                </xsl:matching-substring>
+                <xsl:non-matching-substring>
+                    <xsl:message>Non-matching price: <xsl:value-of select="$text"/></xsl:message>
+                </xsl:non-matching-substring>
+            </xsl:analyze-string>
+        </xsl:if>
     </xsl:template>
     
     <!-- Named templates -->
