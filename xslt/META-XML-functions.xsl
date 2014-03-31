@@ -18,6 +18,11 @@
     <xsl:variable name="ted_nm" select="concat($lod_nm, 'ted.europa.eu/')"/>
     
     <!-- Functions -->
+    <xsl:function name="f:formatDecimal" as="xsd:decimal">
+        <xsl:param name="number" as="xsd:string"/>
+        <xsl:value-of select="xsd:decimal(translate(replace($number, '\s', ''), ',', '.'))"/>
+    </xsl:function>
+    
     <xsl:function name="f:getAuthorityKind" as="xsd:anyURI">
         <xsl:param name="code" as="xsd:string"/>
         <xsl:variable name="localname">

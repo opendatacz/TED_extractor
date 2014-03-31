@@ -40,6 +40,7 @@
     <xsl:variable name="xsd_boolean_uri" select="concat($xsd_nm, 'boolean')"/>
     <xsl:variable name="xsd_date_uri" select="concat($xsd_nm, 'date')"/>
     <xsl:variable name="xsd_datetime_uri" select="concat($xsd_nm, 'dateTime')"/>
+    <xsl:variable name="xsd_decimal_uri" select="concat($xsd_nm, 'decimal')"/>
     <xsl:variable name="pcdt_percentage_uri" select="concat($pcdt_nm, 'percentage')"/>
     <xsl:variable name="pc_criterion_lowest_price_uri" select="concat($pcAwardCriteria, 'LowestPrice')"/>
     
@@ -47,7 +48,7 @@
     
     <xsl:template match="/">
         <rdf:RDF>
-            <xsl:apply-templates select="part/doc[@t = 'O'][*[self::CONTRACT or self::CONTRACT_AWARD][@category='orig']]"/>
+            <xsl:apply-templates select="part/doc[@t = 'O'][*[@category='orig']]"/>
         </rdf:RDF>
     </xsl:template>
 
@@ -61,7 +62,7 @@
         </xsl:apply-templates>
     </xsl:template>
     
-    <xsl:template match="CONTRACT | CONTRACT_AWARD">
+    <xsl:template match="*[@category = 'orig']">
         <xsl:param name="pc_uri" tunnel="yes"/>
         
         <xsl:variable name="lang" select="@lgorig"/>
@@ -221,9 +222,10 @@
     </xsl:template>
     
     <xsl:template mode="contractingAuthority" match="p/addr[position() = 1]">
+        <xsl:param name="contract_address_uri" tunnel="yes"/>
         <xsl:apply-templates mode="contractingAuthority"/>
         <s:address>
-            <s:PostalAddress rdf:about="{f:getClassInstanceURI('Postal address')}">
+            <s:PostalAddress rdf:about="{$contract_address_uri}">
                 <xsl:apply-templates mode="postalAddress"/>
             </s:PostalAddress>
         </s:address>
@@ -296,7 +298,6 @@
     </xsl:template>
     
     <xsl:template mode="contractObject" match="marklist/mlioccur[timark[contains(lower-case(.), 'total final value of contract')]]/txtmark">
-        <xsl:message><xsl:value-of select="."/></xsl:message>
         <pc:aggreedPrice>
             <s:PriceSpecification rdf:about="{f:getClassInstanceURI('Price specification')}">
                 <xsl:apply-templates mode="contractPrice"/>
@@ -321,15 +322,40 @@
         <xsl:if test="matches($text, '^value')">
             <xsl:analyze-string select="$text" regex="^value\s([\d\s]+,?\d*)\s*([a-z]{{3}})$">
                 <xsl:matching-substring>
-                    <s:hasCurrencyValue>
-                        <xsl:value-of select="xsd:decimal(translate(replace(regex-group(1), '\s', ''), ',', '.'))"/>
-                    </s:hasCurrencyValue>
-                    <s:hasCurrency>
+                    <s:price rdf:datatype="{$xsd_decimal_uri}">
+                        <xsl:value-of select="f:formatDecimal(regex-group(1))"/>
+                    </s:price>
+                    <s:priceCurrency>
                         <xsl:value-of select="upper-case(regex-group(2))"/>
-                    </s:hasCurrency>
+                    </s:priceCurrency>
                 </xsl:matching-substring>
                 <xsl:non-matching-substring>
                     <xsl:message>Non-matching price: <xsl:value-of select="$text"/></xsl:message>
+                </xsl:non-matching-substring>
+            </xsl:analyze-string>
+        </xsl:if>
+        
+        <!-- Price ranges:
+            Lowest offer 276 790,57 and highest offer 426 697,93 EUR
+            Lowest offer 1 582 918,12 and highest offer 1 674 180,56 PLN
+            Lowest offer 3 500 000,00 and highest offer 4 000 000,00 EUR
+            Lowest offer 536 906,58 and highest offer 596 356,20 EUR
+            -->
+        <xsl:if test="matches($text, 'lowest|highest\soffer')">
+            <xsl:analyze-string select="$text" regex="^lowest offer ([\d\s]+,?\d*) and highest offer ([\d\s]+,?\d*)\s*([a-z]{{3}})$">
+                <xsl:matching-substring>
+                    <s:minPrice rdf:datatype="{$xsd_decimal_uri}">
+                        <xsl:value-of select="f:formatDecimal(regex-group(1))"/>
+                    </s:minPrice>
+                    <s:maxPrice rdf:datatype="{$xsd_decimal_uri}">
+                        <xsl:value-of select="f:formatDecimal(regex-group(2))"/>
+                    </s:maxPrice>
+                    <s:priceCurrency>
+                        <xsl:value-of select="upper-case(regex-group(3))"/>
+                    </s:priceCurrency>
+                </xsl:matching-substring>
+                <xsl:non-matching-substring>
+                    <xsl:message>Non-matching price range: <xsl:value-of select="$text"/></xsl:message>
                 </xsl:non-matching-substring>
             </xsl:analyze-string>
         </xsl:if>
