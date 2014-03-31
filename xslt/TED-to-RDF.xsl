@@ -6,11 +6,19 @@
 #  Supported XSDs:              F02_CONTRACT, F03_CONTRACT_AWARD
 ####################################################################################
  -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:gr="http://purl.org/goodrelations/v1#" xmlns:dcterms="http://purl.org/dc/terms/"
-    xmlns:pc="http://purl.org/procurement/public-contracts#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:s="http://schema.org/"
-    xmlns:vcard="http://www.w3.org/2006/vcard/ns#" xmlns:pceu="http://purl.org/procurement/public-contracts-eu#" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-    xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:adms="http://www.w3.org/ns/adms#" xmlns:f="http://opendata.cz/xslt/functions#" exclude-result-prefixes="f"
-    xpath-default-namespace="http://publications.europa.eu/TED_schema/Export" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:dcterms="http://purl.org/dc/terms/"
+    xmlns:pc="http://purl.org/procurement/public-contracts#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:s="http://schema.org/"
+    xmlns:pceu="http://purl.org/procurement/public-contracts-eu#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+    xmlns:adms="http://www.w3.org/ns/adms#"
+    xmlns:f="http://opendata.cz/xslt/functions#"
+    exclude-result-prefixes="f"
+    xpath-default-namespace="http://publications.europa.eu/TED_schema/Export"
+    version="2.0">
 
     <xsl:import href="functions.xsl"/>
     <xsl:output encoding="UTF-8" indent="yes" method="xml" normalization-form="NFC"/>
@@ -141,11 +149,11 @@
             <xsl:value-of select="f:getBusinessEntityId($country, $organisationId)"/>
         </xsl:variable>
         <pc:contractingAuthority>
-            <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm, $contractingAuthorityUri)}">
+            <s:Organization rdf:about="{concat($ted_business_entity_nm, $contractingAuthorityUri)}">
                 <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE" mode="legalNameAndAddress"/>
                 <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT/URL_BUYER"/>
                 <xsl:apply-templates select="../TYPE_AND_ACTIVITIES_AND_PURCHASING_ON_BEHALF/TYPE_AND_ACTIVITIES"/>
-            </gr:BusinessEntity>
+            </s:Organization>
         </pc:contractingAuthority>
     </xsl:template>
 
@@ -207,14 +215,14 @@
     <!-- estimated price -->
     <xsl:template match="NATURE_QUANTITY_SCOPE/COSTS_RANGE_AND_CURRENCY">
         <pc:estimatedPrice>
-            <gr:PriceSpecification rdf:about="{concat($pc_estimated_price_nm, position())}">
+            <s:PriceSpecification rdf:about="{concat($pc_estimated_price_nm, position())}">
                 <xsl:apply-templates select="VALUE_COST"/>
                 <xsl:apply-templates select="RANGE_VALUE_COST"/>
                 <xsl:call-template name="currency">
                     <xsl:with-param name="currencyCode" select="@CURRENCY"/>
                 </xsl:call-template>
-                <gr:valueAddedTaxIncluded rdf:datatype="{$xsd_boolean_uri}">false</gr:valueAddedTaxIncluded>
-            </gr:PriceSpecification>
+                <s:valueAddedTaxIncluded rdf:datatype="{$xsd_boolean_uri}">false</s:valueAddedTaxIncluded>
+            </s:PriceSpecification>
         </pc:estimatedPrice>
     </xsl:template>
 
@@ -309,14 +317,14 @@
     <!-- contract documentation price -->
     <xsl:template match="PAYABLE_DOCUMENTS/DOCUMENT_COST">
         <pc:documentationPrice>
-            <gr:PriceSpecification rdf:about="{$pc_documentation_price_uri}">
+            <s:PriceSpecification rdf:about="{$pc_documentation_price_uri}">
                 <xsl:call-template name="priceValue">
                     <xsl:with-param name="value" select="@FMTVAL"/>
                 </xsl:call-template>
                 <xsl:call-template name="currency">
                     <xsl:with-param name="currencyCode" select="@CURRENCY"/>
                 </xsl:call-template>
-            </gr:PriceSpecification>
+            </s:PriceSpecification>
         </pc:documentationPrice>
     </xsl:template>
 
@@ -400,11 +408,11 @@
             <xsl:value-of select="f:getBusinessEntityId($country, $organisationId)"/>
         </xsl:variable>
         <pc:contractingAuthority>
-            <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm, $contractingAuthorityUri)}">
+            <s:Organization rdf:about="{concat($ted_business_entity_nm, $contractingAuthorityUri)}">
                 <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE" mode="legalNameAndAddress"/>
                 <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_AWARD/URL_BUYER"/>
                 <xsl:apply-templates select="../TYPE_AND_ACTIVITIES_AND_PURCHASING_ON_BEHALF/TYPE_AND_ACTIVITIES"/>
-            </gr:BusinessEntity>
+            </s:Organization>
         </pc:contractingAuthority>
     </xsl:template>
 
@@ -575,9 +583,9 @@
     -->
 
     <xsl:template name="legalName">
-        <gr:legalName>
+        <s:legalName>
             <xsl:value-of select="normalize-space(ORGANISATION/OFFICIALNAME/text())"/>
-        </gr:legalName>
+        </s:legalName>
     </xsl:template>
 
     <xsl:template name="postalAddress">
@@ -625,30 +633,30 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <gr:PriceSpecification rdf:about="{$priceUri}">
+        <s:PriceSpecification rdf:about="{$priceUri}">
             <xsl:apply-templates select="VALUE_COST"/>
             <xsl:apply-templates select="RANGE_VALUE_COST"/>
             <xsl:call-template name="currency">
                 <xsl:with-param name="currencyCode" select="@CURRENCY"/>
             </xsl:call-template>
-            <gr:valueAddedTaxIncluded rdf:datatype="{$xsd_boolean_uri}">
+            <s:valueAddedTaxIncluded rdf:datatype="{$xsd_boolean_uri}">
                 <xsl:value-of select="$isTaxIncluded"/>
-            </gr:valueAddedTaxIncluded>
-        </gr:PriceSpecification>
+            </s:valueAddedTaxIncluded>
+        </s:PriceSpecification>
     </xsl:template>
 
     <xsl:template name="priceValue">
         <xsl:param name="value"/>
-        <gr:hasCurrencyValue rdf:datatype="{$xsd_decimal_uri}">
+        <s:price rdf:datatype="{$xsd_decimal_uri}">
             <xsl:value-of select="$value"/>
-        </gr:hasCurrencyValue>
+        </s:price>
     </xsl:template>
 
     <xsl:template name="currency">
         <xsl:param name="currencyCode"/>
-        <gr:hasCurrency>
+        <s:priceCurrency>
             <xsl:value-of select="$currencyCode"/>
-        </gr:hasCurrency>
+        </s:priceCurrency>
     </xsl:template>
 
     <xsl:template name="procedureType">
@@ -741,11 +749,11 @@
         <xsl:variable name="businessEntityId">
             <xsl:value-of select="f:getBusinessEntityId($country, $organisationId)"/>
         </xsl:variable>
-        <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm, $businessEntityId)}">
+        <s:Organization rdf:about="{concat($ted_business_entity_nm, $businessEntityId)}">
             <xsl:call-template name="legalName"/>
             <xsl:call-template name="postalAddress"/>
             <xsl:call-template name="contactPoint"/>
-        </gr:BusinessEntity>
+        </s:Organization>
     </xsl:template>
 
     <xsl:template name="contactPoint">
@@ -942,12 +950,12 @@
 
     <!-- price range min and max values -->
     <xsl:template match="RANGE_VALUE_COST">
-        <gr:hasMinCurrencyValue rdf:datatype="{$xsd_decimal_uri}">
+        <s:minPrice rdf:datatype="{$xsd_decimal_uri}">
             <xsl:value-of select="LOW_VALUE/@FMTVAL"/>
-        </gr:hasMinCurrencyValue>
-        <gr:hasMaxCurrencyValue rdf:datatype="{$xsd_decimal_uri}">
+        </s:minPrice>
+        <s:maxPrice rdf:datatype="{$xsd_decimal_uri}">
             <xsl:value-of select="HIGH_VALUE/@FMTVAL"/>
-        </gr:hasMaxCurrencyValue>
+        </s:maxPrice>
     </xsl:template>
 
     <!-- criterion lowest price -->

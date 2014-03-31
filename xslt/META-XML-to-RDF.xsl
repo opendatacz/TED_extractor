@@ -8,14 +8,10 @@
  -->
 <xsl:stylesheet 
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-    xmlns:gr="http://purl.org/goodrelations/v1#" 
     xmlns:dcterms="http://purl.org/dc/terms/"
     xmlns:pc="http://purl.org/procurement/public-contracts#" 
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
-    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" 
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"  
     xmlns:s="http://schema.org/"
-    xmlns:vcard="http://www.w3.org/2006/vcard/ns#" 
-    xmlns:pceu="http://purl.org/procurement/public-contracts-eu#" 
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns:skos="http://www.w3.org/2004/02/skos/core#" 
     xmlns:adms="http://www.w3.org/ns/adms#"
