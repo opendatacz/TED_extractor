@@ -99,7 +99,10 @@
 
     <xsl:template match="FD_CONTRACT">
         <!-- contract kind -->
-        <pc:kind rdf:resource="{f:getContractKind(@CTYPE)}"/>
+        <xsl:variable name="contract_kind_uri" select="f:getContractKind(@CTYPE)"/>
+        <xsl:if test="$contract_kind_uri">
+            <pc:kind rdf:resource="{$contract_kind_uri}"/>
+        </xsl:if>
         <xsl:apply-templates select="CONTRACTING_AUTHORITY_INFORMATION"/>
         <xsl:apply-templates select="OBJECT_CONTRACT_INFORMATION"/>
         <xsl:apply-templates select="PROCEDURE_DEFINITION_CONTRACT_NOTICE"/>
@@ -661,7 +664,10 @@
 
     <xsl:template name="procedureType">
         <xsl:param name="ptElementName"/>
-        <pc:procedureType rdf:resource="{f:getProcedureType($ptElementName)}"/>
+        <xsl:variable name="procedure_type_uri" select="f:getProcedureType($ptElementName)"/>
+        <xsl:if test="$procedure_type_uri">
+            <pc:procedureType rdf:resource="{$procedure_type_uri}"/>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template name="awardCriterion">
@@ -810,10 +816,16 @@
     <!-- contracting authority kind and main activity  -->
     <xsl:template match="TYPE_AND_ACTIVITIES">
         <xsl:if test="TYPE_OF_CONTRACTING_AUTHORITY">
-            <pc:authorityKind rdf:resource="{f:getAuthorityKind(TYPE_OF_CONTRACTING_AUTHORITY/@VALUE)}"/>
+            <xsl:variable name="authority_kind_uri" select="f:getAuthorityKind(TYPE_OF_CONTRACTING_AUTHORITY/@VALUE)"/>
+            <xsl:if test="$authority_kind_uri">
+                <pc:authorityKind rdf:resource="{$authority_kind_uri}"/>
+            </xsl:if>
         </xsl:if>
         <xsl:if test="TYPE_OF_ACTIVITY">
-            <pc:mainActivity rdf:resource="{f:getAuthorityActivity(TYPE_OF_ACTIVITY[1]/@VALUE)}"/>
+            <xsl:variable name="authority_activity_uri" select="f:getAuthorityActivity(TYPE_OF_ACTIVITY[1]/@VALUE)"/>
+            <xsl:if test="$authority_activity_uri">
+                <pc:mainActivity rdf:resource="{$authority_activity_uri}"/>
+            </xsl:if>
         </xsl:if>
     </xsl:template>
 

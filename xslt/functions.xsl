@@ -35,81 +35,58 @@
     </xsl:function>
     
     <!-- get contract kind resource uri -->
-    <xsl:function name="f:getContractKind" as="xs:string">
+    <xsl:function name="f:getContractKind" as="xs:string?">
         <xsl:param name="kind" as="xs:string"/>
-        <xsl:choose>
-            <xsl:when test="matches($kind,'SERVICES')">
-                <xsl:sequence select="concat($contract_kinds_nm,'Services')"/>
-            </xsl:when>
-            <xsl:when test="matches($kind,'WORKS')">
-                <xsl:sequence select="concat($contract_kinds_nm,'Works')"/>
-            </xsl:when>
-            <xsl:when test="matches($kind,'SUPPLIES')">
-                <xsl:sequence select="concat($contract_kinds_nm,'Supplies')"/>
-            </xsl:when>
-        </xsl:choose>
+        <xsl:variable name="localname">
+            <xsl:choose>
+                <xsl:when test="matches($kind, 'SERVICES')">Services</xsl:when>
+                <xsl:when test="matches($kind, 'WORKS')">Works</xsl:when>
+                <xsl:when test="matches($kind, 'SUPPLIES')">Supplies</xsl:when>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:if test="not($localname = '')">
+            <xsl:value-of select="concat($contract_kinds_nm, $localname)"/>
+        </xsl:if>
     </xsl:function>
     
     <!-- get authority kind resource uri -->
-    <xsl:function name="f:getAuthorityKind" as="xs:string">
-        <xsl:param name="kind" as="xs:string" />       
-        <xsl:choose>
-            <xsl:when test="matches($kind,'MINISTRY')">
-                <xsl:sequence select="concat($authority_kinds_nm, 'NationalAuthority')" />
-            </xsl:when>
-            <xsl:when test="matches($kind,'NATIONAL_AGENCY')">
-                <xsl:sequence select="concat($authority_kinds_nm, 'NationalAgency')" />
-            </xsl:when>
-            <xsl:when test="matches($kind,'REGIONAL_AUTHORITY')">
-                <xsl:sequence select="concat($authority_kinds_nm, 'LocalAuthority')" />
-            </xsl:when>
-            <xsl:when test="matches($kind,'REGIONAL_AGENCY')">
-                <xsl:sequence select="concat($authority_kinds_nm, 'LocalAgency')" />
-            </xsl:when>
-            <xsl:when test="matches($kind,'BODY_PUBLIC')">
-                <xsl:sequence select="concat($authority_kinds_nm, 'PublicBody')" />
-            </xsl:when>
-            <xsl:when test="matches($kind,'EU_INSTITUTION')">
-                <xsl:sequence select="concat($authority_kinds_nm, 'InternationalOrganization')" />
-            </xsl:when>
-        </xsl:choose>
+    <xsl:function name="f:getAuthorityKind" as="xs:string?">
+        <xsl:param name="kind" as="xs:string" />
+        <xsl:variable name="localname">
+            <xsl:choose>
+                <xsl:when test="matches($kind,'MINISTRY')">NationalAuthority</xsl:when>
+                <xsl:when test="matches($kind,'NATIONAL_AGENCY')">NationalAgency</xsl:when>
+                <xsl:when test="matches($kind,'REGIONAL_AUTHORITY')">LocalAuthority</xsl:when>
+                <xsl:when test="matches($kind,'REGIONAL_AGENCY')">LocalAgency</xsl:when>
+                <xsl:when test="matches($kind,'BODY_PUBLIC')">PublicBody</xsl:when>
+                <xsl:when test="matches($kind,'EU_INSTITUTION')">InternationalOrganization</xsl:when>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:if test="not($localname = '')">
+            <xsl:value-of select="concat($authority_kinds_nm, $localname)"/>
+        </xsl:if>
     </xsl:function>
     
     <!-- get authority kind resource uri -->
-    <xsl:function name="f:getAuthorityActivity" as="xs:string">
-        <xsl:param name="activity" as="xs:string" />       
-        <xsl:choose>
-            <xsl:when test="matches($activity,'GENERAL_PUBLIC_SERVICES')">
-                <xsl:sequence select="concat($authority_activities_nm, 'GeneralServices')" />
-            </xsl:when>
-            <xsl:when test="matches($activity,'SOCIAL_PROTECTION')">
-                <xsl:sequence select="concat($authority_activities_nm, 'SocialProtection')" />
-            </xsl:when>
-            <xsl:when test="matches($activity,'EDUCATION')">
-                <xsl:sequence select="concat($authority_activities_nm, 'Educational')" />
-            </xsl:when>
-            <xsl:when test="matches($activity,'HEALTH')">
-                <xsl:sequence select="concat($authority_activities_nm, 'Health')" />
-            </xsl:when>
-            <xsl:when test="matches($activity,'ENVIRONMENT')">
-                <xsl:sequence select="concat($authority_activities_nm, 'Environment')" />
-            </xsl:when>
-            <xsl:when test="matches($activity,'PUBLIC_ORDER_AND_SAFETY')">
-                <xsl:sequence select="concat($authority_activities_nm, 'Safety')" />
-            </xsl:when>
-            <xsl:when test="matches($activity,'HOUSING_AND_COMMUNITY_AMENITIES')">
-                <xsl:sequence select="concat($authority_activities_nm, 'Housing')" />
-            </xsl:when>
-            <xsl:when test="matches($activity,'DEFENCE')">
-                <xsl:sequence select="concat($authority_activities_nm, 'Defence')" />
-            </xsl:when>
-            <xsl:when test="matches($activity,'ECONOMIC_AND_FINANCIAL_AFFAIRS')">
-                <xsl:sequence select="concat($authority_activities_nm, 'EconomicAffairs')" />
-            </xsl:when>
-            <xsl:when test="matches($activity,'RECREATION_CULTURE_AND_RELIGION')">
-                <xsl:sequence select="concat($authority_activities_nm, 'Cultural')" />
-            </xsl:when>
-        </xsl:choose>
+    <xsl:function name="f:getAuthorityActivity" as="xs:string?">
+        <xsl:param name="activity" as="xs:string" />
+        <xsl:variable name="localname">        
+            <xsl:choose>
+                <xsl:when test="matches($activity,'GENERAL_PUBLIC_SERVICES')">GeneralServices</xsl:when>
+                <xsl:when test="matches($activity,'SOCIAL_PROTECTION')">SocialProtection</xsl:when>
+                <xsl:when test="matches($activity,'EDUCATION')">Educational</xsl:when>
+                <xsl:when test="matches($activity,'HEALTH')">Health</xsl:when>
+                <xsl:when test="matches($activity,'ENVIRONMENT')">Environment</xsl:when>
+                <xsl:when test="matches($activity,'PUBLIC_ORDER_AND_SAFETY')">Safety</xsl:when>
+                <xsl:when test="matches($activity,'HOUSING_AND_COMMUNITY_AMENITIES')">Housing</xsl:when>
+                <xsl:when test="matches($activity,'DEFENCE')">Defence</xsl:when>
+                <xsl:when test="matches($activity,'ECONOMIC_AND_FINANCIAL_AFFAIRS')">EconomicAffairs</xsl:when>
+                <xsl:when test="matches($activity,'RECREATION_CULTURE_AND_RELIGION')">Cultural</xsl:when>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:if test="not($localname = '')">
+            <xsl:value-of select="concat($authority_activities_nm, $localname)"/>
+        </xsl:if>
     </xsl:function>
     
     <xsl:function name="f:getNutsUri" as="xs:string">
@@ -161,36 +138,23 @@
         <xsl:sequence select="xs:dateTime(concat($date, 'T', $time))"/>
     </xsl:function>
     
-    <xsl:function name="f:getProcedureType" as="xs:string">
-        <xsl:param name="procedureTypeElementName" as="xs:string"/>       
-        <xsl:choose>
-            <xsl:when test="matches($procedureTypeElementName,'OPEN')">
-                <xsl:sequence select="concat($procedure_type_nm, 'Open')" />
-            </xsl:when>
-            <xsl:when test="matches($procedureTypeElementName,'ACCELERATED_RESTRICTED')">
-                <xsl:sequence select="concat($procedure_type_nm, 'AcceleratedRestricted')" />
-            </xsl:when>
-            <xsl:when test="matches($procedureTypeElementName,'RESTRICTED')">
-                <xsl:sequence select="concat($procedure_type_nm, 'Restricted')" />
-            </xsl:when>
-            <xsl:when test="matches($procedureTypeElementName,'ACCELERATED_NEGOTIATED')">
-                <xsl:sequence select="concat($procedure_type_nm, 'AcceleratedNegotiated')" />
-            </xsl:when>
-            <xsl:when test="matches($procedureTypeElementName,'NEGOTIATED_WITH_COMPETITION')">
-                <xsl:sequence select="concat($procedure_type_nm, 'NegotiatedWithCompetition')" />
-            </xsl:when>
-            <xsl:when test="matches($procedureTypeElementName,'NEGOTIATED_WITHOUT_COMPETITION')">
-                <xsl:sequence select="concat($procedure_type_nm, 'NegotiatedWithoutCompetition')" />
-            </xsl:when>
-            <xsl:when test="matches($procedureTypeElementName,'NEGOTIATED')">
-                <xsl:sequence select="concat($procedure_type_nm, 'Negotiated')" />
-            </xsl:when>
-            <xsl:when test="matches($procedureTypeElementName,'COMPETITIVE_DIALOGUE')">
-                <xsl:sequence select="concat($procedure_type_nm, 'CompetitiveDialogue')" />
-            </xsl:when>
-            <xsl:when test="matches($procedureTypeElementName,'AWARD_WITHOUT_PRIOR_PUBLICATION')">
-                <xsl:sequence select="concat($procedure_type_nm, 'AwardWithoutPriorPublication')" />
-            </xsl:when>
-        </xsl:choose>
+    <xsl:function name="f:getProcedureType" as="xs:string?">
+        <xsl:param name="procedureTypeElementName" as="xs:string"/>    
+        <xsl:variable name="localname">
+            <xsl:choose>
+                <xsl:when test="matches($procedureTypeElementName,'OPEN')">Open</xsl:when>
+                <xsl:when test="matches($procedureTypeElementName,'ACCELERATED_RESTRICTED')">AcceleratedRestricted</xsl:when>
+                <xsl:when test="matches($procedureTypeElementName,'RESTRICTED')">Restricted</xsl:when>
+                <xsl:when test="matches($procedureTypeElementName,'ACCELERATED_NEGOTIATED')">AcceleratedNegotiated</xsl:when>
+                <xsl:when test="matches($procedureTypeElementName,'NEGOTIATED_WITH_COMPETITION')">NegotiatedWithCompetition</xsl:when>
+                <xsl:when test="matches($procedureTypeElementName,'NEGOTIATED_WITHOUT_COMPETITION')">NegotiatedWithoutCompetition</xsl:when>
+                <xsl:when test="matches($procedureTypeElementName,'NEGOTIATED')">Negotiated</xsl:when>
+                <xsl:when test="matches($procedureTypeElementName,'COMPETITIVE_DIALOGUE')">CompetitiveDialogue</xsl:when>
+                <xsl:when test="matches($procedureTypeElementName,'AWARD_WITHOUT_PRIOR_PUBLICATION')">AwardWithoutPriorPublication</xsl:when>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:if test="not($localname = '')">
+            <xsl:value-of select="concat($procedure_type_nm, $localname)" />
+        </xsl:if>
     </xsl:function>
 </xsl:stylesheet>
