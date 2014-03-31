@@ -93,7 +93,10 @@
         <xsl:param name="contracting_authority_uri" tunnel="yes"/>
         <pc:contractingAuthority>
             <s:Organization rdf:about="{$contracting_authority_uri}">
-                <pc:authorityKind rdf:resource="{f:getAuthorityKind(@code)}"/>
+                <xsl:variable name="authority_kind_uri" select="f:getAuthorityKind(@code)"/>
+                <xsl:if test="$authority_kind_uri">
+                    <pc:authorityKind rdf:resource="{$authority_kind_uri}"/>
+                </xsl:if>
             </s:Organization>
         </pc:contractingAuthority>
     </xsl:template>
@@ -103,11 +106,17 @@
     </xsl:template>
     
     <xsl:template match="market">
-        <pc:kind rdf:resource="{f:getContractKind(@code)}"/>
+        <xsl:variable name="contract_kind_uri" select="f:getContractKind(@code)"/>
+        <xsl:if test="$contract_kind_uri">
+            <pc:kind rdf:resource="{$contract_kind_uri}"/>
+        </xsl:if>
     </xsl:template>
     
     <xsl:template match="proc">
-        <pc:procedureType rdf:resource="{f:getProcedureType(@code)}"/>
+        <xsl:variable name="procedure_type_uri" select="f:getProcedureType(@code)"/>
+        <xsl:if test="$procedure_type_uri">
+            <pc:procedureType rdf:resource="{$procedure_type_uri}"/>
+        </xsl:if>
     </xsl:template>
     
     <xsl:template match="marketorg">
@@ -195,7 +204,10 @@
         <xsl:param name="contracting_authority_uri" tunnel="yes"/>
         <pc:contractingAuthority>
             <s:Organization rdf:about="{$contracting_authority_uri}">
-                <pc:mainActivity rdf:resource="{f:getMainActivity(@code)}"/>
+                <xsl:variable name="main_activity_uri" select="f:getMainActivity(@code)"/>
+                <xsl:if test="$main_activity_uri">
+                    <pc:mainActivity rdf:resource="{$main_activity_uri}"/>
+                </xsl:if>
             </s:Organization>
         </pc:contractingAuthority>
     </xsl:template>

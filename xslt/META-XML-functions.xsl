@@ -23,7 +23,7 @@
         <xsl:value-of select="xsd:decimal(translate(replace($number, '\s', ''), ',', '.'))"/>
     </xsl:function>
     
-    <xsl:function name="f:getAuthorityKind" as="xsd:anyURI">
+    <xsl:function name="f:getAuthorityKind" as="xsd:anyURI?">
         <xsl:param name="code" as="xsd:string"/>
         <xsl:variable name="localname">
             <xsl:choose>
@@ -34,7 +34,9 @@
                 <xsl:when test="$code = '8'">Other</xsl:when> <!-- Not in scheme! -->
             </xsl:choose>
         </xsl:variable>
-        <xsl:value-of select="concat($pcAuthorityKinds, $localname)"/>
+        <xsl:if test="not($localname = '')">
+            <xsl:value-of select="concat($pcAuthorityKinds, $localname)"/>
+        </xsl:if>
     </xsl:function>
     
     <xsl:function name="f:getClassInstanceURI" as="xsd:anyURI">
@@ -48,7 +50,7 @@
         <xsl:value-of select="f:getClassInstanceURI($class, uuid:get-uuid())"/>
     </xsl:function>
     
-    <xsl:function name="f:getContractKind" as="xsd:anyURI">
+    <xsl:function name="f:getContractKind" as="xsd:anyURI?">
         <xsl:param name="code" as="xsd:string"/>
         <xsl:variable name="lowercasedCode" select="lower-case($code)"/>
         <xsl:variable name="localname">
@@ -64,10 +66,12 @@
                 -->
             </xsl:choose>
         </xsl:variable>
-        <xsl:value-of select="concat($pcContractKinds, $localname)"/>
+        <xsl:if test="not($localname = '')">
+            <xsl:value-of select="concat($pcContractKinds, $localname)"/>
+        </xsl:if>
     </xsl:function>
     
-    <xsl:function name="f:getMainActivity" as="xsd:anyURI">
+    <xsl:function name="f:getMainActivity" as="xsd:anyURI?">
         <xsl:param name="code" as="xsd:string"/>
         <xsl:variable name="localname">
             <xsl:choose>
@@ -94,7 +98,9 @@
                 <xsl:when test="$code = 'W'">Water</xsl:when> <!-- "Water" Not in the scheme! -->
             </xsl:choose>
         </xsl:variable>
-        <xsl:value-of select="concat($pcActivities, $localname)"/>
+        <xsl:if test="not($localname = '')">
+            <xsl:value-of select="concat($pcActivities, $localname)"/>
+        </xsl:if>
     </xsl:function>
     
     <xsl:function name="f:getNoticeType" as="xsd:anyURI?">
@@ -109,7 +115,7 @@
         </xsl:if>
     </xsl:function>
     
-    <xsl:function name="f:getProcedureType" as="xsd:anyURI">
+    <xsl:function name="f:getProcedureType" as="xsd:anyURI?">
         <xsl:param name="code" as="xsd:string"/>
         <xsl:variable name="localname">
             <xsl:choose>
@@ -128,7 +134,9 @@
                 <xsl:when test="$code = 'V'">AwardWithoutPriorPublication</xsl:when>
             </xsl:choose>
         </xsl:variable>
-        <xsl:value-of select="concat($pcProcedureTypes, $localname)"/>
+        <xsl:if test="not($localname = '')">
+            <xsl:value-of select="concat($pcProcedureTypes, $localname)"/>
+        </xsl:if>
     </xsl:function>
     
     <xsl:function name="f:parseDateTime" as="xsd:string">
