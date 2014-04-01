@@ -378,7 +378,7 @@
     <xsl:template match="CONDITIONS_FOR_OPENING_TENDERS">
         <xsl:if test="DATE_TIME|PLACE_OPENING">
             <pc:TendersOpening rdf:about="{$tenders_opening_uri}">
-                <pc:Contract rdf:resource="{$pc_uri}"/>
+                <pc:contract rdf:resource="{$pc_uri}"/>
                 <xsl:apply-templates select="DATE_TIME"/>
                 <xsl:apply-templates select="PLACE_OPENING"/>
             </pc:TendersOpening>
