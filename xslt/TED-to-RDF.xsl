@@ -359,7 +359,7 @@
 
     <!-- tender maintenance duration -->
     <xsl:template match="MINIMUM_TIME_MAINTAINING_TENDER">
-        <xsl:if test="PERIOD_DAY|PERIOD_MONTH">
+        <xsl:if test="(PERIOD_DAY and matches(PERIOD_DAY/text(), '^\d+$')) or (PERIOD_MONTH and matches(PERIOD_MONTH/text(), '^\d+$'))">
             <pc:tenderMaintenanceDuration rdf:datatype="{$xsd_duration_uri}">
                 <xsl:apply-templates select="PERIOD_DAY"/>
                 <xsl:apply-templates select="PERIOD_MONTH"/>
