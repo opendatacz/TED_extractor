@@ -51,8 +51,9 @@
     <xsl:variable name="xsd_duration_uri" select="concat($xsd_nm, 'duration')"/>
     <xsl:variable name="xsd_date_time_uri" select="concat($xsd_nm, 'dateTime')"/>
     <xsl:variable name="xsd_decimal_uri" select="concat($xsd_nm, 'decimal')"/>
-    <xsl:variable name="xsd_non_negative_integer_uri" select="concat($xsd_nm, 'nonNegativeInteger')"/>
     <xsl:variable name="xsd_gYearMonth_uri" select="concat($xsd_nm, 'gYearMonth')"/>
+    <xsl:variable name="xsd_non_negative_integer_uri" select="concat($xsd_nm, 'nonNegativeInteger')"/>
+    <xsl:variable name="xsd_time_uri" select="concat($xsd_nm, 'time')"/>
     <xsl:variable name="pcdt_percentage_uri" select="concat($pcdt_nm, 'percentage')"/>
     <xsl:variable name="pc_uri" select="concat($ted_pc_nm, $doc_id)"/>
     <xsl:variable name="pc_location_place_uri" select="concat($pc_uri, '/location-place/1')"/>
@@ -387,9 +388,18 @@
 
     <!-- tenders opening date -->
     <xsl:template match="CONDITIONS_FOR_OPENING_TENDERS/DATE_TIME">
-        <dcterms:date rdf:datatype="{$xsd_date_time_uri}">
-            <xsl:value-of select="f:getDateTime(YEAR, MONTH, DAY, TIME)"/>
-        </dcterms:date>
+        <xsl:choose>
+            <xsl:when test="YEAR/text() and MONTH/text() and DAY/text() and TIME/text()">
+                <dcterms:date rdf:datatype="{$xsd_date_time_uri}">
+                    <xsl:value-of select="f:getDateTime(YEAR, MONTH, DAY, TIME)"/>
+                </dcterms:date>
+            </xsl:when>
+            <xsl:when test="TIME/text()">
+                <dcterms:temporal rdf:datatype="{$xsd_time_uri}">
+                    <xsl:value-of select="f:getTime(TIME)"/>
+                </dcterms:temporal>
+            </xsl:when>
+        </xsl:choose>
     </xsl:template>
 
     <!-- tenders opening place -->

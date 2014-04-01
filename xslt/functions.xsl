@@ -127,23 +127,7 @@
         <xsl:param name="day" as="xs:integer"/>
         <xsl:param name="hoursMinutes" as="xs:string?"/>
         <xsl:variable name="date" select="f:getDate($year, $month, $day)"/>
-        <xsl:variable name="time">
-            <xsl:choose>
-                <xsl:when test="$hoursMinutes">
-                    <xsl:analyze-string select="$hoursMinutes" regex="^(\d+):(\d+)$">
-                        <xsl:matching-substring>
-                            <xsl:value-of select="concat(format-number(xs:integer(regex-group(1)), '00'), ':', format-number(xs:integer(regex-group(2)), '00'), ':', '00')"/>
-                        </xsl:matching-substring>
-                        <xsl:non-matching-substring>
-                            <xsl:value-of select="'00:00:00'"/>
-                        </xsl:non-matching-substring>
-                    </xsl:analyze-string>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="'00:00:00'"/>
-                </xsl:otherwise>
-            </xsl:choose>         
-        </xsl:variable>
+        <xsl:variable name="time" select="f:getTime($hoursMinutes)"/>
         <xsl:sequence select="xs:dateTime(concat($date, 'T', $time))"/>
     </xsl:function>
     
@@ -165,6 +149,25 @@
         <xsl:if test="not($localname = '')">
             <xsl:value-of select="concat($procedure_type_nm, $localname)" />
         </xsl:if>
+    </xsl:function>
+    
+    <xsl:function name="f:getTime" as="xs:time">
+        <xsl:param name="hoursMinutes" as="xs:string"/>
+        <xsl:choose>
+            <xsl:when test="$hoursMinutes">
+                <xsl:analyze-string select="$hoursMinutes" regex="^(\d+):(\d+)$">
+                    <xsl:matching-substring>
+                        <xsl:value-of select="concat(format-number(xs:integer(regex-group(1)), '00'), ':', format-number(xs:integer(regex-group(2)), '00'), ':', '00')"/>
+                    </xsl:matching-substring>
+                    <xsl:non-matching-substring>
+                        <xsl:value-of select="'00:00:00'"/>
+                    </xsl:non-matching-substring>
+                </xsl:analyze-string>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="'00:00:00'"/>
+            </xsl:otherwise>
+        </xsl:choose>      
     </xsl:function>
     
     <xsl:function name="f:parseDuration" as="xs:integer">
