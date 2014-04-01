@@ -109,7 +109,13 @@
         <xsl:param name="year" as="xs:integer"/>
         <xsl:param name="month" as="xs:integer"/>
         <xsl:param name="day" as="xs:integer"/>
-        <xsl:sequence select="xs:date(concat($year, '-', format-number($month, '00'), '-', format-number($day, '00')))"/>
+        <xsl:value-of select="xs:date(concat($year, '-', format-number($month, '00'), '-', format-number($day, '00')))"/>
+    </xsl:function>
+    
+    <xsl:function name="f:getDate" as="xs:gYearMonth">
+        <xsl:param name="year" as="xs:integer"/>
+        <xsl:param name="month" as="xs:integer"/>
+        <xsl:value-of select="xs:gYearMonth(concat($year, '-', format-number($month, '00')))"/>
     </xsl:function>
     
     <xsl:function name="f:getDateTime" as="xs:dateTime">

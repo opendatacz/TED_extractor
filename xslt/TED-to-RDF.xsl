@@ -52,6 +52,7 @@
     <xsl:variable name="xsd_date_time_uri" select="concat($xsd_nm, 'dateTime')"/>
     <xsl:variable name="xsd_decimal_uri" select="concat($xsd_nm, 'decimal')"/>
     <xsl:variable name="xsd_non_negative_integer_uri" select="concat($xsd_nm, 'nonNegativeInteger')"/>
+    <xsl:variable name="xsd_gYearMonth_uri" select="concat($xsd_nm, 'gYearMonth')"/>
     <xsl:variable name="pcdt_percentage_uri" select="concat($pcdt_nm, 'percentage')"/>
     <xsl:variable name="pc_uri" select="concat($ted_pc_nm, $doc_id)"/>
     <xsl:variable name="pc_location_place_uri" select="concat($pc_uri, '/location-place/1')"/>
@@ -258,16 +259,33 @@
 
     <!-- interval start date -->
     <xsl:template match="START_DATE">
-        <pc:startDate rdf:datatype="{$xsd_date_uri}">
-            <xsl:value-of select="f:getDate(YEAR, MONTH, DAY)"/>
-        </pc:startDate>
+        <xsl:call-template name="getDateProperty">
+            <xsl:with-param name="property">pc:startDate</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
 
     <!-- interval estimated end date -->
     <xsl:template match="END_DATE">
-        <pc:estimatedEndDate rdf:datatype="{$xsd_date_uri}">
-            <xsl:value-of select="f:getDate(YEAR, MONTH, DAY)"/>
-        </pc:estimatedEndDate>
+        <xsl:call-template name="getDateProperty">
+            <xsl:with-param name="property">pc:estimatedEndDate</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <!-- Generalized date template, handles missing day information -->
+    <xsl:template name="getDateProperty">
+        <xsl:param name="property"/>
+        <xsl:element name="{$property}">
+            <xsl:choose>
+                <xsl:when test="not(empty(DAY/text()))">
+                    <xsl:attribute name="rdf:datatype" select="$xsd_date_uri"/>
+                    <xsl:value-of select="f:getDate(YEAR, MONTH, DAY)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:attribute name="rdf:datatype" select="$xsd_gYearMonth_uri"/>
+                    <xsl:value-of select="f:getDate(YEAR, MONTH)"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:element>
     </xsl:template>
 
     <!--
