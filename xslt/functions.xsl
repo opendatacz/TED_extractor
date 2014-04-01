@@ -169,10 +169,18 @@
     
     <xsl:function name="f:parseDuration" as="xs:integer">
         <xsl:param name="durationValue" as="xs:string"/>
-        <xsl:analyze-string select="$durationValue" regex="^(\d+)">
-           <xsl:matching-substring>
-               <xsl:value-of select="regex-group(1)"/>
-           </xsl:matching-substring>
-        </xsl:analyze-string>
+        <xsl:variable name="normalizedDuration" select="replace($durationValue, '\s', '')"/>
+        <xsl:choose>
+            <xsl:when test="matches($normalizedDuration, '^\d+$')">
+                <xsl:value-of select="$normalizedDuration"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:analyze-string select="$durationValue" regex="^(\d+)">
+                   <xsl:matching-substring>
+                       <xsl:value-of select="regex-group(1)"/>
+                   </xsl:matching-substring>
+                </xsl:analyze-string>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:function>
 </xsl:stylesheet>
