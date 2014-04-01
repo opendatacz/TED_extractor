@@ -108,11 +108,11 @@
         </xsl:if>
     </xsl:function>
     
-    <xsl:function name="f:getDate" as="xs:date">
+    <xsl:function name="f:getDate" as="xs:string">
         <xsl:param name="year" as="xs:integer"/>
         <xsl:param name="month" as="xs:integer"/>
         <xsl:param name="day" as="xs:integer"/>
-        <xsl:value-of select="xs:date(concat($year, '-', format-number($month, '00'), '-', format-number($day, '00')))"/>
+        <xsl:value-of select="concat($year, '-', format-number($month, '00'), '-', format-number($day, '00'))"/>
     </xsl:function>
     
     <xsl:function name="f:getDate" as="xs:gYearMonth">
@@ -152,7 +152,7 @@
     </xsl:function>
     
     <xsl:function name="f:getTime" as="xs:time">
-        <xsl:param name="hoursMinutes" as="xs:string"/>
+        <xsl:param name="hoursMinutes" as="xs:string?"/>
         <xsl:choose>
             <xsl:when test="$hoursMinutes">
                 <xsl:analyze-string select="$hoursMinutes" regex="^(\d+):(\d+)$">
