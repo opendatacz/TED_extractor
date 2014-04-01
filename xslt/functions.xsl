@@ -99,12 +99,12 @@
         <xsl:sequence select="concat($cpv_nm, $cpvCode)"/>
     </xsl:function>
     
-    <xsl:function name="f:getDuration" as="xs:duration">
+    <xsl:function name="f:getDuration" as="xs:duration?">
         <xsl:param name="durationValue" as="xs:string"/>
         <xsl:param name="unitChar" as="xs:string"/>
         <xsl:variable name="parsedDuration" select="f:parseDuration($durationValue)"/>
         <xsl:if test="$parsedDuration">
-            <xsl:value-of select="xs:duration(concat('P', $parsedDuration, $unitChar))"/>
+            <xsl:value-of select="concat('P', $parsedDuration, $unitChar)"/>
         </xsl:if>
     </xsl:function>
     
@@ -170,7 +170,7 @@
         </xsl:choose>      
     </xsl:function>
     
-    <xsl:function name="f:parseDuration" as="xs:integer">
+    <xsl:function name="f:parseDuration" as="xs:integer?">
         <xsl:param name="durationValue" as="xs:string"/>
         <xsl:variable name="normalizedDuration" select="replace($durationValue, '\s', '')"/>
         <xsl:choose>

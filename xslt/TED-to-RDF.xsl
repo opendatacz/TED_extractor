@@ -240,16 +240,18 @@
 
     <!-- duration in days -->
     <xsl:template match="DAYS">
-        <pc:duration rdf:datatype="{$xsd_duration_uri}">
-            <xsl:value-of select="f:getDuration(text(), 'D')"/>
-        </pc:duration>
+        <xsl:variable name="duration" select="f:getDuration(text(), 'D')"/>
+        <xsl:call-template name="getDuration">
+            <xsl:with-param name="duration" select="$duration"/>
+        </xsl:call-template>
     </xsl:template>
 
     <!-- duration in months -->
     <xsl:template match="MONTHS">
-        <pc:duration rdf:datatype="{$xsd_duration_uri}">
-            <xsl:value-of select="f:getDuration(text(), 'M')"/>
-        </pc:duration>
+        <xsl:variable name="duration" select="f:getDuration(text(), 'M')"/>
+        <xsl:call-template name="getDuration">
+            <xsl:with-param name="duration" select="$duration"/>
+        </xsl:call-template>
     </xsl:template>
 
     <!-- duration as start date and estimated end date -->
@@ -270,23 +272,6 @@
         <xsl:call-template name="getDateProperty">
             <xsl:with-param name="property">pc:estimatedEndDate</xsl:with-param>
         </xsl:call-template>
-    </xsl:template>
-    
-    <!-- Generalized date template, handles missing day information -->
-    <xsl:template name="getDateProperty">
-        <xsl:param name="property"/>
-        <xsl:element name="{$property}">
-            <xsl:choose>
-                <xsl:when test="not(empty(DAY/text()))">
-                    <xsl:attribute name="rdf:datatype" select="$xsd_date_uri"/>
-                    <xsl:value-of select="f:getDate(YEAR, MONTH, DAY)"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:attribute name="rdf:datatype" select="$xsd_gYearMonth_uri"/>
-                    <xsl:value-of select="f:getDate(YEAR, MONTH)"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:element>
     </xsl:template>
 
     <!--
@@ -821,6 +806,38 @@
             </pc:FrameworkAgreement>
         </pc:frameworkAgreement>
     </xsl:template>
+    
+    <!-- Generalized date template, handles missing day information -->
+    <xsl:template name="getDateProperty">
+        <xsl:param name="property"/>
+        <xsl:element name="{$property}">
+            <xsl:choose>
+                <xsl:when test="not(empty(DAY/text()))">
+                    <xsl:attribute name="rdf:datatype" select="$xsd_date_uri"/>
+                    <xsl:value-of select="f:getDate(YEAR, MONTH, DAY)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:attribute name="rdf:datatype" select="$xsd_gYearMonth_uri"/>
+                    <xsl:value-of select="f:getDate(YEAR, MONTH)"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:element>
+    </xsl:template>
+    
+    <xsl:template name="getDuration">
+        <xsl:param name="duration"/>
+        <pc:duration>
+            <xsl:choose>
+                <xsl:when test="not(empty($duration))">
+                    <xsl:attribute name="rdf:datatype" select="$xsd_duration_uri"/>
+                    <xsl:value-of select="$duration"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="text()"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </pc:duration>
+    </xsl:template>
 
     <!--
     *********************************************************
@@ -863,7 +880,6 @@
             <xsl:call-template name="basicBusinessEntity"/>
         </pc:onBehalfOf>
     </xsl:template>
-
 
     <xsl:template match="ADDRESS">
         <xsl:if test="text()">
@@ -1028,14 +1044,11 @@
         </adms:identifier>
     </xsl:template>
 
-
     <!--
     *********************************************************
     *** EMPTY TEMPLATES
     *********************************************************
     -->
     <xsl:template match="text()|@*"/>
-
-
 
 </xsl:stylesheet>
