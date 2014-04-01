@@ -100,9 +100,12 @@
     </xsl:function>
     
     <xsl:function name="f:getDuration" as="xs:duration">
-        <xsl:param name="durationValue" as="xs:integer"/>
+        <xsl:param name="durationValue" as="xs:string"/>
         <xsl:param name="unitChar" as="xs:string"/>
-        <xsl:sequence select="xs:duration(concat('P', $durationValue, $unitChar))"/>
+        <xsl:variable name="parsedDuration" select="f:parseDuration($durationValue)"/>
+        <xsl:if test="$parsedDuration">
+            <xsl:value-of select="xs:duration(concat('P', $parsedDuration, $unitChar))"/>
+        </xsl:if>
     </xsl:function>
     
     <xsl:function name="f:getDate" as="xs:date">
@@ -162,5 +165,14 @@
         <xsl:if test="not($localname = '')">
             <xsl:value-of select="concat($procedure_type_nm, $localname)" />
         </xsl:if>
+    </xsl:function>
+    
+    <xsl:function name="f:parseDuration" as="xs:integer">
+        <xsl:param name="durationValue" as="xs:string"/>
+        <xsl:analyze-string select="$durationValue" regex="^(\d+)">
+           <xsl:matching-substring>
+               <xsl:value-of select="regex-group(1)"/>
+           </xsl:matching-substring>
+        </xsl:analyze-string>
     </xsl:function>
 </xsl:stylesheet>
