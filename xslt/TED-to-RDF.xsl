@@ -317,9 +317,10 @@
 
     <!-- contract documentation request deadline -->
     <xsl:template match="TIME_LIMIT">
-        <pc:documentationRequestDeadline rdf:datatype="{$xsd_date_time_uri}">
-            <xsl:value-of select="f:getDateTime(YEAR, MONTH, DAY, TIME)"/>
-        </pc:documentationRequestDeadline>
+        <xsl:call-template name="getDateTimeProperty">
+            <xsl:with-param name="property">pc:documentationRequestDeadline</xsl:with-param>
+            <xsl:with-param name="object" select="f:getDateTime(YEAR, MONTH, DAY, TIME)"/>
+        </xsl:call-template>
     </xsl:template>
 
     <!-- contract documentation price -->
@@ -338,9 +339,10 @@
 
     <!-- contract tender deadline -->
     <xsl:template match="RECEIPT_LIMIT_DATE">
-        <pc:tenderDeadline rdf:datatype="{$xsd_date_time_uri}">
-            <xsl:value-of select="f:getDateTime(YEAR, MONTH, DAY, TIME)"/>
-        </pc:tenderDeadline>
+        <xsl:call-template name="getDateTimeProperty">
+            <xsl:with-param name="property">pc:tenderDeadline</xsl:with-param>
+            <xsl:with-param name="object" select="f:getDateTime(YEAR, MONTH, DAY, TIME)"/>
+        </xsl:call-template>
     </xsl:template>
 
     <!-- tender maintenance duration -->
@@ -376,9 +378,10 @@
     <xsl:template match="CONDITIONS_FOR_OPENING_TENDERS/DATE_TIME">
         <xsl:choose>
             <xsl:when test="YEAR/text() and MONTH/text() and DAY/text() and TIME/text()">
-                <dcterms:date rdf:datatype="{$xsd_date_time_uri}">
-                    <xsl:value-of select="f:getDateTime(YEAR, MONTH, DAY, TIME)"/>
-                </dcterms:date>
+                <xsl:call-template name="getDateTimeProperty">
+                    <xsl:with-param name="property">dcterms:date</xsl:with-param>
+                    <xsl:with-param name="object" select="f:getDateTime(YEAR, MONTH, DAY, TIME)"/>
+                </xsl:call-template>
             </xsl:when>
             <xsl:when test="TIME/text()">
                 <dcterms:temporal rdf:datatype="{$xsd_time_uri}">
@@ -842,6 +845,33 @@
                 </xsl:otherwise>
             </xsl:choose>
         </pc:duration>
+    </xsl:template>
+    
+    <xsl:template name="getDatatypeProperty">
+        <xsl:param name="property"/>
+        <xsl:param name="object"/>
+        <xsl:param name="datatype_uri"/>
+        <xsl:param name="datatype_regex"/>
+        
+        <xsl:if test="not(empty($object))">
+            <xsl:element name="{$property}">
+                <xsl:if test="matches($object, $datatype_regex)">
+                    <xsl:attribute name="rdf:datatype" select="$datatype_uri"/>
+                </xsl:if>
+                <xsl:value-of select="$object"/>
+            </xsl:element>
+        </xsl:if>
+    </xsl:template>
+    
+    <xsl:template name="getDateTimeProperty">
+        <xsl:param name="property"/>
+        <xsl:param name="object"/>
+        <xsl:call-template name="getDatatypeProperty">
+            <xsl:with-param name="property" select="$property"/>
+            <xsl:with-param name="object" select="$object"/>
+            <xsl:with-param name="datatype_regex">\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}</xsl:with-param>
+            <xsl:with-param name="datatype_uri" select="$xsd_date_time_uri"/>
+        </xsl:call-template>
     </xsl:template>
 
     <!--

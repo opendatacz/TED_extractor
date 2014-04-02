@@ -128,14 +128,14 @@
         <xsl:value-of select="xs:gYear($year)"/>
     </xsl:function>
     
-    <xsl:function name="f:getDateTime" as="xs:dateTime">
+    <xsl:function name="f:getDateTime" as="xs:string">
         <xsl:param name="year" as="xs:integer"/>
         <xsl:param name="month" as="xs:integer"/>
         <xsl:param name="day" as="xs:integer"/>
         <xsl:param name="hoursMinutes" as="xs:string?"/>
         <xsl:variable name="date" select="f:getDate($year, $month, $day)"/>
         <xsl:variable name="time" select="f:getTime($hoursMinutes)"/>
-        <xsl:sequence select="xs:dateTime(concat($date, 'T', $time))"/>
+        <xsl:value-of select="concat($date, 'T', $time)"/>
     </xsl:function>
     
     <xsl:function name="f:getProcedureType" as="xs:string?">
