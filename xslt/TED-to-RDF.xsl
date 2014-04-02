@@ -565,9 +565,9 @@
 
     <!-- contract award date -->
     <xsl:template match="CONTRACT_AWARD_DATE">
-        <pc:awardDate rdf:datatype="{$xsd_date_uri}">
-            <xsl:value-of select="f:getDate(YEAR, MONTH, DAY)"/>
-        </pc:awardDate>
+        <xsl:call-template name="getDateProperty">
+            <xsl:with-param name="property">pc:awardDate</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
 
     <!-- number of received tenders -->
