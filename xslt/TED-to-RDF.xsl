@@ -51,6 +51,7 @@
     <xsl:variable name="xsd_duration_uri" select="concat($xsd_nm, 'duration')"/>
     <xsl:variable name="xsd_date_time_uri" select="concat($xsd_nm, 'dateTime')"/>
     <xsl:variable name="xsd_decimal_uri" select="concat($xsd_nm, 'decimal')"/>
+    <xsl:variable name="xsd_gYear_uri" select="concat($xsd_nm, 'gYear')"/>
     <xsl:variable name="xsd_gYearMonth_uri" select="concat($xsd_nm, 'gYearMonth')"/>
     <xsl:variable name="xsd_non_negative_integer_uri" select="concat($xsd_nm, 'nonNegativeInteger')"/>
     <xsl:variable name="xsd_time_uri" select="concat($xsd_nm, 'time')"/>
@@ -812,13 +813,17 @@
         <xsl:param name="property"/>
         <xsl:element name="{$property}">
             <xsl:choose>
-                <xsl:when test="not(empty(DAY/text()))">
-                    <xsl:attribute name="rdf:datatype" select="$xsd_date_uri"/>
-                    <xsl:value-of select="f:getDate(YEAR, MONTH, DAY)"/>
+                <xsl:when test="empty(DAY/text()) and empty(MONTH/text())">
+                    <xsl:attribute name="rdf:datatype" select="$xsd_gYear_uri"/>
+                    <xsl:value-of select="f:getDate(YEAR)"/>
                 </xsl:when>
-                <xsl:otherwise>
+                <xsl:when test="empty(DAY/text())">
                     <xsl:attribute name="rdf:datatype" select="$xsd_gYearMonth_uri"/>
                     <xsl:value-of select="f:getDate(YEAR, MONTH)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:attribute name="rdf:datatype" select="$xsd_date_uri"/>
+                    <xsl:value-of select="f:getDate(YEAR, MONTH, DAY)"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:element>

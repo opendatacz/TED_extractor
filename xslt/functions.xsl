@@ -100,11 +100,13 @@
     </xsl:function>
     
     <xsl:function name="f:getDuration" as="xs:duration?">
-        <xsl:param name="durationValue" as="xs:string"/>
+        <xsl:param name="durationValue" as="xs:string?"/>
         <xsl:param name="unitChar" as="xs:string"/>
-        <xsl:variable name="parsedDuration" select="f:parseDuration($durationValue)"/>
-        <xsl:if test="$parsedDuration">
-            <xsl:value-of select="concat('P', $parsedDuration, $unitChar)"/>
+        <xsl:if test="$durationValue">
+            <xsl:variable name="parsedDuration" select="f:parseDuration($durationValue)"/>
+            <xsl:if test="$parsedDuration">
+                <xsl:value-of select="concat('P', $parsedDuration, $unitChar)"/>
+            </xsl:if>
         </xsl:if>
     </xsl:function>
     
@@ -119,6 +121,11 @@
         <xsl:param name="year" as="xs:integer"/>
         <xsl:param name="month" as="xs:integer"/>
         <xsl:value-of select="xs:gYearMonth(concat($year, '-', format-number($month, '00')))"/>
+    </xsl:function>
+    
+    <xsl:function name="f:getDate" as="xs:gYear">
+        <xsl:param name="year" as="xs:string"/>
+        <xsl:value-of select="xs:gYear($year)"/>
     </xsl:function>
     
     <xsl:function name="f:getDateTime" as="xs:dateTime">
