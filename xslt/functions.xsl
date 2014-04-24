@@ -26,7 +26,8 @@
         <xsl:param name="identificationNumber" as="xs:string?"/>
         <xsl:choose>
             <xsl:when test="$identificationNumber">
-                <xsl:sequence select="concat($countryCode, $identificationNumber)"/>
+                <xsl:variable name="normalizedID" select="replace($identificationNumber, '\s', '')"/>
+                <xsl:sequence select="concat($countryCode, $normalizedID)"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:sequence select="uuid:get-uuid()"/>
