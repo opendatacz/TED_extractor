@@ -72,7 +72,7 @@
     <xsl:variable name="form_code" select="TED_EXPORT/FORM_SECTION/*[1]/@FORM"/>
     <xsl:variable name="supported_form_codes" select="tokenize('2,3', ',')"/>
     <xsl:variable name="country_code" select="TED_EXPORT/CODED_DATA_SECTION/NOTICE_DATA/ISO_COUNTRY/@VALUE"/>
-    <xsl:variable name="lang" select="/TED_EXPORT/CODED_DATA_SECTION/NOTICE_DATA/LG_ORIG/text()"/>
+    <xsl:variable name="lang" select="TED_EXPORT/FORM_SECTION/*[1]/@LG"/>
     <xsl:variable name="doc_id" select="/TED_EXPORT/@DOC_ID"/>
 
 
@@ -86,7 +86,7 @@
     <xsl:template match="/">
         <rdf:RDF>
             <xsl:if test="$form_code=$supported_form_codes">
-                <xsl:apply-templates select="TED_EXPORT/FORM_SECTION/*[self::CONTRACT or self::CONTRACT_AWARD][@CATEGORY='ORIGINAL']"/>
+                <xsl:apply-templates select="TED_EXPORT/FORM_SECTION/*[1][self::CONTRACT or self::CONTRACT_AWARD][@CATEGORY='ORIGINAL']"/>
             </xsl:if>
         </rdf:RDF>
     </xsl:template>
@@ -192,7 +192,7 @@
 
     <!-- framework agreement -->
     <xsl:template match="F02_FRAMEWORK">
-        <xsl:call-template name="frameworkAgreement"/>
+        <!-- <xsl:call-template name="frameworkAgreement"/>  -->
     </xsl:template>
 
     <!-- contract part (lot) -->
@@ -467,7 +467,7 @@
     </xsl:template>
 
     <xsl:template match="CONCLUSION_FRAMEWORK_AGREEMENT">
-        <xsl:call-template name="frameworkAgreement"/>
+        <!-- <xsl:call-template name="frameworkAgreement"/> -->
     </xsl:template>
 
     <xsl:template match="CONTRACTS_DPS">
@@ -889,7 +889,9 @@
     <!-- contracting authority buyer profile url -->
     <xsl:template match="URL_BUYER">
         <xsl:if test="text()">
-            <pc:buyerProfile rdf:resource="{text()}"/>
+            <xsl:for-each select="tokenize(text(),' ')">
+                <pc:buyerProfile rdf:resource="{.}"/>
+            </xsl:for-each>
         </xsl:if>
     </xsl:template>
 
