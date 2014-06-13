@@ -2,11 +2,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:f="http://opendata.cz/xslt/functions#"
-    xmlns:uuid="http://www.uuid.org" 
+    xmlns:uuid="java:java.util.UUID"
     exclude-result-prefixes="xs f uuid"
     version="2.0">
-    
-    <xsl:import href="uuid.xsl"/>
     
     <xsl:variable name="authority_kinds_nm" select="'http://purl.org/procurement/public-contracts-authority-kinds#'"/>
     <xsl:variable name="contract_kinds_nm" select="'http://purl.org/procurement/public-contracts-kinds#'"/>
@@ -17,7 +15,7 @@
     
     <!-- get UUID -->
     <xsl:function name="f:getUuid">
-        <xsl:sequence select="uuid:get-uuid()"/>
+        <xsl:sequence select="uuid:randomUUID()"/>
     </xsl:function>
     
     <!-- get business entity id -->
@@ -30,7 +28,7 @@
                 <xsl:sequence select="concat($countryCode, $normalizedID)"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:sequence select="uuid:get-uuid()"/>
+                <xsl:sequence select="f:getUuid()"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>

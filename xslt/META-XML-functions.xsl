@@ -2,10 +2,8 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns:f="http://opendata.cz/xslt/functions#" 
-    xmlns:uuid="http://www.uuid.org"
+    xmlns:uuid="java:java.util.UUID"
     version="2.0">
-    
-    <xsl:import href="uuid.xsl"/>
     
     <!-- Namespaces -->
     <xsl:variable name="pc_nm">http://purl.org/procurement/public-contracts#</xsl:variable>
@@ -47,7 +45,7 @@
     
     <xsl:function name="f:getClassInstanceURI" as="xsd:anyURI">
         <xsl:param name="class" as="xsd:string"/>
-        <xsl:value-of select="f:getClassInstanceURI($class, uuid:get-uuid())"/>
+        <xsl:value-of select="f:getClassInstanceURI($class, uuid:randomUUID())"/>
     </xsl:function>
     
     <xsl:function name="f:getContractKind" as="xsd:anyURI?">
