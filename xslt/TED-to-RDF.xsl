@@ -36,6 +36,7 @@
     <xsl:variable name="lod_nm" select="'http://linked.opendata.cz/resource/'"/>
     <xsl:variable name="ted_nm" select="concat($lod_nm, 'ted.europa.eu/')"/>
     <xsl:variable name="ted_business_entity_nm" select="concat($ted_nm, 'business-entity/')"/>
+    <xsl:variable name="ted_identifier_nm" select="concat($ted_nm, 'identifier/')"/>
     <xsl:variable name="ted_pc_nm" select="concat($ted_nm, 'public-contract/')"/>
     <xsl:variable name="ted_postal_address_nm" select="concat($ted_nm, 'postal-address/')"/>
     <xsl:variable name="ted_contact_point_nm" select="concat($ted_nm, 'contact-point/')"/>
@@ -149,13 +150,13 @@
 
     <!-- contracting authority -->
     <xsl:template match="NAME_ADDRESSES_CONTACT_CONTRACT" mode="contractingAuthority">
-        <xsl:variable name="country" select="(CA_CE_CONCESSIONAIRE_PROFILE/COUNTRY/@VALUE, $country_code)[1]"/>
-        <xsl:variable name="organisationId" select="CA_CE_CONCESSIONAIRE_PROFILE/ORGANISATION/NATIONALID"/>
-        <xsl:variable name="contractingAuthorityUri">
-            <xsl:value-of select="f:getBusinessEntityId($country, $organisationId)"/>
-        </xsl:variable>
         <pc:contractingAuthority>
-            <s:Organization rdf:about="{concat($ted_business_entity_nm, $contractingAuthorityUri)}">
+            <s:Organization rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
+                <xsl:call-template name="organizationId">
+                    <xsl:with-param name="nationalId" select="CA_CE_CONCESSIONAIRE_PROFILE/ORGANISATION/NATIONALID"/>
+                    <xsl:with-param name="country" select="(CA_CE_CONCESSIONAIRE_PROFILE/COUNTRY/@VALUE, $country_code)[1]"/>
+                </xsl:call-template>
+                
                 <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE" mode="legalNameAndAddress"/>
                 <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT/URL_BUYER"/>
                 <xsl:apply-templates select="../TYPE_AND_ACTIVITIES_AND_PURCHASING_ON_BEHALF/TYPE_AND_ACTIVITIES"/>
@@ -422,13 +423,13 @@
 
     <!-- contracting authority -->
     <xsl:template match="NAME_ADDRESSES_CONTACT_CONTRACT_AWARD" mode="contractingAuthority">
-        <xsl:variable name="country" select="(CA_CE_CONCESSIONAIRE_PROFILE/COUNTRY/@VALUE, $country_code)[1]"/>
-        <xsl:variable name="organisationId" select="CA_CE_CONCESSIONAIRE_PROFILE/ORGANISATION/NATIONALID"/>
-        <xsl:variable name="contractingAuthorityUri">
-            <xsl:value-of select="f:getBusinessEntityId($country, $organisationId)"/>
-        </xsl:variable>
         <pc:contractingAuthority>
-            <s:Organization rdf:about="{concat($ted_business_entity_nm, $contractingAuthorityUri)}">
+            <s:Organization rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
+                <xsl:call-template name="organizationId">
+                    <xsl:with-param name="nationalId" select="CA_CE_CONCESSIONAIRE_PROFILE/ORGANISATION/NATIONALID"/>
+                    <xsl:with-param name="country" select="(CA_CE_CONCESSIONAIRE_PROFILE/COUNTRY/@VALUE, $country_code)[1]"/>
+                </xsl:call-template>
+                
                 <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE" mode="legalNameAndAddress"/>
                 <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_AWARD/URL_BUYER"/>
                 <xsl:apply-templates select="../TYPE_AND_ACTIVITIES_AND_PURCHASING_ON_BEHALF/TYPE_AND_ACTIVITIES"/>
@@ -767,12 +768,12 @@
     </xsl:template>
 
     <xsl:template name="basicBusinessEntity">
-        <xsl:variable name="country" select="(COUNTRY/@VALUE, $country_code)[1]"/>
-        <xsl:variable name="organisationId" select="ORGANISATION/NATIONALID"/>
-        <xsl:variable name="businessEntityId">
-            <xsl:value-of select="f:getBusinessEntityId($country, $organisationId)"/>
-        </xsl:variable>
-        <s:Organization rdf:about="{concat($ted_business_entity_nm, $businessEntityId)}">
+        <s:Organization rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
+            <xsl:call-template name="organizationId">
+                <xsl:with-param name="nationalId" select="ORGANISATION/NATIONALID"/>
+                <xsl:with-param name="country" select="(COUNTRY/@VALUE, $country_code)[1]"/>
+            </xsl:call-template>
+            
             <xsl:call-template name="legalName"/>
             <xsl:call-template name="postalAddress"/>
             <xsl:call-template name="contactPoint"/>
@@ -872,6 +873,19 @@
             <xsl:with-param name="datatype_regex">\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}</xsl:with-param>
             <xsl:with-param name="datatype_uri" select="$xsd_date_time_uri"/>
         </xsl:call-template>
+    </xsl:template>
+    
+    <xsl:template name="organizationId">
+        <xsl:param name="nationalId"/>
+        <xsl:param name="country"/>
+        
+        <xsl:if test="not(empty($nationalId))">
+            <adms:identifier>
+                <adms:Identifier rdf:about="{concat($ted_identifier_nm, f:getUuid())}">
+                    <skos:notation><xsl:value-of select="f:getBusinessEntityId($country, $nationalId)"/></skos:notation>
+                </adms:Identifier>
+            </adms:identifier>
+        </xsl:if>
     </xsl:template>
 
     <!--

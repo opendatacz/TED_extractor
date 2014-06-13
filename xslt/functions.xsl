@@ -21,16 +21,9 @@
     <!-- get business entity id -->
     <xsl:function name="f:getBusinessEntityId" as="xs:string">
         <xsl:param name="countryCode" as="xs:string"/>
-        <xsl:param name="identificationNumber" as="xs:string?"/>
-        <xsl:choose>
-            <xsl:when test="$identificationNumber">
-                <xsl:variable name="normalizedID" select="replace($identificationNumber, '\s', '')"/>
-                <xsl:sequence select="concat($countryCode, $normalizedID)"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="f:getUuid()"/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:param name="identificationNumber" as="xs:string"/>
+        <xsl:variable name="normalizedID" select="replace($identificationNumber, '\s', '')"/>
+        <xsl:value-of select="concat($countryCode, $normalizedID)"/>
     </xsl:function>
     
     <!-- get contract kind resource uri -->
