@@ -15,7 +15,7 @@ printHelp() {
   echo "-u, --user \t\t Username"
   echo "-p, --password \t\t Password"
   
-  echo "If -g, -d, -s, -u, -p arguments is present. Result will be uploaded to Virtuoso"
+  echo "If -g, -d, -S, -U, -P arguments is present. Result will be uploaded to Virtuoso"
   
   EXECUTE=0
 }
@@ -59,15 +59,15 @@ do
       TARGET_KEY="baseURI"
       shift
       ;;
-      -s|--port)
+      -S|--port)
       VIRT_PORT="$1"
       shift
       ;;
-      -u|--username)
+      -U|--username)
       VIRT_USERNAME="$1"
       shift
       ;;
-      -p|--password)
+      -P|--password)
       VIRT_PASSWORD="$1"
       shift
       ;;
