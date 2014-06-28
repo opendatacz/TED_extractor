@@ -42,6 +42,7 @@
     <xsl:variable name="ted_contact_point_nm" select="concat($ted_nm, 'contact-point/')"/>
     <xsl:variable name="pc_lot_nm" select="concat($pc_uri, '/lot/')"/>
     <xsl:variable name="pc_estimated_price_nm" select="concat($pc_uri, '/estimated-price/')"/>
+    <xsl:variable name="pc_lot_estimated_price_nm" select="concat($pc_uri, '/lot-estimated-price/')"/>
     <xsl:variable name="pc_weighted_criterion_nm" select="concat($pc_uri, '/weighted_criterion/')"/>
     <xsl:variable name="pc_criterion_weighting_nm" select="concat($pc_uri, '/criterion-weighting/')"/>
     <xsl:variable name="pc_criteria_nm" select="'http://purl.org/procurement/public-contracts-criteria#'"/>
@@ -213,7 +214,7 @@
                 <xsl:apply-templates select="LOT_TITLE"/>
                 <xsl:apply-templates select="LOT_DESCRIPTION"/>
                 <xsl:apply-templates select="CPV"/>
-                <xsl:apply-templates select="NATURE_QUANTITY_SCOPE"/>
+                <xsl:apply-templates select="./NATURE_QUANTITY_SCOPE"/>
                 <xsl:apply-templates select="PERIOD_WORK_DATE_STARTING"/>
             </pc:Contract>
         </pc:lot>
@@ -223,6 +224,20 @@
     <xsl:template match="NATURE_QUANTITY_SCOPE/COSTS_RANGE_AND_CURRENCY">
         <pc:estimatedPrice>
             <s:PriceSpecification rdf:about="{concat($pc_estimated_price_nm, position())}">
+                <xsl:apply-templates select="VALUE_COST"/>
+                <xsl:apply-templates select="RANGE_VALUE_COST"/>
+                <xsl:call-template name="currency">
+                    <xsl:with-param name="currencyCode" select="@CURRENCY"/>
+                </xsl:call-template>
+                <s:valueAddedTaxIncluded rdf:datatype="{$xsd_boolean_uri}">false</s:valueAddedTaxIncluded>
+            </s:PriceSpecification>
+        </pc:estimatedPrice>
+    </xsl:template>
+    
+    <!-- lot estimated price -->
+    <xsl:template match="F02_ANNEX_B/NATURE_QUANTITY_SCOPE/COSTS_RANGE_AND_CURRENCY">
+        <pc:estimatedPrice>
+            <s:PriceSpecification rdf:about="{concat($pc_lot_estimated_price_nm, position())}">
                 <xsl:apply-templates select="VALUE_COST"/>
                 <xsl:apply-templates select="RANGE_VALUE_COST"/>
                 <xsl:call-template name="currency">
@@ -668,9 +683,11 @@
 
     <xsl:template name="priceValue">
         <xsl:param name="value"/>
+        <xsl:if test="$value">
         <s:price rdf:datatype="{$xsd_decimal_uri}">
             <xsl:value-of select="$value"/>
         </s:price>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template name="currency">
