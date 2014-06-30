@@ -221,7 +221,7 @@
     </xsl:template>
 
     <!-- estimated price -->
-    <xsl:template match="NATURE_QUANTITY_SCOPE/COSTS_RANGE_AND_CURRENCY">
+    <xsl:template match="QUANTITY_SCOPE/NATURE_QUANTITY_SCOPE/COSTS_RANGE_AND_CURRENCY">
         <pc:estimatedPrice>
             <s:PriceSpecification rdf:about="{concat($pc_estimated_price_nm, position())}">
                 <xsl:apply-templates select="VALUE_COST"/>
