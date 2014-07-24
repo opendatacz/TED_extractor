@@ -185,4 +185,13 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
+    
+    <xsl:function name="f:parseDate">
+        <xsl:param name="dateString" as="xs:string"/>
+        <xsl:variable name="year" select="xs:integer(substring($dateString,1,4))" as="xs:integer" />
+        <xsl:variable name="month" select="xs:integer(substring($dateString,5,2))" as="xs:integer" />
+        <xsl:variable name="day" select="xs:integer(substring($dateString,7,2))" as="xs:integer" />
+        <xsl:value-of select="f:getDate($year, $month, $day)" />
+    </xsl:function>
+    
 </xsl:stylesheet>

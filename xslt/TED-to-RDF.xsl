@@ -37,12 +37,12 @@
     <xsl:variable name="ted_nm" select="concat($lod_nm, 'ted.europa.eu/')"/>
     <xsl:variable name="ted_business_entity_nm" select="concat($ted_nm, 'business-entity/')"/>
     <xsl:variable name="ted_identifier_nm" select="concat($ted_nm, 'identifier/')"/>
+    <xsl:variable name="ted_contract_notice_nm" select="concat($ted_nm, 'contract-notice/')"/>
     <xsl:variable name="ted_pc_nm" select="concat($ted_nm, 'public-contract/')"/>
     <xsl:variable name="ted_postal_address_nm" select="concat($ted_nm, 'postal-address/')"/>
     <xsl:variable name="ted_contact_point_nm" select="concat($ted_nm, 'contact-point/')"/>
     <xsl:variable name="pc_lot_nm" select="concat($pc_uri, '/lot/')"/>
     <xsl:variable name="pc_estimated_price_nm" select="concat($pc_uri, '/estimated-price/')"/>
-    <xsl:variable name="pc_lot_estimated_price_nm" select="concat($pc_uri, '/lot-estimated-price/')"/>
     <xsl:variable name="pc_weighted_criterion_nm" select="concat($pc_uri, '/weighted_criterion/')"/>
     <xsl:variable name="pc_criterion_weighting_nm" select="concat($pc_uri, '/criterion-weighting/')"/>
     <xsl:variable name="pc_criteria_nm" select="'http://purl.org/procurement/public-contracts-criteria#'"/>
@@ -58,6 +58,7 @@
     <xsl:variable name="xsd_non_negative_integer_uri" select="concat($xsd_nm, 'nonNegativeInteger')"/>
     <xsl:variable name="xsd_time_uri" select="concat($xsd_nm, 'time')"/>
     <xsl:variable name="pcdt_percentage_uri" select="concat($pcdt_nm, 'percentage')"/>
+    <xsl:variable name="contract_notice_uri" select="concat($ted_contract_notice_nm,$doc_id)" />
     <xsl:variable name="pc_uri" select="concat($ted_pc_nm, $doc_id)"/>
     <xsl:variable name="pc_location_place_uri" select="concat($pc_uri, '/location-place/1')"/>
     <xsl:variable name="pc_award_criteria_combination_uri_1" select="concat($pc_uri, '/combination-of-contract-award-criteria/1')"/>
@@ -76,6 +77,7 @@
     <xsl:variable name="country_code" select="TED_EXPORT/CODED_DATA_SECTION/NOTICE_DATA/ISO_COUNTRY/@VALUE"/>
     <xsl:variable name="lang" select="TED_EXPORT/FORM_SECTION/*[1]/@LG"/>
     <xsl:variable name="doc_id" select="/TED_EXPORT/@DOC_ID"/>
+    <xsl:variable name="date_pub" select="f:parseDate(/TED_EXPORT/CODED_DATA_SECTION/REF_OJS/DATE_PUB)" />
 
 
     <!--
@@ -95,7 +97,15 @@
 
     <!-- F02 CONTRACT -->
     <xsl:template match="CONTRACT[@CATEGORY='ORIGINAL']">
+        <pc:ContractNotice rdf:about="{$contract_notice_uri}">
+            <xsl:if test="$date_pub">
+                <pc:publicationDate rdf:datatype="{$xsd_date_uri}">
+                    <xsl:value-of select="$date_pub"/>
+                </pc:publicationDate>
+            </xsl:if>
+        </pc:ContractNotice>
         <pc:Contract rdf:about="{$pc_uri}">
+            <pc:publicNotice rdf:resource="{$contract_notice_uri}" />
             <xsl:apply-templates select="FD_CONTRACT"/>
         </pc:Contract>
         <!-- tenders opening -->
@@ -116,7 +126,15 @@
 
     <!-- F03 CONTRACT AWARD -->
     <xsl:template match="CONTRACT_AWARD[@CATEGORY='ORIGINAL']">
+        <pc:ContractAwardNotice rdf:about="{$contract_notice_uri}">
+            <xsl:if test="$date_pub">
+            <pc:publicationDate rdf:datatype="{$xsd_date_uri}">
+                <xsl:value-of select="$date_pub"/>
+            </pc:publicationDate>
+            </xsl:if>
+        </pc:ContractAwardNotice>
         <pc:Contract rdf:about="{$pc_uri}">
+            <pc:publicNotice rdf:resource="{$contract_notice_uri}" />
             <xsl:apply-templates select="FD_CONTRACT_AWARD"/>
         </pc:Contract>
     </xsl:template>
@@ -209,12 +227,15 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
+        <xsl:variable name="pc_lot_uri"><xsl:value-of select="concat($pc_lot_nm, $lotNumber)" /></xsl:variable>
         <pc:lot>
-            <pc:Contract rdf:about="{concat($pc_lot_nm, $lotNumber)}">
+            <pc:Contract rdf:about="{$pc_lot_uri}">
                 <xsl:apply-templates select="LOT_TITLE"/>
                 <xsl:apply-templates select="LOT_DESCRIPTION"/>
                 <xsl:apply-templates select="CPV"/>
-                <xsl:apply-templates select="./NATURE_QUANTITY_SCOPE"/>
+                <xsl:apply-templates select="./NATURE_QUANTITY_SCOPE">
+                    <xsl:with-param name="pc_lot_uri"><xsl:value-of select="$pc_lot_uri" /></xsl:with-param>
+                </xsl:apply-templates>
                 <xsl:apply-templates select="PERIOD_WORK_DATE_STARTING"/>
             </pc:Contract>
         </pc:lot>
@@ -236,8 +257,9 @@
     
     <!-- lot estimated price -->
     <xsl:template match="F02_ANNEX_B/NATURE_QUANTITY_SCOPE/COSTS_RANGE_AND_CURRENCY">
+        <xsl:param name="pc_lot_uri" />
         <pc:estimatedPrice>
-            <s:PriceSpecification rdf:about="{concat($pc_lot_estimated_price_nm, position())}">
+            <s:PriceSpecification rdf:about="{concat($pc_lot_uri,'/estimated-price')}">
                 <xsl:apply-templates select="VALUE_COST"/>
                 <xsl:apply-templates select="RANGE_VALUE_COST"/>
                 <xsl:call-template name="currency">
@@ -652,9 +674,11 @@
     </xsl:template>
 
     <xsl:template name="description">
+        <xsl:if test="text()">
         <dcterms:description xml:lang="{$lang}">
             <xsl:value-of select="normalize-space(.)"/>
         </dcterms:description>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template name="price">
@@ -921,7 +945,9 @@
     <xsl:template match="URL_BUYER">
         <xsl:if test="text()">
             <xsl:for-each select="tokenize(text(),' ')">
-                <pc:buyerProfile rdf:resource="{.}"/>
+                <pc:buyerProfile>
+                    <xsl:value-of select="."/>
+                </pc:buyerProfile>
             </xsl:for-each>
         </xsl:if>
     </xsl:template>
