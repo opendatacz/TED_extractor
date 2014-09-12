@@ -945,9 +945,9 @@
     <xsl:template match="URL_BUYER">
         <xsl:if test="text()">
             <xsl:for-each select="tokenize(text(),' ')">
-                <pc:buyerProfile>
+                <pc:profile>
                     <xsl:value-of select="."/>
-                </pc:buyerProfile>
+                </pc:profile>
             </xsl:for-each>
         </xsl:if>
     </xsl:template>
