@@ -194,4 +194,9 @@
         <xsl:value-of select="f:getDate($year, $month, $day)" />
     </xsl:function>
     
+    <xsl:function name="f:slugify" as="xs:anyURI">
+        <xsl:param name="text" as="xs:string"/>
+        <xsl:value-of select="encode-for-uri(translate(replace(lower-case(normalize-unicode($text, 'NFKD')), '\P{IsBasicLatin}', ''), ' ', '-'))" />
+    </xsl:function>
+    
 </xsl:stylesheet>

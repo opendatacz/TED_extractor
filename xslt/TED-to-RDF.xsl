@@ -1118,7 +1118,19 @@
 
     <!-- criterion most economically advantageous tender -->
     <xsl:template match="CRITERIA_DEFINITION">
-        <xsl:variable name="id" select="(ORDER_C, position())[1]"/>
+        <xsl:variable name="id_pre" select="(ORDER_C, position())[1]"/>
+        
+        <xsl:variable name="id">
+            <xsl:choose>
+                <xsl:when test="string(number($id_pre))=$id_pre">
+                    <xsl:value-of select="$id_pre" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="f:slugify($id_pre)" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        
         <xsl:call-template name="awardCriterion">
             <xsl:with-param name="isLowestPrice" select="false()"/>
             <xsl:with-param name="name" select="CRITERIA"/>
