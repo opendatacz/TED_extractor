@@ -19,8 +19,8 @@
     exclude-result-prefixes="f"
     version="2.0">
 
-    <xsl:import href="META-XML-functions.xsl"/>
-    
+    <!-- <xsl:import href="META-XML-functions.xsl"/> -->
+    <xsl:import href="functions.xsl"/>
     <xsl:output encoding="UTF-8" indent="yes" method="xml" normalization-form="NFC"/>
 
     <!-- Namespaces -->
@@ -75,7 +75,7 @@
     </xsl:template>
 
     <xsl:template match="@ctype">
-        <xsl:variable name="contractKind" select="f:getContractKind(.)"/>
+        <xsl:variable name="contractKind" select="f:getContractKind('',.)"/>
         <if test="$contractKind">
             <pc:contractKind rdf:resource="{$contractKind}"/>
         </if>
@@ -93,7 +93,7 @@
         <xsl:param name="contracting_authority_uri" tunnel="yes"/>
         <pc:contractingAuthority>
             <s:Organization rdf:about="{$contracting_authority_uri}">
-                <xsl:variable name="authority_kind_uri" select="f:getAuthorityKind(@code)"/>
+                <xsl:variable name="authority_kind_uri" select="f:getAuthorityKind('',@code)"/>
                 <xsl:if test="$authority_kind_uri">
                     <pc:authorityKind rdf:resource="{$authority_kind_uri}"/>
                 </xsl:if>
@@ -106,14 +106,14 @@
     </xsl:template>
     
     <xsl:template match="market">
-        <xsl:variable name="contract_kind_uri" select="f:getContractKind(@code)"/>
+        <xsl:variable name="contract_kind_uri" select="f:getContractKind('',@code)"/>
         <xsl:if test="$contract_kind_uri">
             <pc:kind rdf:resource="{$contract_kind_uri}"/>
         </xsl:if>
     </xsl:template>
     
     <xsl:template match="proc">
-        <xsl:variable name="procedure_type_uri" select="f:getProcedureType(@code)"/>
+        <xsl:variable name="procedure_type_uri" select="f:getProcedureType('',@code)"/>
         <xsl:if test="$procedure_type_uri">
             <pc:procedureType rdf:resource="{$procedure_type_uri}"/>
         </xsl:if>
@@ -169,7 +169,7 @@
     
     <xsl:template match="refnotice">
         <adms:identifier>
-            <adms:Identifier rdf:about="{f:getClassInstanceURI('Identifier', f:slugify(text()))}">
+            <adms:Identifier rdf:about="{f:getClassInstanceURI('Identifier', f:slugify(text(),'META'))}">
                 <skos:notation><xsl:value-of select="text()"/></skos:notation>
             </adms:Identifier>
         </adms:identifier>
@@ -204,7 +204,7 @@
         <xsl:param name="contracting_authority_uri" tunnel="yes"/>
         <pc:contractingAuthority>
             <s:Organization rdf:about="{$contracting_authority_uri}">
-                <xsl:variable name="main_activity_uri" select="f:getMainActivity(@code)"/>
+                <xsl:variable name="main_activity_uri" select="f:getAuthorityOrMainActivity('',@code)"/>
                 <xsl:if test="$main_activity_uri">
                     <pc:mainActivity rdf:resource="{$main_activity_uri}"/>
                 </xsl:if>
