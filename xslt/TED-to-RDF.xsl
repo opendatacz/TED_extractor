@@ -3,8 +3,10 @@
 ####################################################################################
 #  Author:                      Tomas Posepny
 #  Compatible TED XSD release:  R2.0.8.S02.E01
-#  Supported XSDs:              F02_CONTRACT, F03_CONTRACT_AWARD, F04_, F05_, F06_, F07_, F08_,
-#                               F09_, F15_, F16_, F17_, F18_
+#  Supported XSDs:              F02_CONTRACT, F03_CONTRACT_AWARD, F04_PERIODIC_INDICATIVE_UTILITIES, 
+#                               F05_CONTRACT_UTILITIES, F06_CONTRACT_AWARD_UTILITIES, F07_QUALIFICATION_SYSTEM_UTILITIES,
+#                               F08_BUYER_PROFILE, F09_SIMPLIFIED_CONTRACT, F15_VOLUNTARY_EX_ANTE_TRANSPARENCY_NOTICE,
+#                               F16_PRIOR_INFORMATION_DEFENCE, F17_CONTRACT_DEFENCE, F18_CONTRACT_AWARD_DEFENCE
 ####################################################################################
  -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -15,10 +17,11 @@
     xmlns:pceu="http://purl.org/procurement/public-contracts-eu#"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:skos="http://www.w3.org/2004/02/skos/core#"
     xmlns:adms="http://www.w3.org/ns/adms#" xmlns:f="http://opendata.cz/xslt/functions#"
-    xmlns:pproc="http://contsem.unizar.es/def/sector-publico/pproc#" exclude-result-prefixes="f"
+    xmlns:pproc="http://contsem.unizar.es/def/sector-publico/pproc#" 
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    exclude-result-prefixes="f"
     xpath-default-namespace="http://publications.europa.eu/TED_schema/Export" version="2.0">
 
-    <!-- <xsl:import href="functions.xsl"/> -->
     <xsl:import href="functions.xsl"/>
     <xsl:output encoding="UTF-8" indent="yes" method="xml" normalization-form="NFC"/>
 
@@ -41,6 +44,7 @@
     <xsl:variable name="ted_pc_nm" select="concat($ted_nm, 'public-contract/')"/>
     <xsl:variable name="ted_postal_address_nm" select="concat($ted_nm, 'postal-address/')"/>
     <xsl:variable name="ted_contact_point_nm" select="concat($ted_nm, 'contact-point/')"/>
+    <xsl:variable name="ted_date_interval_nm" select="concat($ted_nm, 'date-interval/')"/>
     <xsl:variable name="pc_lot_nm" select="concat($pc_uri, '/lot/')"/>
     <xsl:variable name="pc_estimated_price_nm" select="concat($pc_uri, '/estimated-price/')"/>
     <xsl:variable name="pc_weighted_criterion_nm" select="concat($pc_uri, '/weighted_criterion/')"/>
@@ -239,6 +243,7 @@
                     </xsl:with-param>
                 </xsl:apply-templates>
                 <xsl:apply-templates select="PERIOD_WORK_DATE_STARTING"/>
+               
             </pc:Contract>
         </pc:lot>
     </xsl:template>
@@ -255,6 +260,9 @@
                 </xsl:call-template>
                 <s:valueAddedTaxIncluded rdf:datatype="{$xsd_boolean_uri}"
                     >false</s:valueAddedTaxIncluded>
+                <xsl:if test="../MAIN_FINANCIAL_CONDITIONS">
+                    <xsl:apply-templates select="../MAIN_FINANCIAL_CONDITIONS"/>  
+                </xsl:if>
             </s:PriceSpecification>
         </pc:estimatedPrice>
     </xsl:template>
@@ -282,6 +290,13 @@
         <xsl:apply-templates select="INTERVAL_DATE"/>
     </xsl:template>
 
+    <!-- contract expected duration -->
+    <xsl:template match="PERIOD_WORK_DATE_STARTING" mode="F04">
+        <xsl:apply-templates select="DAYS"/>
+        <xsl:apply-templates select="MONTHS"/>
+        <xsl:apply-templates select="INTERVAL_DATE" mode="F04"/>
+    </xsl:template>
+
     <!-- duration in days -->
     <xsl:template match="DAYS">
         <xsl:variable name="duration" select="f:getDuration(text(), 'D')"/>
@@ -295,6 +310,33 @@
         <xsl:variable name="duration" select="f:getDuration(text(), 'M')"/>
         <xsl:call-template name="getDuration">
             <xsl:with-param name="duration" select="$duration"/>
+        </xsl:call-template>
+    </xsl:template>
+
+    <!-- duration as start date and estimated end date -->
+    <xsl:template match="INTERVAL_DATE" mode="F04">
+        <xsl:if test="self::INTERVAL_DATE">
+            <xsl:variable name="position" select="position()"/>
+            <pc:startDate>
+                <s:Event rdf:about="{concat($ted_date_interval_nm, f:getUuid())}">
+                    <xsl:apply-templates select="START_DATE" mode="F04"/>
+                    <xsl:apply-templates select="END_DATE" mode="F04"/>
+                </s:Event>
+            </pc:startDate>
+        </xsl:if>
+    </xsl:template>
+
+    <!-- interval start date -->
+    <xsl:template match="START_DATE" mode="F04">
+        <xsl:call-template name="getDateProperty">
+            <xsl:with-param name="property">s:startDate</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+
+    <!-- interval estimated end date -->
+    <xsl:template match="END_DATE" mode="F04">
+        <xsl:call-template name="getDateProperty">
+            <xsl:with-param name="property">s:endDate</xsl:with-param>
         </xsl:call-template>
     </xsl:template>
 
@@ -684,12 +726,64 @@
 
     <xsl:template match="FD_PERIODIC_INDICATIVE_UTILITIES">
         <pc:kind rdf:resource="{f:getContractKind(@CTYPE,'')}"/>
-        <!-- <xsl:apply-templates select="INTRODUCTION_PERIODIC_INDICATIVE"/> -->
+        <xsl:apply-templates select="INTRODUCTION_PERIODIC_INDICATIVE"/>
         <xsl:apply-templates select="AUTHORITY_PERIODIC_INDICATIVE"/>
         <xsl:apply-templates select="OBJECT_CONTRACT_PERIODIC_INDICATIVE"/>
         <xsl:apply-templates select="PROCEDURE_ADMINISTRATIVE_INFORMATION_PERIODIC"/>
         <xsl:apply-templates select="COMPLEMENTARY_INFORMATION_PERIODIC_INDICATIVE"/>
     </xsl:template>
+
+    <!--
+    *********************************************************
+    *** F04 PERIODIC INDICATIVE UTILITIES
+    *** INTRODUCTION PERIODIC INDICATIVE
+    *********************************************************
+    -->
+
+    <xsl:template match="INTRODUCTION_PERIODIC_INDICATIVE">
+        <xsl:choose>
+            <xsl:when test="NOTICE_CALL_COMPETITION">
+                <xsl:call-template name="noticeCallCompetition">
+                    <xsl:with-param name="yesNo">true</xsl:with-param>
+                </xsl:call-template>
+            </xsl:when>
+                <xsl:when test="NO_NOTICE_CALL_COMPETITION">
+                    <xsl:call-template name="noticeCallCompetition">
+                        <xsl:with-param name="yesNo">false</xsl:with-param>
+                    </xsl:call-template>
+                </xsl:when>
+            </xsl:choose>
+        
+
+        <!-- 
+            <xsl:choose>
+                <xsl:when test="NOTICE_TIME_LIMITS_RECEIPT_TENDERS"></xsl:when>    
+                <xsl:when test="NO_NOTICE_TIME_LIMITS_RECEIPT_TENDERS"></xsl:when>
+            </xsl:choose> -->
+        <xsl:apply-templates select="ANNEX_I"/>
+    </xsl:template>
+
+    <xsl:template name="noticeCallCompetition">
+        <xsl:param name="yesNo"/>
+        <pc:CompetitiveDialogue rdf:datatype="{$xsd_boolean_uri}">
+            <xsl:value-of select="$yesNo"/>
+        </pc:CompetitiveDialogue>
+    </xsl:template>
+
+    <xsl:template match="ANNEX_I">
+        <xsl:apply-templates select="AI_OBJECT_CONTRACT_PERIODIC_INDICATIVE"/>
+        <xsl:apply-templates select="AI_LEFTI_PERIODIC_INDICATIVE"/>
+        <xsl:apply-templates select="AI_PROCEDURE_PERIODIC_INDICATIVE"/>
+        <xsl:apply-templates select="AI_COMPLEMENTARY_INFORMATION_PERIODIC_INDICATIVE"/>
+    </xsl:template>
+
+    <xsl:template match="AI_OBJECT_CONTRACT_PERIODIC_INDICATIVE"> </xsl:template>
+
+    <xsl:template match="AI_LEFTI_PERIODIC_INDICATIVE"> </xsl:template>
+
+    <xsl:template match="AI_PROCEDURE_PERIODIC_INDICATIVE"> </xsl:template>
+
+    <xsl:template match="AI_COMPLEMENTARY_INFORMATION_PERIODIC_INDICATIVE"> </xsl:template>
 
     <!--
     *********************************************************
@@ -734,7 +828,10 @@
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates
                     select="INTERNET_ADDRESSES_PERIODIC_INDICATIVE_UTILITIES/URL_BUYER"/>
+                <xsl:apply-templates
+                    select="INTERNET_ADDRESSES_PERIODIC_INDICATIVE_UTILITIES/URL_GENERAL"/>
                 <!-- internet_addresses schema part -->
+                
                 <xsl:apply-templates select="../ACTIVITIES_OF_CONTRACTING_ENTITY"/>
             </s:GovernmentOrganization>
         </pc:contractingAuthority>
@@ -752,16 +849,43 @@
     -->
 
     <xsl:template match="OBJECT_CONTRACT_PERIODIC_INDICATIVE">
-        <xsl:apply-templates select="TITLE_CONTRACT"/>
-        <xsl:apply-templates select="TYPE_CONTRACT_LOCATION_WORKS"/>
-        <xsl:apply-templates select="DESCRIPTION_OF_CONTRACT"/>
-        <xsl:apply-templates select="CPV"/>
-        <xsl:apply-templates select="ANNEX_B_INFORMATION_LOTS_PERIODIC_INDICATIVE"/>
-        <xsl:apply-templates select="SCHEDULED_DATE_PERIOD/PERIOD_WORK_DATE_STARTING"/>
-        <!--   <xsl:apply-templates select="SCHEDULED_DATE_PERIOD/PROCEDURE_DATE_STARTING"/> -->
-        <xsl:apply-templates select="ESTIMATED_COST_MAIN_FINANCING"/>
-        <xsl:apply-templates select="CONTRACT_COVERED_GPA"/>
-        <xsl:apply-templates select="ADDITIONAL_INFORMATION"/>
+        <xsl:choose>
+            <xsl:when test="count(//OBJECT_CONTRACT_PERIODIC_INDICATIVE) > 1">
+                <xsl:variable name="lotNumber">
+                            <xsl:value-of select="position()"/>
+                </xsl:variable>
+                <xsl:variable name="pc_lot_uri">
+                    <xsl:value-of select="concat($pc_lot_nm, $lotNumber)"/>
+                </xsl:variable>
+                <pc:lot>
+                    <pc:Contract rdf:about="{$pc_lot_uri}">
+                <xsl:apply-templates select="TITLE_CONTRACT"/>
+                <xsl:apply-templates select="TYPE_CONTRACT_LOCATION_WORKS"/>
+                <xsl:apply-templates select="DESCRIPTION_OF_CONTRACT"/>
+                <xsl:apply-templates select="CPV"/>
+                <!--<xsl:apply-templates select="ANNEX_B_INFORMATION_LOTS_PERIODIC_INDICATIVE"/>-->
+                <xsl:apply-templates select="SCHEDULED_DATE_PERIOD/PERIOD_WORK_DATE_STARTING" mode="F04"/>
+                <!--   <xsl:apply-templates select="SCHEDULED_DATE_PERIOD/PROCEDURE_DATE_STARTING"/> -->
+                <xsl:apply-templates select="ESTIMATED_COST_MAIN_FINANCING"/>
+                <xsl:apply-templates select="CONTRACT_COVERED_GPA"/>
+                <xsl:apply-templates select="ADDITIONAL_INFORMATION"/>
+                    </pc:Contract>
+                </pc:lot>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="TITLE_CONTRACT"/>
+                <xsl:apply-templates select="TYPE_CONTRACT_LOCATION_WORKS"/>
+                <xsl:apply-templates select="DESCRIPTION_OF_CONTRACT"/>
+                <xsl:apply-templates select="CPV"/>
+                <xsl:apply-templates select="ANNEX_B_INFORMATION_LOTS_PERIODIC_INDICATIVE"/>
+                <xsl:apply-templates select="SCHEDULED_DATE_PERIOD/PERIOD_WORK_DATE_STARTING" mode="F04"/>
+                <!--   <xsl:apply-templates select="SCHEDULED_DATE_PERIOD/PROCEDURE_DATE_STARTING"/> -->
+                <xsl:apply-templates select="ESTIMATED_COST_MAIN_FINANCING"/>
+               <!-- <xsl:apply-templates select="CONTRACT_COVERED_GPA"/> -->
+                <xsl:apply-templates select="ADDITIONAL_INFORMATION"/>
+            </xsl:otherwise>
+        </xsl:choose>
+        
     </xsl:template>
 
 
@@ -790,7 +914,7 @@
                         <xsl:value-of select="$pc_lot_uri"/>
                     </xsl:with-param>
                 </xsl:apply-templates>
-                <xsl:apply-templates select="SCHEDULED_DATE_PERIOD/PERIOD_WORK_DATE_STARTING"/>
+                <xsl:apply-templates select="SCHEDULED_DATE_PERIOD/PERIOD_WORK_DATE_STARTING" mode="F04"/>
                 <xsl:apply-templates select="ADDITIONAL_INFORMATION"/>
             </pc:Contract>
         </pc:lot>
@@ -799,19 +923,28 @@
 
     <xsl:template match="ESTIMATED_COST_MAIN_FINANCING">
         <xsl:apply-templates select="COSTS_RANGE_AND_CURRENCY"/>
-        <!--<xsl:apply-templates select="MAIN_FINANCIAL_CONDITIONS"/> -->
+       
     </xsl:template>
 
-    <xsl:template match="CONTRACT_COVERED_GPA">
+  <!--  <xsl:template match="CONTRACT_COVERED_GPA">
         <xsl:if test="self::CONTRACT_COVERED_GPA">
-            <pc:Gpa rdf:about="{$xsd_boolean_uri}">
+            <pc: rdf:datatype="{$xsd_boolean_uri}">
                 <xsl:choose>
                     <xsl:when test="@VALUE = 'YES'">true</xsl:when>
-                    <xsl:when test="@VALUE = 'NO'">false</xsl:when>
+                    <xsl:otherwise>false</xsl:otherwise>
                 </xsl:choose>
-            </pc:Gpa>
+            </pc:>
         </xsl:if>
+    </xsl:template> -->
+    
+    <xsl:template match="MAIN_FINANCIAL_CONDITIONS">
+            <xsl:if test="./text()">
+                <s:description xml:lang="{$lang}">
+                    <xsl:value-of select="normalize-space(.)"/>
+                </s:description>
+            </xsl:if>
     </xsl:template>
+    
     <!--
     *********************************************************
     *** F04 PERIODIC INDICATIVE UTILITIES
@@ -832,12 +965,13 @@
     -->
 
     <xsl:template match="COMPLEMENTARY_INFORMATION_PERIODIC_INDICATIVE">
-        <!-- <xsl:apply-templates select="RELATES_TO_EU_PROJECT_YESorNO"/> -->
+        <!-- <xsl:apply-templates select="RELATES_TO_EU_PROJECT_YES|RELATES_TO_EU_PROJECT_NO"/> -->
         <xsl:apply-templates select="ADDITIONAL_INFORMATION"/>
         <xsl:apply-templates select="COSTS_RANGE_AND_CURRENCY_WITH_VAT_RATE"/>
         <xsl:apply-templates select="NOTICE_DISPATCH_DATE"/>
     </xsl:template>
 
+    <xsl:template match="RELATES_TO_EU_PROJECT_YES|RELATES_TO_EU_PROJECT_NO"></xsl:template>
 
     <!--  
     ******************************************************************************************************************
@@ -861,14 +995,11 @@
     </xsl:template>
 
     <xsl:template match="FD_CONTRACT_UTILITIES">
-        <pc:kind rdf:resource="{f:getContractKind(@CTYPE,'')}"/>
+       <!-- <pc:kind rdf:resource="{f:getContractKind(@CTYPE,'')}"/> -->
         <xsl:apply-templates select="CONTRACTING_AUTHORITY_INFO"/>
-        <!-- COMPLETED -->
         <xsl:apply-templates select="OBJECT_CONTRACT_INFORMATION_CONTRACT_UTILITIES"/>
-        <!-- NOT COMPLETED -->
-        <!--  <xsl:apply-templates select="LEFTI_CONTRACT_NOTICE_UTILITIES"/>                    NOT COMPLETED -->
+        <!--  <xsl:apply-templates select="LEFTI_CONTRACT_NOTICE_UTILITIES"/>  -->
         <xsl:apply-templates select="PROCEDURE_DEFINITION_CONTRACT_NOTICE_UTILITIES"/>
-        <!-- NOT COMPLETED -->
         <xsl:apply-templates select="COMPLEMENTARY_INFORMATION_CONTRACT_UTILITIES"/>
     </xsl:template>
 
@@ -929,6 +1060,7 @@
         <xsl:apply-templates select="PERIOD_WORK_DATE_STARTING"/>
     </xsl:template>
     <xsl:template match="CONTRACT_OBJECT_DESCRIPTION">
+     
         <xsl:apply-templates select="TITLE_CONTRACT"/>
         <xsl:apply-templates select="TYPE_CONTRACT_LOCATION" mode="type_contract"/>
         <xsl:apply-templates select="TYPE_CONTRACT_LOCATION" mode="category"/>
@@ -937,8 +1069,9 @@
         <xsl:apply-templates select="F05_FRAMEWORK"/>
         <xsl:apply-templates select="SHORT_CONTRACT_DESCRIPTION"/>
         <xsl:apply-templates select="CPV"/>
-        <xsl:apply-templates select="CONTRACT_COVERED_GPA"/>
+        <!--<xsl:apply-templates select="CONTRACT_COVERED_GPA"/> -->
         <xsl:apply-templates select="F05_DIVISION_INTO_LOTS/F05_DIV_INTO_LOT_YES/F05_ANNEX_B"/>
+        
     </xsl:template>
 
     <xsl:template match="F05_FRAMEWORK">
@@ -1038,7 +1171,9 @@
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="IS_CANDIDATE_SELECTED"> </xsl:template>
+    <xsl:template match="IS_CANDIDATE_SELECTED"> 
+    
+    </xsl:template>
 
     <xsl:template match="F05_AWARD_CRITERIA_CONTRACT_UTILITIES_INFORMATION">
         <xsl:apply-templates select="AWARD_CRITERIA_DETAIL"/>
@@ -1060,7 +1195,9 @@
 
     <xsl:template match="PREVIOUS_PUBLICATION_INFORMATION_NOTICE_F5"> </xsl:template>
 
-    <xsl:template match="CONDITIONS_FOR_MORE_INFORMATION"> </xsl:template>
+    <xsl:template match="CONDITIONS_FOR_MORE_INFORMATION"> 
+    
+    </xsl:template>
 
 
 
@@ -1621,9 +1758,13 @@
 
     <!-- dispatch date -->
     <xsl:template match="NOTICE_DISPATCH_DATE">
-        <xsl:call-template name="getDateProperty">
-            <xsl:with-param name="property">pc:startDate</xsl:with-param>
-        </xsl:call-template>
+        <pc:ContractNotice>
+            <pproc:ContractAwardNotice rdf:about="{$contract_notice_uri}">
+                <xsl:call-template name="getDateProperty">
+                    <xsl:with-param name="property">pproc:noticeSentDate</xsl:with-param>
+                </xsl:call-template>
+            </pproc:ContractAwardNotice>
+        </pc:ContractNotice>
     </xsl:template>
 
     <!--  
@@ -1939,7 +2080,7 @@
         </pc:awardCriteriaCombination>
     </xsl:template>
 
-    <xsl:template match="IS_ELECTRONIC_AUCTION_USABLE"> </xsl:template>
+
 
     <xsl:template match="ADMINISTRATIVE_INFORMATION_VEAT">
         <xsl:apply-templates select="FILE_REFERENCE_NUMBER"/>
@@ -2340,9 +2481,7 @@
         <xsl:apply-templates select="DISPATCH_INVITATIONS_DATE"/>
     </xsl:template>
 
-    <xsl:template match="DISPATCH_INVITATIONS_DATE">
-        
-    </xsl:template>
+    <xsl:template match="DISPATCH_INVITATIONS_DATE"> </xsl:template>
 
     <!-- contract procedure type -->
     <xsl:template match="TYPE_OF_PROCEDURE_DETAIL_FOR_CONTRACT_NOTICE_DEFENCE">
@@ -2441,43 +2580,44 @@
     *** SECTION II: OBJECT OF THE CONTRACT
     *********************************************************
     -->
-    
+
     <xsl:template match="OBJECT_CONTRACT_INFORMATION_CONTRACT_AWARD_NOTICE_DEFENCE">
         <xsl:apply-templates select="DESCRIPTION_AWARD_NOTICE_INFORMATION_DEFENCE"/>
         <xsl:apply-templates select="TOTAL_FINAL_VALUE"/>
     </xsl:template>
-    
+
     <xsl:template match="DESCRIPTION_AWARD_NOTICE_INFORMATION_DEFENCE">
         <xsl:apply-templates select="TITLE_CONTRACT"/>
         <xsl:apply-templates select="TYPE_CONTRACT_W_PUB_DEFENCE"/>
         <xsl:apply-templates select="LOCATION_NUTS"/>
-        
+
         <!--<xsl:apply-templates select="NOTICE_INVOLVES_DESC_DEFENCE"/>-->
         <xsl:apply-templates select="SHORT_CONTRACT_DESCRIPTION"/>
         <xsl:apply-templates select="CPV"/>
-        
+
     </xsl:template>
-    
+
     <!--  
     *********************************************************
     *** F18 CONTRACT AWARD DEFENCE
     *** SECTION IV: PROCEDURE
     *********************************************************
     -->
-    
+
     <xsl:template match="PROCEDURE_DEFINITION_CONTRACT_AWARD_NOTICE_DEFENCE">
         <xsl:apply-templates select="TYPE_OF_PROCEDURE_CONTRACT_AWARD_DEFENCE"/>
-        <xsl:apply-templates select="AWARD_CRITERIA_CONTRACT_AWARD_NOTICE_INFORMATION_DEFENCE/AWARD_CRITERIA_DETAIL_F18"/>
+        <xsl:apply-templates
+            select="AWARD_CRITERIA_CONTRACT_AWARD_NOTICE_INFORMATION_DEFENCE/AWARD_CRITERIA_DETAIL_F18"/>
         <xsl:apply-templates select="ADMINISTRATIVE_INFORMATION_CONTRACT_AWARD_DEFENCE"/>
     </xsl:template>
-    
+
     <!-- contract procedure type -->
     <xsl:template match="TYPE_OF_PROCEDURE_CONTRACT_AWARD_DEFENCE">
         <xsl:call-template name="procedureType">
             <xsl:with-param name="ptElementName" select="local-name(*)"/>
         </xsl:call-template>
     </xsl:template>
-    
+
     <!-- contract criteria -->
     <xsl:template
         match="AWARD_CRITERIA_DETAIL_F18[LOWEST_PRICE or MOST_ECONOMICALLY_ADVANTAGEOUS_TENDER_SHORT]">
@@ -2489,28 +2629,28 @@
             </pc:AwardCriteriaCombination>
         </pc:awardCriteriaCombination>
     </xsl:template>
-    
-    
+
+
     <xsl:template match="ADMINISTRATIVE_INFORMATION_CONTRACT_AWARD_DEFENCE">
         <xsl:apply-templates select="FILE_REFERENCE_NUMBER"/>
-      <!--  <xsl:apply-templates select="PREVIOUS_PUBLICATION_INFORMATION_NOTICE_F18"/> -->
+        <!--  <xsl:apply-templates select="PREVIOUS_PUBLICATION_INFORMATION_NOTICE_F18"/> -->
     </xsl:template>
-    
-   
-   
+
+
+
     <!--  
     *********************************************************
     *** F18 CONTRACT AWARD DEFENCE
     *** SECTION VI: COMPLEMENTARY INFORMATION
     *********************************************************
     -->
-     
+
     <xsl:template match="COMPLEMENTARY_INFORMATION_CONTRACT_AWARD">
         <xsl:apply-templates select="ADDITIONAL_INORMATION"/>
         <xsl:apply-templates select="PROCEDURES_FOR_APPEAL"/>
         <xsl:apply-templates select="NOTICE_DISPATCH_DATE"/>
     </xsl:template>
-    
+
 
 
     <!--
@@ -2553,6 +2693,8 @@
         </xsl:if>
     </xsl:template>
 
+  
+    
     <xsl:template name="description">
         <xsl:if test="text()">
             <dcterms:description xml:lang="{$lang}">
@@ -2860,12 +3002,23 @@
     </xsl:template>
 
     <!-- contracting authority buyer profile url -->
-    <xsl:template match="URL_BUYER|URL_GENERAL">
+    <xsl:template match="URL_BUYER">
         <xsl:if test="text()">
             <xsl:for-each select="tokenize(text(),' ')">
                 <pc:profile>
                     <xsl:value-of select="."/>
                 </pc:profile>
+            </xsl:for-each>
+        </xsl:if>
+    </xsl:template>
+    
+    <!-- website with general information -->
+    <xsl:template match="URL_GENERAL">
+        <xsl:if test="text()">
+            <xsl:for-each select="tokenize(text(),' ')">
+                <foaf:page>
+                            <xsl:value-of select="."/>
+                </foaf:page>
             </xsl:for-each>
         </xsl:if>
     </xsl:template>
@@ -2951,21 +3104,24 @@
 
     <!-- activity of contracting entity -->
     <xsl:template match="ACTIVITIES_OF_CONTRACTING_ENTITY">
-        <xsl:if test="ACTIVITY_OF_CONTRACTING_ENTITY">
-            <xsl:variable name="authority_activity_uri"
-                select="f:getAuthorityOrMainActivity(ACTIVITY_OF_CONTRACTING_ENTITY[1]/@VALUE,'')"/>
-            <xsl:if test="$authority_activity_uri">
-                <pc:mainActivity rdf:resource="{$authority_activity_uri}"/>
-            </xsl:if>
-        </xsl:if>
-
-        <xsl:if test="ACTIVITY_OF_CONTRACTING_ENTITY_OTHER">
-            <xsl:variable name="authority_activity_uri"
-                select="f:getAuthorityOrMainActivity(ACTIVITY_OF_CONTRACTING_ENTITY_OTHER[1]/@VALUE,'')"/>
-            <xsl:if test="$authority_activity_uri">
-                <pc:mainActivity rdf:resource="{$authority_activity_uri}"/>
-            </xsl:if>
-        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="ACTIVITY_OF_CONTRACTING_ENTITY">
+                <xsl:variable name="authority_activity_uri"
+                    select="f:getAuthorityOrMainActivity(ACTIVITY_OF_CONTRACTING_ENTITY[1]/@VALUE,'')"/>
+                <xsl:if test="$authority_activity_uri">
+                    <pc:mainActivity rdf:resource="{$authority_activity_uri}"/>
+                </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:if test="ACTIVITY_OF_CONTRACTING_ENTITY_OTHER">
+                    <xsl:variable name="authority_activity_uri"
+                        select="f:getAuthorityOrMainActivity(ACTIVITY_OF_CONTRACTING_ENTITY_OTHER[1]/@VALUE,'')"/>
+                    <xsl:if test="$authority_activity_uri">
+                        <pc:mainActivity rdf:resource="{$authority_activity_uri}"/>
+                    </xsl:if>
+                </xsl:if>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
 
@@ -3003,9 +3159,9 @@
 
     <xsl:template match="COUNTRY">
         <xsl:if test="@VALUE">
-            <s:addressCountry>
-                <xsl:value-of select="@VALUE"/>
-            </s:addressCountry>
+                <s:Country>
+                    <xsl:value-of select="@VALUE"/>
+                </s:Country>
         </xsl:if>
     </xsl:template>
 
@@ -3169,7 +3325,8 @@
     </xsl:template>
 
     <!-- contract agreed price -->
-    <xsl:template match="TOTAL_FINAL_VALUE/COSTS_RANGE_AND_CURRENCY_WITH_VAT_RATE">
+    <xsl:template
+        match="COSTS_RANGE_AND_CURRENCY_WITH_VAT_RATE|TOTAL_FINAL_VALUE/COSTS_RANGE_AND_CURRENCY_WITH_VAT_RATE">
         <pc:agreedPrice>
             <xsl:call-template name="price">
                 <xsl:with-param name="priceUri" select="$pc_agreed_price_uri"/>

@@ -71,16 +71,12 @@
         </xsl:variable>
         <xsl:choose>
             <!-- TED-to-RDF -->
-            <xsl:when test="(string-length($kind) &gt; 0) and (string-length($code) = 0)">
-                <xsl:if test="not($localname = '')">
-                    <xsl:value-of select="concat($authority_kinds_nm, $localname)"/>
-                </xsl:if>
+            <xsl:when test="(string-length($kind) &gt; 0) and (string-length($code) = 0) and not($localname = '')">
+               <xsl:value-of select="concat($authority_kinds_nm, $localname)"/>                
             </xsl:when>
             <!-- META-XML-to-RDF -->
-            <xsl:when test="(string-length($kind) = 0) and (string-length($code) &gt; 0)">
-                <xsl:if test="not($localname = '')">
-                    <xsl:value-of select="concat($authority_kinds_nm, $localname)"/>
-                </xsl:if>
+            <xsl:when test="(string-length($kind) = 0) and (string-length($code) &gt; 0) and not($localname = '')">
+               <xsl:value-of select="concat($authority_kinds_nm, $localname)"/>
             </xsl:when>
         </xsl:choose>
     </xsl:function>
