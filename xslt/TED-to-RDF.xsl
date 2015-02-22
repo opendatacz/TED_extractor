@@ -1306,6 +1306,7 @@
                 <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE"
                     mode="legalNameAndAddress"/>
                 <!-- internet_addresses schema part -->
+                <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_AWARD_UTILITIES/URL_GENERAL"/>
                 <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_AWARD_UTILITIES/URL_BUYER"/>
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates select="../ACTIVITIES_OF_CONTRACTING_ENTITY"/>
@@ -1529,6 +1530,7 @@
         <!-- COMPLETED -->
 
         <xsl:apply-templates select="PROCEDURES_QUALIFICATION_SYSTEM"/>
+        
     </xsl:template>
 
     <!--
@@ -1573,6 +1575,8 @@
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates
                     select="INTERNET_ADDRESSES_QUALIFICATION_SYSTEM_UTILITIES/URL_BUYER"/>
+                <xsl:apply-templates
+                    select="INTERNET_ADDRESSES_QUALIFICATION_SYSTEM_UTILITIES/URL_GENERAL"/>
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates select="../ACTIVITIES_OF_CONTRACTING_ENTITY"/>
             </s:GovernmentOrganization>
@@ -1596,7 +1600,7 @@
         <xsl:apply-templates select="CONTRACT_LOCATION_TYPE/SERVICE_CATEGORY" mode="category"/>
         <xsl:apply-templates select="DESCRIPTION"/>
         <xsl:apply-templates select="CPV"/>
-        <xsl:apply-templates select="CONTRACT_COVERED_GPA"/>
+      <!--  <xsl:apply-templates select="CONTRACT_COVERED_GPA"/> -->
     </xsl:template>
 
 
@@ -1714,6 +1718,7 @@
                     mode="legalNameAndAddress"/>
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates select="INTERNET_ADDRESSES_BUYER_PROFILE/URL_BUYER"/>
+                <xsl:apply-templates select="INTERNET_ADDRESSES_BUYER_PROFILE/URL_GENERAL"/>
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates
                     select="../TYPE_AND_ACTIVITIES_OR_CONTRACTING_ENTITY_AND_PURCHASING_ON_BEHALF"/>
@@ -1834,7 +1839,7 @@
                 <xsl:apply-templates select="INTERNET_ADDRESSES_SIMPLIFIED_CONTRACT/URL_BUYER"/>
                 <!-- internet_addresses schema part -->
                 <!-- TYPE AND ACTIVITIES part -->
-                <xsl:apply-templates select="../ACTIVITIES_OF_CONTRACTING_ENTITY"/>
+                <xsl:apply-templates select="../TYPE_AND_ACTIVITIES_OR_CONTRACTING_ENTITY_AND_PURCHASING_ON_BEHALF/ACTIVITIES_OF_CONTRACTING_ENTITY"/>
                 <!-- TYPE AND ACTIVITIES part -->
             </s:Organization>
         </pc:contractingAuthority>
@@ -1982,7 +1987,8 @@
                 <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE"
                     mode="legalNameAndAddress"/>
                 <!-- internet_addresses schema part -->
-                <xsl:apply-templates select="INTERNET_ADDRESSES_VEAT/(URL_BUYER|URL_GENERAL)"/>
+                <xsl:apply-templates select="INTERNET_ADDRESSES_VEAT/URL_BUYER"/>
+                <xsl:apply-templates select="INTERNET_ADDRESSES_VEAT/URL_GENERAL"/>
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates
                     select="../TYPE_AND_ACTIVITIES_OR_CONTRACTING_ENTITY_AND_PURCHASING_ON_BEHALF"/>
@@ -2008,7 +2014,7 @@
 
     <xsl:template match="DESCRIPTION_VEAT">
         <xsl:apply-templates select="TITLE_CONTRACT"/>
-        <xsl:apply-templates select="LOCATION_NUTS"/>
+        
         <xsl:choose>
             <xsl:when test="TYPE_CONTRACT_LOCATION">
                 <xsl:apply-templates select="TYPE_CONTRACT_LOCATION" mode="type_contract"/>
@@ -2019,8 +2025,8 @@
                 <!-- TO BE DONE -->
             </xsl:otherwise>
         </xsl:choose>
-
-
+        
+        <xsl:apply-templates select="LOCATION_NUTS"/>
         <xsl:apply-templates select="NOTICE_INVOLVES_DESC/CONCLUSION_FRAMEWORK_AGREEMENT"/>
         <xsl:apply-templates select="SHORT_CONTRACT_DESCRIPTION"/>
         <xsl:apply-templates select="CPV"/>
@@ -2225,6 +2231,7 @@
                     mode="legalNameAndAddress"/>
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates select="INTERNET_ADDRESSES_PRIOR_INFORMATION/URL_BUYER"/>
+                <xsl:apply-templates select="INTERNET_ADDRESSES_PRIOR_INFORMATION/URL_GENERAL"/>
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates
                     select="../TYPE_AND_ACTIVITIES_OR_CONTRACTING_ENTITY_AND_PURCHASING_ON_BEHALF"/>
@@ -2372,6 +2379,7 @@
                     mode="legalNameAndAddress"/>
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT/URL_BUYER"/>
+                <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT/URL_GENERAL"/>
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates
                     select="../TYPE_AND_ACTIVITIES_OR_CONTRACTING_ENTITY_AND_PURCHASING_ON_BEHALF"/>
@@ -2409,6 +2417,10 @@
 
 
         <xsl:apply-templates select="F17_DIVISION_INTO_LOTS/F17_DIV_INTO_LOT_YES/F17_ANNEX_B"/>
+    </xsl:template>
+
+    <xsl:template match="QUANTITY_SCOPE">
+        <xsl:apply-templates select="NATURE_QUANTITY_SCOPE"/>
     </xsl:template>
 
     <!-- contract part (lot) -->
@@ -2563,6 +2575,7 @@
                 <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE"
                     mode="legalNameAndAddress"/>
                 <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_AWARD/URL_BUYER"/>
+                <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_AWARD/URL_GENERAL"/>
                 <xsl:apply-templates
                     select="../TYPE_AND_ACTIVITIES_OR_CONTRACTING_ENTITY_AND_PURCHASING_ON_BEHALF"/>
             </s:Organization>
