@@ -45,6 +45,7 @@
     <xsl:variable name="ted_postal_address_nm" select="concat($ted_nm, 'postal-address/')"/>
     <xsl:variable name="ted_contact_point_nm" select="concat($ted_nm, 'contact-point/')"/>
     <xsl:variable name="ted_date_interval_nm" select="concat($ted_nm, 'date-interval/')"/>
+    <xsl:variable name="ted_electronic_auction_nm" select="concat($ted_nm, 'electronic-auction/1')"/>
     <xsl:variable name="pc_lot_nm" select="concat($pc_uri, '/lot/')"/>
     <xsl:variable name="pc_estimated_price_nm" select="concat($pc_uri, '/estimated-price/')"/>
     <xsl:variable name="pc_weighted_criterion_nm" select="concat($pc_uri, '/weighted_criterion/')"/>
@@ -599,9 +600,6 @@
         <xsl:apply-templates select="CONTRACTS_DPS"/>
     </xsl:template>
 
-    <xsl:template match="CONCLUSION_FRAMEWORK_AGREEMENT">
-        <!-- <xsl:call-template name="frameworkAgreement"/> -->
-    </xsl:template>
 
     <xsl:template match="CONTRACTS_DPS">
         <!-- TODO: DPS -->
@@ -992,6 +990,8 @@
             <pc:publicNotice rdf:resource="{$contract_notice_uri}"/>
             <xsl:apply-templates select="FD_CONTRACT_UTILITIES"/>
         </pc:Contract>
+        <!-- tenders opening -->
+        <xsl:apply-templates select="PROCEDURE_DEFINITION_CONTRACT_NOTICE_UTILITIES/ADMINISTRATIVE_INFORMATION_CONTRACT_UTILITIES/CONDITIONS_FOR_OPENING_TENDERS"/>
     </xsl:template>
 
     <xsl:template match="FD_CONTRACT_UTILITIES">
@@ -1160,6 +1160,8 @@
 
     </xsl:template>
 
+    
+
     <xsl:template match="TYPE_OF_PROCEDURE_FOR_CONTRACT">
         <xsl:apply-templates select="TYPE_OF_PROCEDURE_DETAIL"/>
         <xsl:apply-templates select="IS_CANDIDATE_SELECTED"/>
@@ -1180,7 +1182,7 @@
         <xsl:apply-templates select="IS_ELECTRONIC_AUCTION_USABLE"/>
     </xsl:template>
 
-    <xsl:template match="IS_ELECTRONIC_AUCTION_USABLE"> </xsl:template>
+    
 
     <xsl:template match="ADMINISTRATIVE_INFORMATION_CONTRACT_UTILITIES">
         <xsl:apply-templates select="FILE_REFERENCE_NUMBER"/>
@@ -1189,15 +1191,11 @@
         <xsl:apply-templates select="RECEIPT_LIMIT_DATE"/>
         <xsl:apply-templates select="LANGUAGE"/>
         <xsl:apply-templates select="MINIMUM_TIME_MAINTAINING_TENDER"/>
-        <xsl:apply-templates select="CONDITIONS_FOR_OPENING_TENDERS"/>
-
-    </xsl:template>
+     </xsl:template>
 
     <xsl:template match="PREVIOUS_PUBLICATION_INFORMATION_NOTICE_F5"> </xsl:template>
 
-    <xsl:template match="CONDITIONS_FOR_MORE_INFORMATION"> 
-    
-    </xsl:template>
+    <xsl:template match="CONDITIONS_FOR_MORE_INFORMATION"></xsl:template>
 
 
 
@@ -1210,14 +1208,14 @@
     -->
 
     <xsl:template match="COMPLEMENTARY_INFORMATION_CONTRACT_UTILITIES">
-        <xsl:apply-templates select="RECURRENT_PROCUREMENT|NO_RECURRENT_PROCUREMENT"/>
-        <!--  <xsl:apply-templates select="RELATES_TO_EU_PROJECT_YES|RELATES_TO_EU_PROJECT_NO"/> -->
+        <!-- <xsl:apply-templates select="RECURRENT_PROCUREMENT|NO_RECURRENT_PROCUREMENT"/>-->
+        <!-- <xsl:apply-templates select="RELATES_TO_EU_PROJECT_YES|RELATES_TO_EU_PROJECT_NO"/> -->
         <xsl:apply-templates select="ADDITIONAL_INFORMATION"/>
         <xsl:apply-templates select="PROCEDURES_FOR_APPEAL"/>
         <xsl:apply-templates select="NOTICE_DISPATCH_DATE"/>
     </xsl:template>
 
-    <xsl:template match="RECURRENT_PROCUREMENT|NO_RECURRENT_PROCUREMENT">
+   <!-- <xsl:template match="RECURRENT_PROCUREMENT|NO_RECURRENT_PROCUREMENT">
         <xsl:variable name="value">
             <xsl:choose>
                 <xsl:when test="../RECURRENT_PROCUREMENT">true</xsl:when>
@@ -1225,13 +1223,15 @@
             </xsl:choose>
         </xsl:variable>
         <xsl:if test=".">
-            <pproc:Remedy rdf:about="{$pc_recurrement_uri}">
+            <pproc:Remedy> rdf:about="{$pc_recurrement_uri}"
+                   <pproc:LegalRemedy>
                 <pproc:recurrentRemedy rdf:datatype="{$xsd_boolean_uri}">
                     <xsl:value-of select="$value"/>
                 </pproc:recurrentRemedy>
+                   </pproc:LegalRemedy>
             </pproc:Remedy>
         </xsl:if>
-    </xsl:template>
+    </xsl:template> -->
 
     <xsl:template match="PROCEDURES_FOR_APPEAL">
         <xsl:apply-templates
@@ -1378,8 +1378,12 @@
         <xsl:apply-templates
             select="F06_AWARD_CRITERIA_CONTRACT_UTILITIES_INFORMATION/PRICE_AWARD_CRITERIA"/>
         <xsl:apply-templates
+            select="F06_AWARD_CRITERIA_CONTRACT_UTILITIES_INFORMATION" mode="electronicAuction"/>
+        <xsl:apply-templates
             select="ADMINISTRATIVE_INFO_CONTRACT_AWARD_UTILITIES/REFERENCE_NUMBER_ATTRIBUTED"/>
     </xsl:template>
+
+    
 
     <!-- contract procedure type -->
     <xsl:template match="TYPE_PROCEDURE_AWARD">
@@ -1624,6 +1628,7 @@
 
     <xsl:template match="PROCEDURES_QUALIFICATION_SYSTEM">
         <xsl:apply-templates select="AWARD_CRITERIA_QUALIFICATION_SYSTEM/AWARD_CRITERIA_DETAIL"/>
+        <xsl:apply-templates select="AWARD_CRITERIA_QUALIFICATION_SYSTEM" mode="electronicAuction"/>
         <xsl:apply-templates select="ADMINISTRATIVE_INFORMATION_QUALIFICATION_SYSTEM"/>
     </xsl:template>
 
@@ -1674,7 +1679,7 @@
     </xsl:template>
 
     <xsl:template match="FD_BUYER_PROFILE">
-        <xsl:apply-templates select="NOTICE_RELATION_PUBLICATION"/>
+        <!--<xsl:apply-templates select="NOTICE_RELATION_PUBLICATION"/>-->
         <xsl:apply-templates select="AUTHORITY_ENTITY_NOTICE_BUYER_PROFILE"/>
         <xsl:apply-templates select="OBJECT_NOTICE_BUYER_PROFILE"/>
         <xsl:apply-templates select="COMPLEMENTARY_INFORMATION_NOTICE_BUYER_PROFILE"/>
@@ -1888,7 +1893,7 @@
 
     <xsl:template match="PROCEDURES_SIMPLIFIED_CONTRACT_NOTICE">
         <xsl:apply-templates select="F09_TYPE_PROCEDURE_OPEN"/>
-        <!-- <xsl:apply-templates select="IS_ELECTRONIC_AUCTION_USABLE"/> -->
+         <xsl:apply-templates select="IS_ELECTRONIC_AUCTION_USABLE"/>
         <xsl:apply-templates select="ADMINISTRATIVE_INFORMATION_SIMPLIFIED_CONTRACT"/>
     </xsl:template>
 
@@ -2039,9 +2044,7 @@
         <xsl:apply-templates select="CONTRACTS_DPS"/>
     </xsl:template>
 
-    <xsl:template match="CONCLUSION_FRAMEWORK_AGREEMENT">
-        <!-- <xsl:call-template name="frameworkAgreement"/> -->
-    </xsl:template>
+    
 
     <xsl:template match="CONTRACTS_DPS">
         <!-- TODO: DPS -->
@@ -2482,6 +2485,8 @@
             select="TYPE_OF_PROCEDURE_DEFENCE/TYPE_OF_PROCEDURE_DETAIL_FOR_CONTRACT_NOTICE_DEFENCE"/>
         <xsl:apply-templates
             select="AWARD_CRITERIA_CONTRACT_NOTICE_INFORMATION/AWARD_CRITERIA_DETAIL"/>
+        <xsl:apply-templates
+            select="AWARD_CRITERIA_CONTRACT_NOTICE_INFORMATION/IS_ELECTRONIC_AUCTION_USABLE"/>
         <xsl:apply-templates select="ADMINISTRATIVE_INFORMATION_CONTRACT_NOTICE_DEFENCE"/>
     </xsl:template>
 
@@ -2621,6 +2626,8 @@
         <xsl:apply-templates select="TYPE_OF_PROCEDURE_CONTRACT_AWARD_DEFENCE"/>
         <xsl:apply-templates
             select="AWARD_CRITERIA_CONTRACT_AWARD_NOTICE_INFORMATION_DEFENCE/AWARD_CRITERIA_DETAIL_F18"/>
+        <xsl:apply-templates
+            select="AWARD_CRITERIA_CONTRACT_AWARD_NOTICE_INFORMATION_DEFENCE/F18_IS_ELECTRONIC_AUCTION_USABLE"/>
         <xsl:apply-templates select="ADMINISTRATIVE_INFORMATION_CONTRACT_AWARD_DEFENCE"/>
     </xsl:template>
 
@@ -2989,14 +2996,56 @@
     ******************************************************************************************************************
     -->
 
-    <xsl:template match="NOTICE_RELATION_PUBLICATION">
+   <!-- <xsl:template match="NOTICE_RELATION_PUBLICATION">
         <xsl:variable name="agreement_type_uri"
             select="f:getNoticeType(../NOTICE_RELATION_PUBLICATION/@NOTICE,'')"/>
         <xsl:if test="$agreement_type_uri">
             <pc:previousNotice rdf:about="{$agreement_type_uri}"/>
         </xsl:if>
+    </xsl:template> -->
+
+    <xsl:template match="CONCLUSION_FRAMEWORK_AGREEMENT">
+        <!-- <xsl:call-template name="frameworkAgreement"/> -->
     </xsl:template>
 
+    <xsl:template match="IS_ELECTRONIC_AUCTION_USABLE|F15_IS_ELECTRONIC_AUCTION_USABLE|F18_IS_ELECTRONIC_AUCTION_USABLE"> 
+       
+        <xsl:if test="self::IS_ELECTRONIC_AUCTION_USABLE or self::F15_IS_ELECTRONIC_AUCTION_USABLE or self::F18_IS_ELECTRONIC_AUCTION_USABLE">
+            <xsl:variable name="value">
+                <xsl:choose>
+                    <xsl:when test="USE_ELECTRONIC_AUCTION|./@VALUE = 'YES'">true</xsl:when>
+                    <xsl:otherwise>false</xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+        <pproc:ContractProcedureSpecification>
+            <pproc:ElectronicAuction rdf:about="{$ted_electronic_auction_nm}">
+                <pproc:electronicAuction rdf:datatype="{$xsd_boolean_uri}">
+                    <xsl:value-of select="$value"/>
+                </pproc:electronicAuction>
+            </pproc:ElectronicAuction>
+        </pproc:ContractProcedureSpecification>
+        
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="F06_AWARD_CRITERIA_CONTRACT_UTILITIES_INFORMATION|AWARD_CRITERIA_QUALIFICATION_SYSTEM" mode="electronicAuction">
+        <xsl:if test="self::F06_AWARD_CRITERIA_CONTRACT_UTILITIES_INFORMATION or self::AWARD_CRITERIA_QUALIFICATION_SYSTEM">
+            <xsl:variable name="value">
+                <xsl:choose>
+                    <xsl:when test="F06_ELECTRONIC_AUCTION|ELECTRONIC_AUCTION">true</xsl:when>
+                    <xsl:otherwise>false</xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <pproc:ContractProcedureSpecification>
+                <pproc:ElectronicAuction rdf:about="{$ted_electronic_auction_nm}">
+                    <pproc:electronicAuction rdf:datatype="{$xsd_boolean_uri}">
+                        <xsl:value-of select="$value"/>
+                    </pproc:electronicAuction>
+                </pproc:ElectronicAuction>
+            </pproc:ContractProcedureSpecification>
+            
+        </xsl:if>
+    </xsl:template>
 
     <xsl:template match="TYPE_AND_ACTIVITIES_OR_CONTRACTING_ENTITY_AND_PURCHASING_ON_BEHALF">
         <xsl:apply-templates select="TYPE_AND_ACTIVITIES"/>
@@ -3005,7 +3054,13 @@
 
     <!-- contracting authority further information -->
     <xsl:template match="CONTACT_DATA">
-        <xsl:call-template name="basicBusinessEntity"/>
+        <xsl:choose>
+            <xsl:when test="../../FURTHER_INFORMATION">
+                <pc:contact>
+                    <xsl:call-template name="basicBusinessEntity"/>
+                </pc:contact>
+            </xsl:when>
+        </xsl:choose>    
     </xsl:template>
 
     <!-- contracting authority name and address -->
