@@ -2307,7 +2307,6 @@
             select="TYPE_CONTRACT_PLACE_DELIVERY_DEFENCE/TYPE_CONTRACT_PI_DEFENCE/TYPE_CONTRACT"
             mode="category"/>
         <xsl:apply-templates select="LOCATION_NUTS"/>
-        <xsl:apply-templates select="FRAMEWORK_AGREEMENT" mode="F16"/>
         <xsl:apply-templates select="CPV"/>
         <xsl:apply-templates select="ADDITIONAL_INFORMATION"/>
 
@@ -2325,11 +2324,6 @@
 
     <xsl:template match="TOTAL_QUANTITY_OR_SCOPE" mode="F16">
         <xsl:call-template name="description"/>
-    </xsl:template>
-
-
-    <xsl:template match="FRAMEWORK_AGREEMENT" mode="F16">
-        <!-- <xsl:call-template name="frameworkAgreement"/> -->
     </xsl:template>
 
     <!--  
@@ -2459,7 +2453,7 @@
         <xsl:apply-templates select="TYPE_CONTRACT_DEFENCE/TYPE_CONTRACT" mode="type_contract"/>
         <xsl:apply-templates select="TYPE_CONTRACT_DEFENCE/TYPE_CONTRACT" mode="category"/>
         <xsl:apply-templates select="LOCATION_NUTS"/>
-        <xsl:apply-templates select="F17_FRAMEWORK" mode="F17"/>
+        <xsl:apply-templates select="F17_FRAMEWORK"/>
         <xsl:apply-templates select="CPV"/>
         <xsl:apply-templates select="SHORT_CONTRACT_DESCRIPTION"/>
 
@@ -2502,7 +2496,7 @@
     </xsl:template>
 
     <xsl:template match="F17_FRAMEWORK">
-        <!-- <xsl:call-template name="frameworkAgreement"/>  -->
+         <xsl:call-template name="frameworkAgreement"/> 
     </xsl:template>
 
     <!--  
@@ -2969,7 +2963,9 @@
                             </pc:expectedNumberOfOperators>
                         </xsl:when>
                     </xsl:choose>
-                
+                <xsl:if test="JUSTIFICATION">
+                    <xsl:call-template name="description"/>
+                </xsl:if>
                 <xsl:apply-templates select="TOTAL_ESTIMATED/COSTS_RANGE_AND_CURRENCY"/>
             </pc:FrameworkAgreement>
         </pc:frameworkAgreement>
@@ -3309,7 +3305,9 @@
             </s:name>
         </xsl:if>
     </xsl:template>
-
+    
+    
+    
     <xsl:template match="ATTENTION">
         <xsl:if test="text()">
             <s:description>
