@@ -1253,6 +1253,12 @@
             select="LODGING_INFORMATION_FOR_SERVICE/CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME"/>
         </pc:contact>
         </xsl:if>
+        <xsl:if test="MEDIATION_PROCEDURE_BODY_RESPONSIBLE/CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME">
+            <pc:contact>
+                <xsl:apply-templates
+                    select="MEDIATION_PROCEDURE_BODY_RESPONSIBLE/CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME"/>
+            </pc:contact>
+        </xsl:if>
     </xsl:template>
 
 
@@ -2237,7 +2243,7 @@
     <xsl:template match="FD_PRIOR_INFORMATION_DEFENCE">
         <xsl:apply-templates select="AUTHORITY_PRIOR_INFORMATION_DEFENCE"/>
         <xsl:apply-templates select="OBJECT_WORKS_SUPPLIES_SERVICES_PRIOR_INFORMATION"/>
-        <!--  <xsl:apply-templates select="LEFTI_PRIOR_INFORMATION"/> -->
+        <xsl:apply-templates select="LEFTI_PRIOR_INFORMATION"/>
         <xsl:apply-templates select="OTH_INFO_PRIOR_INFORMATION"/>
     </xsl:template>
 
@@ -2338,6 +2344,18 @@
             <xsl:apply-templates select="MAIN_FINANCING_CONDITIONS"/>
         </xsl:if>
         <xsl:apply-templates select="RESERVED_CONTRACTS"/>
+    </xsl:template>
+
+    <xsl:template match="MAIN_FINANCING_CONDITIONS">
+        <pproc:contractEconomicConditions>
+            <pproc:ContractEconomicConditions>
+                <xsl:call-template name="description"/>
+            </pproc:ContractEconomicConditions>
+        </pproc:contractEconomicConditions>
+    </xsl:template>
+    
+    <xsl:template match="RESERVED_CONTRACTS">
+        
     </xsl:template>
 
     <!--  
