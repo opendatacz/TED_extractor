@@ -18,6 +18,8 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:skos="http://www.w3.org/2004/02/skos/core#"
     xmlns:adms="http://www.w3.org/ns/adms#" xmlns:f="http://opendata.cz/xslt/functions#"
     xmlns:pproc="http://contsem.unizar.es/def/sector-publico/pproc#"
+    xmlns:ProcurementRegulations="https://loted2.googlecode.com/svn/trunk/modules/ProcurementRegulations#"
+    xmlns:TenderDocuments="https://loted2.googlecode.com/svn/trunk/modules/TenderDocuments#"
     xmlns:foaf="http://xmlns.com/foaf/0.1/" exclude-result-prefixes="f"
     xpath-default-namespace="http://publications.europa.eu/TED_schema/Export" version="2.0">
 
@@ -44,6 +46,7 @@
     <xsl:variable name="ted_postal_address_nm" select="concat($ted_nm, 'postal-address/')"/>
     <xsl:variable name="ted_contact_point_nm" select="concat($ted_nm, 'contact-point/')"/>
     <xsl:variable name="ted_date_interval_nm" select="concat($ted_nm, 'date-interval/')"/>
+    <xsl:variable name="ted_gpa_nm" select="concat($ted_nm, 'government-procurement-agreement/1')"/>
     <xsl:variable name="ted_electronic_auction_nm" select="concat($ted_nm, 'electronic-auction/1')"/>
     <xsl:variable name="pc_lot_nm" select="concat($pc_uri, '/lot/')"/>
     <xsl:variable name="pc_estimated_price_nm" select="concat($pc_uri, '/estimated-price/')"/>
@@ -758,7 +761,7 @@
                 <xsl:when test="NOTICE_TIME_LIMITS_RECEIPT_TENDERS"></xsl:when>    
                 <xsl:when test="NO_NOTICE_TIME_LIMITS_RECEIPT_TENDERS"></xsl:when>
             </xsl:choose> -->
-        <xsl:apply-templates select="ANNEX_I"/>
+        
     </xsl:template>
 
     <xsl:template name="noticeCallCompetition">
@@ -767,21 +770,6 @@
             <xsl:value-of select="$yesNo"/>
         </pc:CompetitiveDialogue>
     </xsl:template>
-
-    <xsl:template match="ANNEX_I">
-        <xsl:apply-templates select="AI_OBJECT_CONTRACT_PERIODIC_INDICATIVE"/>
-        <xsl:apply-templates select="AI_LEFTI_PERIODIC_INDICATIVE"/>
-        <xsl:apply-templates select="AI_PROCEDURE_PERIODIC_INDICATIVE"/>
-        <xsl:apply-templates select="AI_COMPLEMENTARY_INFORMATION_PERIODIC_INDICATIVE"/>
-    </xsl:template>
-
-    <xsl:template match="AI_OBJECT_CONTRACT_PERIODIC_INDICATIVE"> </xsl:template>
-
-    <xsl:template match="AI_LEFTI_PERIODIC_INDICATIVE"> </xsl:template>
-
-    <xsl:template match="AI_PROCEDURE_PERIODIC_INDICATIVE"> </xsl:template>
-
-    <xsl:template match="AI_COMPLEMENTARY_INFORMATION_PERIODIC_INDICATIVE"> </xsl:template>
 
     <!--
     *********************************************************
@@ -881,7 +869,7 @@
                     mode="F04"/>
                 <!--   <xsl:apply-templates select="SCHEDULED_DATE_PERIOD/PROCEDURE_DATE_STARTING"/> -->
                 <xsl:apply-templates select="ESTIMATED_COST_MAIN_FINANCING"/>
-                <!-- <xsl:apply-templates select="CONTRACT_COVERED_GPA"/> -->
+                <xsl:apply-templates select="CONTRACT_COVERED_GPA"/>
                 <xsl:apply-templates select="ADDITIONAL_INFORMATION"/>
             </xsl:otherwise>
         </xsl:choose>
@@ -927,16 +915,13 @@
 
     </xsl:template>
 
-    <!--  <xsl:template match="CONTRACT_COVERED_GPA">
-        <xsl:if test="self::CONTRACT_COVERED_GPA">
-            <pc: rdf:datatype="{$xsd_boolean_uri}">
-                <xsl:choose>
-                    <xsl:when test="@VALUE = 'YES'">true</xsl:when>
-                    <xsl:otherwise>false</xsl:otherwise>
-                </xsl:choose>
-            </pc:>
+     <xsl:template match="CONTRACT_COVERED_GPA">
+        <xsl:if test="self::CONTRACT_COVERED_GPA/@VALUE='YES'">
+               <TenderDocuments:covers>
+                <ProcurementRegulations:GovernmentProcurementAgreement rdf:about="{$ted_gpa_nm}"/>
+               </TenderDocuments:covers>  
         </xsl:if>
-    </xsl:template> -->
+    </xsl:template>
 
     <xsl:template match="MAIN_FINANCIAL_CONDITIONS">
         <xsl:if test="./text()">
@@ -1038,8 +1023,10 @@
                     <xsl:with-param name="country"
                         select="(CA_CE_CONCESSIONAIRE_PROFILE/COUNTRY/@VALUE, $country_code)[1]"/>
                 </xsl:call-template>
+                <s:PostalAddress>
                 <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE"
                     mode="legalNameAndAddress"/>
+                </s:PostalAddress>
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_UTILITIES/URL_GENERAL"/>
                 <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_UTILITIES/URL_BUYER"/>
@@ -1050,6 +1037,7 @@
             </s:GovernmentOrganization>
         </pc:contractingAuthority>
     </xsl:template>
+    
     <xsl:template match="NAME_ADDRESSES_CONTACT_CONTRACT_UTILITIES" mode="contact">
         <xsl:call-template name="contractContact"/>
     </xsl:template>
@@ -1076,7 +1064,7 @@
         <xsl:apply-templates select="F05_FRAMEWORK"/>
         <xsl:apply-templates select="SHORT_CONTRACT_DESCRIPTION"/>
         <xsl:apply-templates select="CPV"/>
-        <!--<xsl:apply-templates select="CONTRACT_COVERED_GPA"/> -->
+        <xsl:apply-templates select="CONTRACT_COVERED_GPA"/>
         <xsl:apply-templates select="F05_DIVISION_INTO_LOTS/F05_DIV_INTO_LOT_YES/F05_ANNEX_B"/>
 
     </xsl:template>
@@ -1360,15 +1348,15 @@
         <xsl:apply-templates select="TYPE_CONTRACT_LOCATION_W_PUB" mode="type_contract"/>
         <xsl:apply-templates select="TYPE_CONTRACT_LOCATION_W_PUB" mode="category"/>
         <xsl:apply-templates select="LOCATION_NUTS"/>
-        <xsl:apply-templates select="F06_NOTICE_INVOLVES/CONCLUSION_FRAMEWORK_AGREEMENT" mode="F06"/>
+        <!--<xsl:apply-templates select="F06_NOTICE_INVOLVES/CONCLUSION_FRAMEWORK_AGREEMENT" mode="F06"/>-->
         <xsl:apply-templates select="SHORT_DESCRIPTION"/>
         <xsl:apply-templates select="CPV"/>
         <xsl:apply-templates select="CONTRACT_COVERED_GPA"/>
     </xsl:template>
 
-    <xsl:template match="CONCLUSION_FRAMEWORK_AGREEMENT" mode="F06">
-        <!-- <xsl:call-template name="frameworkAgreement"/> -->
-    </xsl:template>
+    <!-- <xsl:template match="CONCLUSION_FRAMEWORK_AGREEMENT" mode="F06">
+        <xsl:call-template name="frameworkAgreement"/> 
+    </xsl:template>-->
 
     <xsl:template match="TYPE_CONTRACT_LOCATION_W_PUB" mode="type_contract">
         <xsl:if test="TYPE_CONTRACT/@VALUE">
@@ -1495,7 +1483,7 @@
 
 
     <!-- tenderer info -->
-    <xsl:template match="CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME">
+    <xsl:template match="CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME|CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME_CHP">
         <xsl:call-template name="basicBusinessEntity"/>
     </xsl:template>
 
@@ -1515,13 +1503,13 @@
     </xsl:template>
 
     <xsl:template match="APPEAL_PROCEDURES">
-        <xsl:apply-templates
+        <!--<xsl:apply-templates
             select="RESPONSIBLE_FOR_APPEAL_PROCEDURES/CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME"/>
         <xsl:apply-templates
-            select="RESPONSIBLE_FOR_MEDIATION_PROCEDURES//CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME"/>
+            select="RESPONSIBLE_FOR_MEDIATION_PROCEDURES//CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME"/>-->
         <xsl:apply-templates select="INFO_ON_DEADLINE"/>
-        <xsl:apply-templates select="SERVICE_FROM_INFORMATION/CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME"
-        />
+        <!--<xsl:apply-templates select="SERVICE_FROM_INFORMATION/CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME"
+        /> -->
     </xsl:template>
 
     <xsl:template match="INFO_ON_DEADLINE">
@@ -1632,7 +1620,7 @@
         <xsl:apply-templates select="CONTRACT_LOCATION_TYPE/SERVICE_CATEGORY" mode="category"/>
         <xsl:apply-templates select="DESCRIPTION"/>
         <xsl:apply-templates select="CPV"/>
-        <!--  <xsl:apply-templates select="CONTRACT_COVERED_GPA"/> -->
+        <xsl:apply-templates select="CONTRACT_COVERED_GPA"/>
     </xsl:template>
 
 
@@ -2343,7 +2331,7 @@
         <xsl:if test="MAIN_FINANCING_CONDITIONS">
             <xsl:apply-templates select="MAIN_FINANCING_CONDITIONS"/>
         </xsl:if>
-        <xsl:apply-templates select="RESERVED_CONTRACTS"/>
+       <!-- <xsl:apply-templates select="RESERVED_CONTRACTS"/>-->
     </xsl:template>
 
     <xsl:template match="MAIN_FINANCING_CONDITIONS">
@@ -2354,9 +2342,6 @@
         </pproc:contractEconomicConditions>
     </xsl:template>
     
-    <xsl:template match="RESERVED_CONTRACTS">
-        
-    </xsl:template>
 
     <!--  
     *********************************************************
@@ -2907,6 +2892,7 @@
                     <xsl:when
                         test="$awardNode/ECONOMIC_OPERATOR_NAME_ADDRESS/CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME|$awardNode/CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME_CHP">
                         <pc:bidder>
+                            
                             <xsl:apply-templates
                                 select="$awardNode/ECONOMIC_OPERATOR_NAME_ADDRESS/CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME|$awardNode/CONTACT_DATA_WITHOUT_RESPONSIBLE_NAME_CHP"
                             />
@@ -3310,9 +3296,9 @@
 
     <xsl:template match="COUNTRY">
         <xsl:if test="@VALUE">
-            <s:Country>
+            <s:addressCountry>
                 <xsl:value-of select="@VALUE"/>
-            </s:Country>
+            </s:addressCountry>
         </xsl:if>
     </xsl:template>
 
