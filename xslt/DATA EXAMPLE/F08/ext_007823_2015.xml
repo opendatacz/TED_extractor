@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/"
+         xmlns:pc="http://purl.org/procurement/public-contracts#"
+         xmlns:gr="http://purl.org/goodrelations/v1#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:s="http://schema.org/"
+         xmlns:pceu="http://purl.org/procurement/public-contracts-eu#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+         xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+         xmlns:adms="http://www.w3.org/ns/adms#"
+         xmlns:pproc="http://contsem.unizar.es/def/sector-publico/pproc#"
+         xmlns:ProcurementRegulations="https://loted2.googlecode.com/svn/trunk/modules/ProcurementRegulations#"
+         xmlns:TenderDocuments="https://loted2.googlecode.com/svn/trunk/modules/TenderDocuments#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/">
+   <pc:ContractNotice rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/007823-2015">
+      <pc:publicationDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2015-01-10</pc:publicationDate>
+   </pc:ContractNotice>
+   <pc:Contract rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/007823-2015">
+      <pc:publicNotice rdf:resource="http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/007823-2015"/>
+      <pc:contractingAuthority>
+         <gr:BusinessEntity rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/business-entity/becd98b9-bc96-4b27-9fa4-0f6743d37170">
+            <adms:identifier>
+               <adms:Identifier rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/identifier/fdb4a96c-feae-4b51-9326-b3ce96a8ac97">
+                  <skos:notation>BG000689182</skos:notation>
+               </adms:Identifier>
+            </adms:identifier>
+            <gr:legalName>Първа специализирана акушеро-гинекологична болница за активно лечение „Света София“ ЕАД</gr:legalName>
+            <s:address>
+               <s:PostalAddress rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/postal-address/fed318c3-3a21-42cf-9809-284af2a778c5">
+                  <s:streetAddress>ул. „Михалаки Ташев“ № 2</s:streetAddress>
+                  <s:addressLocality>София</s:addressLocality>
+                  <s:postalCode>1330</s:postalCode>
+                  <s:addressCountry>BG</s:addressCountry>
+               </s:PostalAddress>
+            </s:address>
+            <pc:profile rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">www.1agb.com</pc:profile>
+            <foaf:page>www.1agb.com</foaf:page>
+            <foaf:page>www.1agb.com</foaf:page>
+            <pc:authorityKind rdf:resource="http://purl.org/procurement/public-contracts-authority-kinds#PublicBody"/>
+            <pc:mainActivity rdf:resource="http://purl.org/procurement/public-contracts-activities#Health"/>
+         </gr:BusinessEntity>
+      </pc:contractingAuthority>
+      <pc:contact>
+         <s:ContactPoint rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/contact-point/f3d673f2-3768-4fa3-9ed1-e262d5bcf455">
+            <s:description>Николай Георгиев</s:description>
+            <s:telephone>+359 24470245</s:telephone>
+            <s:email>sagbal.svetasofia@mail.bg</s:email>
+            <s:faxNumber>+359 24470245</s:faxNumber>
+         </s:ContactPoint>
+      </pc:contact>
+      <pc:item>
+         <gr:Offering rdf:about="http://linked.opendata.cz/resource/cpv-2008/concept/33140000">
+            <dcterms:title xml:lang="BG">Доставка на медицински консумативи.</dcterms:title>
+            <pc:kind rdf:resource="http://purl.org/procurement/public-contracts-kinds#Supplies"/>
+            <dcterms:description xml:lang="BG">Периодични доставки на медицински изделия за период от 12 месеца.</dcterms:description>
+            <pc:mainObject rdf:resource="http://linked.opendata.cz/resource/cpv-2008/concept/33140000"/>
+            <pc:additionalObject rdf:resource="http://linked.opendata.cz/resource/cpv-2008/concept/33141110"/>
+         </gr:Offering>
+      </pc:item>
+      <pc:item>
+         <gr:Offering rdf:about="http://linked.opendata.cz/resource/cpv-2008/concept/33600000">
+            <dcterms:title xml:lang="BG">Доставка на лекарствени продукти.</dcterms:title>
+            <pc:kind rdf:resource="http://purl.org/procurement/public-contracts-kinds#Supplies"/>
+            <dcterms:description xml:lang="BG">Периодични доставки на лекарствени продукти за период от 12 месеца.</dcterms:description>
+            <pc:mainObject rdf:resource="http://linked.opendata.cz/resource/cpv-2008/concept/33600000"/>
+         </gr:Offering>
+      </pc:item>
+      <pc:item>
+         <gr:Offering rdf:about="http://linked.opendata.cz/resource/cpv-2008/concept/33698000">
+            <dcterms:title xml:lang="BG">Доставка на лабораторни реактиви и консумативи.</dcterms:title>
+            <pc:kind rdf:resource="http://purl.org/procurement/public-contracts-kinds#Supplies"/>
+            <dcterms:description xml:lang="BG">Периодични доставки на лабораторни реактиви и консумативи за период от 12 месеца.</dcterms:description>
+            <pc:mainObject rdf:resource="http://linked.opendata.cz/resource/cpv-2008/concept/33698000"/>
+            <pc:additionalObject rdf:resource="http://linked.opendata.cz/resource/cpv-2008/concept/33696500"/>
+         </gr:Offering>
+      </pc:item>
+      <dcterms:description xml:lang="BG">Обявлението за педварителна информация № 2 от 7.1.2015 г. е публикувано в РОП с УИН 641117 и в TED с № 2015/S 00-005086 от 8.1.2015 г.</dcterms:description>
+      <pc:notice>
+         <pproc:ContractAwardNotice rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/007823-2015">
+            <pproc:noticeSentDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2015-01-08</pproc:noticeSentDate>
+         </pproc:ContractAwardNotice>
+      </pc:notice>
+   </pc:Contract>
+</rdf:RDF>

@@ -1,0 +1,28 @@
+
+<http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/005304-2015> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/procurement/public-contracts#PriorInformationNotice> .
+<http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/005304-2015> <http://purl.org/procurement/public-contracts#publicationDate> "2015-01-08"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/005304-2015> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/procurement/public-contracts#Contract> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/005304-2015> <http://purl.org/procurement/public-contracts#publicNotice> <http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/005304-2015> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/9ba990c9-ab35-4dcf-88cb-9dae6be366a4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/goodrelations/v1#BusinessEntity> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/005304-2015> <http://purl.org/procurement/public-contracts#contractingAuthority> <http://linked.opendata.cz/resource/ted.europa.eu/business-entity/9ba990c9-ab35-4dcf-88cb-9dae6be366a4> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/9ba990c9-ab35-4dcf-88cb-9dae6be366a4> <http://purl.org/goodrelations/v1#legalName> "Forsvarsministeriets Materiel- og Indkøbsstyrelse (Danish Defence Acquisition and Logistics Organization)" .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/1ab5de57-b1a2-4d6c-893d-c1628faf1c84> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/9ba990c9-ab35-4dcf-88cb-9dae6be366a4> <http://schema.org/address> <http://linked.opendata.cz/resource/ted.europa.eu/postal-address/1ab5de57-b1a2-4d6c-893d-c1628faf1c84> .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/1ab5de57-b1a2-4d6c-893d-c1628faf1c84> <http://schema.org/streetAddress> "Lautrupbjerg 1-5" .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/1ab5de57-b1a2-4d6c-893d-c1628faf1c84> <http://schema.org/addressLocality> "Ballerup" .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/1ab5de57-b1a2-4d6c-893d-c1628faf1c84> <http://schema.org/postalCode> "2750" .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/1ab5de57-b1a2-4d6c-893d-c1628faf1c84> <http://schema.org/addressCountry> "DK" .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/9ba990c9-ab35-4dcf-88cb-9dae6be366a4> <http://xmlns.com/foaf/0.1/page> "http://www.forsvaret.dk/fmi"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/9ba990c9-ab35-4dcf-88cb-9dae6be366a4> <http://purl.org/procurement/public-contracts#authorityKind> <http://purl.org/procurement/public-contracts-authority-kinds#NationalAuthority> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/9ba990c9-ab35-4dcf-88cb-9dae6be366a4> <http://purl.org/procurement/public-contracts#mainActivity> <http://purl.org/procurement/public-contracts-activities#Defence> .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/933e5ad2-064e-4fe5-9ba7-5fdbcd8abc39> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/ContactPoint> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/005304-2015> <http://purl.org/procurement/public-contracts#contact> <http://linked.opendata.cz/resource/ted.europa.eu/contact-point/933e5ad2-064e-4fe5-9ba7-5fdbcd8abc39> .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/933e5ad2-064e-4fe5-9ba7-5fdbcd8abc39> <http://schema.org/description> "Category Manager Thomas Dam Jensen" .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/933e5ad2-064e-4fe5-9ba7-5fdbcd8abc39> <http://schema.org/telephone> "+45 72572204" .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/933e5ad2-064e-4fe5-9ba7-5fdbcd8abc39> <http://schema.org/email> "fmt-id-s204@mil.dk" .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/005304-2015> <http://purl.org/dc/terms/title> "Global strategic sourcing initiative with regards to military rifle spare-parts."@EN .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/005304-2015> <http://purl.org/procurement/public-contracts#mainObject> <http://linked.opendata.cz/resource/cpv-2008/concept/35341000> .
+<http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/005304-2015> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://contsem.unizar.es/def/sector-publico/pproc#ContractAwardNotice> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/005304-2015> <http://purl.org/procurement/public-contracts#notice> <http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/005304-2015> .
+<http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/005304-2015> <http://contsem.unizar.es/def/sector-publico/pproc#noticeSentDate> "2015-01-06"^^<http://www.w3.org/2001/XMLSchema#date> .
+

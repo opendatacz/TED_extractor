@@ -1,0 +1,125 @@
+
+<http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/000588-2015> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/procurement/public-contracts#ContractAwardNotice> .
+<http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/000588-2015> <http://purl.org/procurement/public-contracts#publicationDate> "2015-01-02"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/procurement/public-contracts#Contract> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015> <http://purl.org/procurement/public-contracts#publicNotice> <http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/000588-2015> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015> <http://purl.org/procurement/public-contracts#kind> <http://purl.org/procurement/public-contracts-kinds#Supplies> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/d372e93b-e248-4056-b61b-833e44e1f30f> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/goodrelations/v1#BusinessEntity> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015> <http://purl.org/procurement/public-contracts#contractingAuthority> <http://linked.opendata.cz/resource/ted.europa.eu/business-entity/d372e93b-e248-4056-b61b-833e44e1f30f> .
+<http://linked.opendata.cz/resource/ted.europa.eu/identifier/eb55339e-ac43-4848-9f5d-9443c3cff6cc> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/adms#Identifier> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/d372e93b-e248-4056-b61b-833e44e1f30f> <http://www.w3.org/ns/adms#identifier> <http://linked.opendata.cz/resource/ted.europa.eu/identifier/eb55339e-ac43-4848-9f5d-9443c3cff6cc> .
+<http://linked.opendata.cz/resource/ted.europa.eu/identifier/eb55339e-ac43-4848-9f5d-9443c3cff6cc> <http://www.w3.org/2004/02/skos/core#notation> "LT188732677" .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/d372e93b-e248-4056-b61b-833e44e1f30f> <http://purl.org/goodrelations/v1#legalName> "Lietuvos kariuomenė" .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/a319d5d1-b928-49ee-9f62-bb6cd41fec85> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/d372e93b-e248-4056-b61b-833e44e1f30f> <http://schema.org/address> <http://linked.opendata.cz/resource/ted.europa.eu/postal-address/a319d5d1-b928-49ee-9f62-bb6cd41fec85> .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/a319d5d1-b928-49ee-9f62-bb6cd41fec85> <http://schema.org/streetAddress> "Šv. Ignoto g. 8/29" .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/a319d5d1-b928-49ee-9f62-bb6cd41fec85> <http://schema.org/addressLocality> "LT-01120 Vilnius" .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/a319d5d1-b928-49ee-9f62-bb6cd41fec85> <http://schema.org/postalCode> "01144" .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/a319d5d1-b928-49ee-9f62-bb6cd41fec85> <http://schema.org/addressCountry> "LT" .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/d372e93b-e248-4056-b61b-833e44e1f30f> <http://xmlns.com/foaf/0.1/page> "http://www.kam.lt"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/d372e93b-e248-4056-b61b-833e44e1f30f> <http://xmlns.com/foaf/0.1/page> "https://pirkimai.eviesiejipirkimai.lt"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/d372e93b-e248-4056-b61b-833e44e1f30f> <http://purl.org/procurement/public-contracts#authorityKind> <http://purl.org/procurement/public-contracts-authority-kinds#NationalAuthority> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/d372e93b-e248-4056-b61b-833e44e1f30f> <http://purl.org/procurement/public-contracts#mainActivity> <http://purl.org/procurement/public-contracts-activities#Defence> .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/a010d25c-8ed4-4ab9-aded-c20b01503950> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/ContactPoint> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015> <http://purl.org/procurement/public-contracts#contact> <http://linked.opendata.cz/resource/ted.europa.eu/contact-point/a010d25c-8ed4-4ab9-aded-c20b01503950> .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/a010d25c-8ed4-4ab9-aded-c20b01503950> <http://schema.org/description> "Mindaugas Burba" .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/a010d25c-8ed4-4ab9-aded-c20b01503950> <http://schema.org/telephone> "+370 52735569" .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/a010d25c-8ed4-4ab9-aded-c20b01503950> <http://schema.org/email> "mindaugas.burba@kam.lt" .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/a010d25c-8ed4-4ab9-aded-c20b01503950> <http://schema.org/faxNumber> "+370 52735646" .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015> <http://purl.org/dc/terms/title> "Kario šalmų ir šarvinių liemenių komplektų pirkimas."@LT .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015> <http://purl.org/procurement/public-contracts#kind> <http://purl.org/procurement/public-contracts-kinds#Supplies> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/location-place/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Place> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015> <http://purl.org/procurement/public-contracts#location> <http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/location-place/1> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/location-place/1> <http://schema.org/description> "Lietuvos kariuomenės Depų tarnybos sandėliai, Savanorių pr. 8, LT-03116 Vilnius." .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015> <http://purl.org/procurement/public-contracts#mainObject> <http://linked.opendata.cz/resource/cpv-2008/concept/35813000> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015> <http://purl.org/procurement/public-contracts#additionalObject> <http://linked.opendata.cz/resource/cpv-2008/concept/35815100> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/agreed-price/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PriceSpecification> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015> <http://purl.org/procurement/public-contracts#agreedPrice> <http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/agreed-price/1> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/agreed-price/1> <http://schema.org/price> "801705.80"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/agreed-price/1> <http://schema.org/priceCurrency> "EUR" .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/agreed-price/1> <http://schema.org/valueAddedTaxIncluded> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015> <http://purl.org/procurement/public-contracts#procedureType> <http://purl.org/procurement/public-contracts-procedure-types#Restricted> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/combination-of-contract-award-criteria/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/procurement/public-contracts#AwardCriteriaCombination> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015> <http://purl.org/procurement/public-contracts#awardCriteriaCombination> <http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/combination-of-contract-award-criteria/1> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/criterion-weighting/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/procurement/public-contracts#CriterionWeighting> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/combination-of-contract-award-criteria/1> <http://purl.org/procurement/public-contracts#awardCriterion> <http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/criterion-weighting/1> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/weighted_criterion/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/criterion-weighting/1> <http://purl.org/procurement/public-contracts#weightedCriterion> <http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/weighted_criterion/1> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/weighted_criterion/1> <http://www.w3.org/2004/02/skos/core#prefLabel> "Kaina"@LT .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/criterion-weighting/1> <http://purl.org/procurement/public-contracts#criterionWeight> "70"^^<http://purl.org/procurement/public-contracts-datatypes#percentage> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/criterion-weighting/2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/procurement/public-contracts#CriterionWeighting> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/combination-of-contract-award-criteria/1> <http://purl.org/procurement/public-contracts#awardCriterion> <http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/criterion-weighting/2> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/weighted_criterion/2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/criterion-weighting/2> <http://purl.org/procurement/public-contracts#weightedCriterion> <http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/weighted_criterion/2> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/weighted_criterion/2> <http://www.w3.org/2004/02/skos/core#prefLabel> "Ergonominės savybės"@LT .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/criterion-weighting/2> <http://purl.org/procurement/public-contracts#criterionWeight> "20"^^<http://purl.org/procurement/public-contracts-datatypes#percentage> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/criterion-weighting/3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/procurement/public-contracts#CriterionWeighting> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/combination-of-contract-award-criteria/1> <http://purl.org/procurement/public-contracts#awardCriterion> <http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/criterion-weighting/3> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/weighted_criterion/3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/criterion-weighting/3> <http://purl.org/procurement/public-contracts#weightedCriterion> <http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/weighted_criterion/3> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/weighted_criterion/3> <http://www.w3.org/2004/02/skos/core#prefLabel> "Svoris"@LT .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/criterion-weighting/3> <http://purl.org/procurement/public-contracts#criterionWeight> "10"^^<http://purl.org/procurement/public-contracts-datatypes#percentage> .
+<http://linked.opendata.cz/resource/ted.europa.eu/electronic-auction/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://contsem.unizar.es/def/sector-publico/pproc#ElectronicAuction> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015> <http://contsem.unizar.es/def/sector-publico/pproc#ContractProcedureSpecification> <http://linked.opendata.cz/resource/ted.europa.eu/electronic-auction/1> .
+<http://linked.opendata.cz/resource/ted.europa.eu/electronic-auction/1> <http://contsem.unizar.es/def/sector-publico/pproc#electronicAuction> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/procurement/public-contracts#Contract> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015> <http://purl.org/procurement/public-contracts#lot> <http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/1> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/1> <http://purl.org/dc/terms/title> "Kario šalmai"@LT .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/1> <http://purl.org/procurement/public-contracts#awardDate> "2014-10-31"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/1> <http://purl.org/procurement/public-contracts#numberOfTenders> "4"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/1/tender/> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/procurement/public-contracts#Tender> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/1> <http://purl.org/procurement/public-contracts#awardedTender> <http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/1/tender/> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/915fa6a9-0800-4f1a-b0e5-e8877e7b844e> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/1/tender/> <http://purl.org/procurement/public-contracts#bidder> <http://linked.opendata.cz/resource/ted.europa.eu/business-entity/915fa6a9-0800-4f1a-b0e5-e8877e7b844e> .
+<http://linked.opendata.cz/resource/ted.europa.eu/identifier/746cf1bd-7c09-473a-bbe2-12010b606825> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/adms#Identifier> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/915fa6a9-0800-4f1a-b0e5-e8877e7b844e> <http://www.w3.org/ns/adms#identifier> <http://linked.opendata.cz/resource/ted.europa.eu/identifier/746cf1bd-7c09-473a-bbe2-12010b606825> .
+<http://linked.opendata.cz/resource/ted.europa.eu/identifier/746cf1bd-7c09-473a-bbe2-12010b606825> <http://www.w3.org/2004/02/skos/core#notation> "PL803" .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/915fa6a9-0800-4f1a-b0e5-e8877e7b844e> <http://purl.org/goodrelations/v1#legalName> "NFM production Sp. z o.o." .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/683cb2e8-8f6a-4a4f-b151-a65a6104a0d6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/915fa6a9-0800-4f1a-b0e5-e8877e7b844e> <http://schema.org/address> <http://linked.opendata.cz/resource/ted.europa.eu/postal-address/683cb2e8-8f6a-4a4f-b151-a65a6104a0d6> .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/683cb2e8-8f6a-4a4f-b151-a65a6104a0d6> <http://schema.org/streetAddress> "Targowa 5" .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/683cb2e8-8f6a-4a4f-b151-a65a6104a0d6> <http://schema.org/addressLocality> "Potegowo" .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/683cb2e8-8f6a-4a4f-b151-a65a6104a0d6> <http://schema.org/postalCode> "76-230" .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/683cb2e8-8f6a-4a4f-b151-a65a6104a0d6> <http://schema.org/addressCountry> "PL" .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/04df8886-eb8c-496d-9933-52ac2fcecafd> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/ContactPoint> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/915fa6a9-0800-4f1a-b0e5-e8877e7b844e> <http://schema.org/contactPoint> <http://linked.opendata.cz/resource/ted.europa.eu/contact-point/04df8886-eb8c-496d-9933-52ac2fcecafd> .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/04df8886-eb8c-496d-9933-52ac2fcecafd> <http://schema.org/telephone> "+48 598484141" .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/04df8886-eb8c-496d-9933-52ac2fcecafd> <http://schema.org/email> "info@nfm.no" .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/04df8886-eb8c-496d-9933-52ac2fcecafd> <http://schema.org/faxNumber> "+48 598484140" .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/1/tender//offered-price/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PriceSpecification> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/1/tender/> <http://purl.org/procurement/public-contracts#offeredPrice> <http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/1/tender//offered-price/1> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/1/tender//offered-price/1> <http://schema.org/price> "354650"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/1/tender//offered-price/1> <http://schema.org/priceCurrency> "EUR" .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/1/tender//offered-price/1> <http://schema.org/valueAddedTaxIncluded> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/procurement/public-contracts#Contract> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015> <http://purl.org/procurement/public-contracts#lot> <http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/2> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/2> <http://purl.org/dc/terms/title> "Kario šarvinių liemenių komplektai"@LT .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/2> <http://purl.org/procurement/public-contracts#awardDate> "2014-10-31"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/2> <http://purl.org/procurement/public-contracts#numberOfTenders> "4"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/2/tender/> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/procurement/public-contracts#Tender> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/2> <http://purl.org/procurement/public-contracts#awardedTender> <http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/2/tender/> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/c2dd9e1b-02a0-4c79-ba38-b2154cb9a177> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/2/tender/> <http://purl.org/procurement/public-contracts#bidder> <http://linked.opendata.cz/resource/ted.europa.eu/business-entity/c2dd9e1b-02a0-4c79-ba38-b2154cb9a177> .
+<http://linked.opendata.cz/resource/ted.europa.eu/identifier/a32b6ed5-2ee4-4b26-9a7f-9df2ac6fc74f> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/adms#Identifier> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/c2dd9e1b-02a0-4c79-ba38-b2154cb9a177> <http://www.w3.org/ns/adms#identifier> <http://linked.opendata.cz/resource/ted.europa.eu/identifier/a32b6ed5-2ee4-4b26-9a7f-9df2ac6fc74f> .
+<http://linked.opendata.cz/resource/ted.europa.eu/identifier/a32b6ed5-2ee4-4b26-9a7f-9df2ac6fc74f> <http://www.w3.org/2004/02/skos/core#notation> "PL803" .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/c2dd9e1b-02a0-4c79-ba38-b2154cb9a177> <http://purl.org/goodrelations/v1#legalName> "NFM production Sp. z o.o." .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/cd7f1168-d0e6-4b7d-a2bf-50bbf3efa059> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/c2dd9e1b-02a0-4c79-ba38-b2154cb9a177> <http://schema.org/address> <http://linked.opendata.cz/resource/ted.europa.eu/postal-address/cd7f1168-d0e6-4b7d-a2bf-50bbf3efa059> .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/cd7f1168-d0e6-4b7d-a2bf-50bbf3efa059> <http://schema.org/streetAddress> "Targowa 5" .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/cd7f1168-d0e6-4b7d-a2bf-50bbf3efa059> <http://schema.org/addressLocality> "Potegowo" .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/cd7f1168-d0e6-4b7d-a2bf-50bbf3efa059> <http://schema.org/postalCode> "76-230" .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/cd7f1168-d0e6-4b7d-a2bf-50bbf3efa059> <http://schema.org/addressCountry> "PL" .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/9efa5fef-a9c9-455a-8269-1e8b7ecbb638> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/ContactPoint> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/c2dd9e1b-02a0-4c79-ba38-b2154cb9a177> <http://schema.org/contactPoint> <http://linked.opendata.cz/resource/ted.europa.eu/contact-point/9efa5fef-a9c9-455a-8269-1e8b7ecbb638> .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/9efa5fef-a9c9-455a-8269-1e8b7ecbb638> <http://schema.org/telephone> "+48 598484141" .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/9efa5fef-a9c9-455a-8269-1e8b7ecbb638> <http://schema.org/email> "info@nfm.no" .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/9efa5fef-a9c9-455a-8269-1e8b7ecbb638> <http://schema.org/faxNumber> "+48 598484140" .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/2/tender//offered-price/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PriceSpecification> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/2/tender/> <http://purl.org/procurement/public-contracts#offeredPrice> <http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/2/tender//offered-price/1> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/2/tender//offered-price/1> <http://schema.org/price> "447055.80"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/2/tender//offered-price/1> <http://schema.org/priceCurrency> "EUR" .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015/lot/2/tender//offered-price/1> <http://schema.org/valueAddedTaxIncluded> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/000588-2015> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://contsem.unizar.es/def/sector-publico/pproc#ContractAwardNotice> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/000588-2015> <http://purl.org/procurement/public-contracts#notice> <http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/000588-2015> .
+<http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/000588-2015> <http://contsem.unizar.es/def/sector-publico/pproc#noticeSentDate> "2014-12-30"^^<http://www.w3.org/2001/XMLSchema#date> .

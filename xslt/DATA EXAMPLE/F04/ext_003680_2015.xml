@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/"
+         xmlns:pc="http://purl.org/procurement/public-contracts#"
+         xmlns:gr="http://purl.org/goodrelations/v1#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:s="http://schema.org/"
+         xmlns:pceu="http://purl.org/procurement/public-contracts-eu#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+         xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+         xmlns:adms="http://www.w3.org/ns/adms#"
+         xmlns:pproc="http://contsem.unizar.es/def/sector-publico/pproc#"
+         xmlns:ProcurementRegulations="https://loted2.googlecode.com/svn/trunk/modules/ProcurementRegulations#"
+         xmlns:TenderDocuments="https://loted2.googlecode.com/svn/trunk/modules/TenderDocuments#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/">
+   <pc:PriorInformationNotice rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/003680-2015">
+      <pc:publicationDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2015-01-06</pc:publicationDate>
+   </pc:PriorInformationNotice>
+   <pc:Contract rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/003680-2015">
+      <pc:publicNotice rdf:resource="http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/003680-2015"/>
+      <pc:kind rdf:resource="http://purl.org/procurement/public-contracts-kinds#Supplies"/>
+      <pc:CompetitiveDialogue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</pc:CompetitiveDialogue>
+      <pc:contractingAuthority>
+         <gr:BusinessEntity rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/business-entity/1f2bece7-a0aa-4689-86b6-5bc5d4fc113f">
+            <gr:legalName>Creos SA</gr:legalName>
+            <s:address>
+               <s:PostalAddress rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/postal-address/348d4ad6-2050-4f8d-81fd-33cb5c74b53b">
+                  <s:streetAddress>2, rue T. Edison</s:streetAddress>
+                  <s:addressLocality>Strassen</s:addressLocality>
+                  <s:postalCode>1445</s:postalCode>
+                  <s:addressCountry>LU</s:addressCountry>
+               </s:PostalAddress>
+            </s:address>
+            <foaf:page rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">http://www.creos.net</foaf:page>
+         </gr:BusinessEntity>
+      </pc:contractingAuthority>
+      <pc:contact>
+         <s:ContactPoint rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/contact-point/cf9c3a4d-cc2f-4c49-9d5f-fec2df4505c4">
+            <s:description>Guy Muller</s:description>
+            <s:telephone>+352 26241</s:telephone>
+            <s:email>muller.guy@creos.net</s:email>
+            <s:faxNumber>+352 26245100</s:faxNumber>
+         </s:ContactPoint>
+      </pc:contact>
+      <dcterms:title xml:lang="FR">M Conduites de Gaz HP acier et Courbes HP acier 90°.</dcterms:title>
+      <pc:kind rdf:resource="http://purl.org/procurement/public-contracts-kinds#Supplies"/>
+      <pc:mainObject rdf:resource="http://linked.opendata.cz/resource/cpv-2008/concept/39340000"/>
+      <adms:identifier>
+         <adms:Identifier rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/003680-2015/identifier/1">
+            <skos:notation>CRE_2015_001</skos:notation>
+         </adms:Identifier>
+      </adms:identifier>
+      <pc:notice>
+         <pproc:ContractAwardNotice rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/003680-2015">
+            <pproc:noticeSentDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2015-01-05</pproc:noticeSentDate>
+         </pproc:ContractAwardNotice>
+      </pc:notice>
+   </pc:Contract>
+</rdf:RDF>

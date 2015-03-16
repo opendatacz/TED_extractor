@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/"
+         xmlns:pc="http://purl.org/procurement/public-contracts#"
+         xmlns:gr="http://purl.org/goodrelations/v1#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:s="http://schema.org/"
+         xmlns:pceu="http://purl.org/procurement/public-contracts-eu#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+         xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+         xmlns:adms="http://www.w3.org/ns/adms#"
+         xmlns:pproc="http://contsem.unizar.es/def/sector-publico/pproc#"
+         xmlns:ProcurementRegulations="https://loted2.googlecode.com/svn/trunk/modules/ProcurementRegulations#"
+         xmlns:TenderDocuments="https://loted2.googlecode.com/svn/trunk/modules/TenderDocuments#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/">
+   <pc:PriorInformationNotice rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/001152-2015">
+      <pc:publicationDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2015-01-02</pc:publicationDate>
+   </pc:PriorInformationNotice>
+   <pc:Contract rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015">
+      <pc:publicNotice rdf:resource="http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/001152-2015"/>
+      <pc:kind rdf:resource="http://purl.org/procurement/public-contracts-kinds#Supplies"/>
+      <pc:CompetitiveDialogue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</pc:CompetitiveDialogue>
+      <pc:contractingAuthority>
+         <gr:BusinessEntity rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/business-entity/71702ae9-8126-4319-a19f-230570a1063c">
+            <gr:legalName>Compania de Apa Oltenia SA</gr:legalName>
+            <s:address>
+               <s:PostalAddress rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/postal-address/67dc081b-bf5e-4111-b6d3-f71f0166da3a">
+                  <s:streetAddress>Str. Brestei nr. 133</s:streetAddress>
+                  <s:addressLocality>Craiova</s:addressLocality>
+                  <s:postalCode>200177</s:postalCode>
+                  <s:addressCountry>RO</s:addressCountry>
+               </s:PostalAddress>
+            </s:address>
+            <pc:profile rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">www.e-licitatie.ro</pc:profile>
+            <foaf:page rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">www.apaoltenia.ro</foaf:page>
+            <pc:mainActivity rdf:resource="http://purl.org/procurement/public-contracts-activities#Water"/>
+         </gr:BusinessEntity>
+      </pc:contractingAuthority>
+      <pc:contact>
+         <s:ContactPoint rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/contact-point/5a73ee7a-5625-41bb-b57b-247d78f2b740">
+            <s:name>Serviciul Achizitii Publice</s:name>
+            <s:telephone>+40 251422117</s:telephone>
+            <s:email>achizitii.apaoltenia@gmail.com</s:email>
+            <s:email>achizitii.apaoltenia@yahoo.com</s:email>
+            <s:faxNumber>+40 251422263</s:faxNumber>
+         </s:ContactPoint>
+      </pc:contact>
+      <dcterms:title xml:lang="RO">Autocuratitoare combinate intretinere canale.</dcterms:title>
+      <pc:kind rdf:resource="http://purl.org/procurement/public-contracts-kinds#Supplies"/>
+      <dcterms:description xml:lang="RO">3 buc. autocuratitor combinat intretinere canale.</dcterms:description>
+      <pc:mainObject rdf:resource="http://linked.opendata.cz/resource/cpv-2008/concept/34114000"/>
+      <pc:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#duration">P6M</pc:duration>
+      <pc:estimatedPrice>
+         <s:PriceSpecification rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015/estimated-price/1">
+            <s:price rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4153380</s:price>
+            <s:priceCurrency>RON</s:priceCurrency>
+            <s:valueAddedTaxIncluded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</s:valueAddedTaxIncluded>
+            <s:description xml:lang="RO">Fonduri externe, Programul Operational Sectorial de Mediu.</s:description>
+         </s:PriceSpecification>
+      </pc:estimatedPrice>
+      <dcterms:description xml:lang="RO">Clauza suspensiva: Procedura de este initiata sub incidenta prezentei clauze suspensive, in sensul ca incheierea contractului de achizitie publica este conditionata de incheierea contractului de finantare cu autoritatea de management, semnarea contractului facandu-se cu respectarea dispozitiilor art. 94 din HG nr. 925/2006, cu modifi-carile si completarile ulterioare.</dcterms:description>
+      <adms:identifier>
+         <adms:Identifier rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015/identifier/1">
+            <skos:notation>CP03-2014</skos:notation>
+         </adms:Identifier>
+      </adms:identifier>
+      <dcterms:description xml:lang="RO">Procedura de achizitie se va face prin licitatie deschisa, online.</dcterms:description>
+      <pc:agreedPrice>
+         <s:PriceSpecification rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015/agreed-price/1">
+            <s:price rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4153380</s:price>
+            <s:priceCurrency>RON</s:priceCurrency>
+            <s:valueAddedTaxIncluded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</s:valueAddedTaxIncluded>
+         </s:PriceSpecification>
+      </pc:agreedPrice>
+      <pc:notice>
+         <pproc:ContractAwardNotice rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/001152-2015">
+            <pproc:noticeSentDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2014-12-29</pproc:noticeSentDate>
+         </pproc:ContractAwardNotice>
+      </pc:notice>
+   </pc:Contract>
+</rdf:RDF>

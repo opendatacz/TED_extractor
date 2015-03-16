@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/"
+         xmlns:pc="http://purl.org/procurement/public-contracts#"
+         xmlns:gr="http://purl.org/goodrelations/v1#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:s="http://schema.org/"
+         xmlns:pceu="http://purl.org/procurement/public-contracts-eu#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+         xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+         xmlns:adms="http://www.w3.org/ns/adms#"
+         xmlns:pproc="http://contsem.unizar.es/def/sector-publico/pproc#"
+         xmlns:ProcurementRegulations="https://loted2.googlecode.com/svn/trunk/modules/ProcurementRegulations#"
+         xmlns:TenderDocuments="https://loted2.googlecode.com/svn/trunk/modules/TenderDocuments#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/">
+   <pc:ContractNotice rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/002827-2015">
+      <pc:publicationDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2015-01-03</pc:publicationDate>
+   </pc:ContractNotice>
+   <pc:Contract rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/002827-2015">
+      <pc:publicNotice rdf:resource="http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/002827-2015"/>
+      <pc:contractingAuthority>
+         <gr:BusinessEntity rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/business-entity/9623d662-1df6-4909-a19f-1e9766232ac9">
+            <gr:legalName>TenneT TSO GmbH</gr:legalName>
+            <s:address>
+               <s:PostalAddress rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/postal-address/1a872cd9-f01a-428c-8cef-ead817e3af05">
+                  <s:streetAddress>Bernecker Straße 70</s:streetAddress>
+                  <s:addressLocality>Bayreuth</s:addressLocality>
+                  <s:postalCode>95448</s:postalCode>
+                  <s:addressCountry>DE</s:addressCountry>
+               </s:PostalAddress>
+            </s:address>
+            <foaf:page rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">http://www.tennet.eu</foaf:page>
+            <pc:mainActivity rdf:resource="http://purl.org/procurement/public-contracts-activities#Electricity"/>
+         </gr:BusinessEntity>
+      </pc:contractingAuthority>
+      <pc:contact>
+         <s:ContactPoint rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/contact-point/d19e2d84-98f7-4283-a0b3-c168e8178316">
+            <s:description>Volker Kleindienst</s:description>
+            <s:telephone>+49 921507404300</s:telephone>
+            <s:email>volker.kleindienst@tennet.eu</s:email>
+            <s:faxNumber>+49 921507404452</s:faxNumber>
+         </s:ContactPoint>
+      </pc:contact>
+      <dcterms:title xml:lang="DE">Beschaffung von Beschichtungsstoffen für den schweren Korrosionsschutz von Freileitungsmasten.</dcterms:title>
+      <pc:kind rdf:resource="http://purl.org/procurement/public-contracts-kinds#Supplies"/>
+      <pc:mainObject rdf:resource="http://linked.opendata.cz/resource/cpv-2008/concept/65310000"/>
+      <pc:additionalObject rdf:resource="http://linked.opendata.cz/resource/cpv-2008/concept/65320000"/>
+      <pc:additionalObject rdf:resource="http://linked.opendata.cz/resource/cpv-2008/concept/65000000"/>
+      <pc:additionalObject rdf:resource="http://linked.opendata.cz/resource/cpv-2008/concept/24200000"/>
+      <pproc:ContractProcedureSpecification>
+         <pproc:ElectronicAuction rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/electronic-auction/1">
+            <pproc:electronicAuction rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</pproc:electronicAuction>
+         </pproc:ElectronicAuction>
+      </pproc:ContractProcedureSpecification>
+      <adms:identifier>
+         <adms:Identifier rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/002827-2015/identifier/1">
+            <skos:notation>KMD-vk/PQ-KF/2014</skos:notation>
+         </adms:Identifier>
+      </adms:identifier>
+      <pc:notice>
+         <pproc:ContractAwardNotice rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/002827-2015">
+            <pproc:noticeSentDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2014-12-31</pproc:noticeSentDate>
+         </pproc:ContractAwardNotice>
+      </pc:notice>
+   </pc:Contract>
+</rdf:RDF>

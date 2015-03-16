@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/"
+         xmlns:pc="http://purl.org/procurement/public-contracts#"
+         xmlns:gr="http://purl.org/goodrelations/v1#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:s="http://schema.org/"
+         xmlns:pceu="http://purl.org/procurement/public-contracts-eu#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+         xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+         xmlns:adms="http://www.w3.org/ns/adms#"
+         xmlns:pproc="http://contsem.unizar.es/def/sector-publico/pproc#"
+         xmlns:ProcurementRegulations="https://loted2.googlecode.com/svn/trunk/modules/ProcurementRegulations#"
+         xmlns:TenderDocuments="https://loted2.googlecode.com/svn/trunk/modules/TenderDocuments#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/">
+   <pc:ContractNotice rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/002900-2015">
+      <pc:publicationDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2015-01-03</pc:publicationDate>
+   </pc:ContractNotice>
+   <pc:Contract rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/002900-2015">
+      <pc:publicNotice rdf:resource="http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/002900-2015"/>
+      <pc:contractingAuthority>
+         <gr:BusinessEntity rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/business-entity/8f7b7432-744b-41cb-aa25-8b0c860a8ec5">
+            <gr:legalName>Viveracqua S.c. a r.l.</gr:legalName>
+            <s:address>
+               <s:PostalAddress rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/postal-address/2590eefd-af22-4e2f-a9bf-e0c340f55e8d">
+                  <s:streetAddress>Lungadige Galtarossa 8 (ingresso da Via Campo Marzo
+                                6)</s:streetAddress>
+                  <s:addressLocality>Verona</s:addressLocality>
+                  <s:postalCode>37133</s:postalCode>
+                  <s:addressCountry>IT</s:addressCountry>
+               </s:PostalAddress>
+            </s:address>
+            <pc:profile rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">http://www.albopretorionline.it/viveracqua/alboente.aspx</pc:profile>
+            <foaf:page>http://www.viveracqua.it</foaf:page>
+            <foaf:page>http://www.viveracqua.it/area_riservata.asp</foaf:page>
+            <pc:mainActivity rdf:resource="http://purl.org/procurement/public-contracts-activities#Water"/>
+         </gr:BusinessEntity>
+      </pc:contractingAuthority>
+      <pc:contact>
+         <s:ContactPoint rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/contact-point/18fff95f-b773-4b8b-827b-3a8aaf55bc88">
+            <s:name>Ufficio Acquisti</s:name>
+            <s:description>Manuela Vecchiatti</s:description>
+            <s:telephone>+39 0444955200</s:telephone>
+            <s:email>avi.acquisti@pec.viveracqua.it</s:email>
+            <s:faxNumber>+39 0444955299</s:faxNumber>
+         </s:ContactPoint>
+      </pc:contact>
+      <pc:onBehalfOf>
+         <s:Organization rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/business-entity/8db21f2f-4d90-4d9c-9427-2a962d5ccb48">
+            <gr:legalName>Centro Veneto Servizi SpA</gr:legalName>
+            <s:address>
+               <s:PostalAddress rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/postal-address/87a15920-d3fd-4cb7-81d4-c5fe4fc3caed">
+                  <s:streetAddress>Via C. Colombo 29/A</s:streetAddress>
+                  <s:addressLocality>Monselice (PD)</s:addressLocality>
+                  <s:postalCode>35043</s:postalCode>
+                  <s:addressCountry>IT</s:addressCountry>
+               </s:PostalAddress>
+            </s:address>
+         </s:Organization>
+      </pc:onBehalfOf>
+      <pc:onBehalfOf>
+         <s:Organization rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/business-entity/cc7471e1-be6e-4195-827c-24d225f1c28a">
+            <gr:legalName>Acque Vicentine SpA</gr:legalName>
+            <s:address>
+               <s:PostalAddress rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/postal-address/a22c90b8-15d3-4cf0-944c-b63d9ec27f87">
+                  <s:streetAddress>Viale dell'Industria 23</s:streetAddress>
+                  <s:addressLocality>Vicenza</s:addressLocality>
+                  <s:postalCode>36100</s:postalCode>
+                  <s:addressCountry>IT</s:addressCountry>
+               </s:PostalAddress>
+            </s:address>
+         </s:Organization>
+      </pc:onBehalfOf>
+      <pc:onBehalfOf>
+         <s:Organization rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/business-entity/0b707d10-4be3-456d-80a5-1db0731eb7a6">
+            <gr:legalName>Alto Vicentino Servizi SpA</gr:legalName>
+            <s:address>
+               <s:PostalAddress rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/postal-address/7137c25d-5ad8-4426-9830-e9ff6ee24265">
+                  <s:streetAddress>Via S. Giovanni Bosco 77/B</s:streetAddress>
+                  <s:addressLocality>Thiene (VI)</s:addressLocality>
+                  <s:postalCode>36016</s:postalCode>
+                  <s:addressCountry>IT</s:addressCountry>
+               </s:PostalAddress>
+            </s:address>
+         </s:Organization>
+      </pc:onBehalfOf>
+      <pc:onBehalfOf>
+         <s:Organization rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/business-entity/419cbae7-7eba-4b20-aa03-93ef73ed662e">
+            <gr:legalName>Livenza Tagliamento Acque SpA</gr:legalName>
+            <s:address>
+               <s:PostalAddress rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/postal-address/cedd8fb4-7a0d-4393-813d-f9eb57c42514">
+                  <s:streetAddress>Via L. Zannier 9</s:streetAddress>
+                  <s:addressLocality>Fossalta di Portogruaro (VE)</s:addressLocality>
+                  <s:postalCode>30025</s:postalCode>
+                  <s:addressCountry>IT</s:addressCountry>
+               </s:PostalAddress>
+            </s:address>
+         </s:Organization>
+      </pc:onBehalfOf>
+      <pc:onBehalfOf>
+         <s:Organization rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/business-entity/d2f2c9ae-13c7-4ce7-baed-4bfc305c4c8f">
+            <gr:legalName>ETRA SpA</gr:legalName>
+            <s:address>
+               <s:PostalAddress rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/postal-address/fbc3a72a-8d75-4d74-ad07-adb1e7c5144a">
+                  <s:streetAddress>Largo Parolini 82B</s:streetAddress>
+                  <s:addressLocality>Bassano del Grappa (VI)</s:addressLocality>
+                  <s:postalCode>36061</s:postalCode>
+                  <s:addressCountry>IT</s:addressCountry>
+               </s:PostalAddress>
+            </s:address>
+         </s:Organization>
+      </pc:onBehalfOf>
+      <pc:item>
+         <gr:Offering rdf:about="http://linked.opendata.cz/resource/cpv-2008/concept/66120000">
+            <dcterms:title xml:lang="IT">Affidamento della gestione temporanea della liquidità soci Viveracqua — VAG14S020.</dcterms:title>
+            <pc:kind rdf:resource="http://purl.org/procurement/public-contracts-kinds#Services"/>
+            <dcterms:description xml:lang="IT">Affidamento della gestione temporanea della liquidità soci Viveracqua — VAG14S02. Gli EA hanno a disposizione risorse finanziarie destinate alla realizzazione di investimenti infrastrutturali del Servizio Idrico Integrato; considerando la dinamica dei tempi di realizzazione di nuove opere e, quindi, dell'effettivo utilizzo di provviste finanziarie per il pagamento degli investimenti nelle medesime, è di fatto possibile prevedere che ogni EA abbia liquidità libere disponibili sino al 2016, come da Allegato 1 ai documenti di gara — Schema disponibilità. L'obiettivo della trattativa informale che Viveracqua si propone di avviare, in qualità di Centrale unica di Committenza, è quindi la miglior gestione possibile delle somme suddette, intesa come massimizzazione del rendimento minimo garantito nell'orizzonte temporale desiderato.</dcterms:description>
+            <pc:mainObject rdf:resource="http://linked.opendata.cz/resource/cpv-2008/concept/66120000"/>
+         </gr:Offering>
+      </pc:item>
+      <dcterms:description xml:lang="IT">Servizio escluso dal codice degli appalti ai sensi dell'art. 19 c. 1 lett. d) del D.Lgs. 163/2006 smi. Gara a trattativa informale con applicazione del D.Lgs. 163/2006 smi solo per gli articoli espressamente richiamati. Modalità di partecipazione, requisiti minimi come da avviso integrale e relativi allegati visionabili all'indirizzo: http://www.viveracqua.it/area_riservata.asp Codice invito vag14s020 — Password: 1nt124CG06Br Eventuali chiarimenti/informazioni a mezzo PEC all'indirizzo: avi.acquisti@pec.viveracqua.it Le risposte saranno visionabili al link: http://www.viveracqua.it/area_riservata.asp Codice invito: vag14s020_quesiti Password: IAv1Gz3xF5kn Le risposte e le informazioni alle richieste di chiarimenti pubblicate sul link suindicato si intendono note a tutti i concorrenti. I soggetti ammessi sono banche o loro aggregazioni in ogni forma, assicurazioni, intermediari finanziari in ogni forma o specificazione, iscritti negli elenchi tenuti da Banca d'Italia, dall'Ivass o da Consob. Scadenza fissata per la presentazione dell'offerta e relativa documentazione a corredo: 26.1.2015 ore 12:00.</dcterms:description>
+      <pc:notice>
+         <pproc:ContractAwardNotice rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/002900-2015">
+            <pproc:noticeSentDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2014-12-30</pproc:noticeSentDate>
+         </pproc:ContractAwardNotice>
+      </pc:notice>
+   </pc:Contract>
+</rdf:RDF>

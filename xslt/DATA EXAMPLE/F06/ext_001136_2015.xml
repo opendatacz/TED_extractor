@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/"
+         xmlns:pc="http://purl.org/procurement/public-contracts#"
+         xmlns:gr="http://purl.org/goodrelations/v1#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:s="http://schema.org/"
+         xmlns:pceu="http://purl.org/procurement/public-contracts-eu#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+         xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+         xmlns:adms="http://www.w3.org/ns/adms#"
+         xmlns:pproc="http://contsem.unizar.es/def/sector-publico/pproc#"
+         xmlns:ProcurementRegulations="https://loted2.googlecode.com/svn/trunk/modules/ProcurementRegulations#"
+         xmlns:TenderDocuments="https://loted2.googlecode.com/svn/trunk/modules/TenderDocuments#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/">
+   <pc:ContractAwardNotice rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/001136-2015">
+      <pc:publicationDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2015-01-02</pc:publicationDate>
+   </pc:ContractAwardNotice>
+   <pc:Contract rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001136-2015">
+      <pc:publicNotice rdf:resource="http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/001136-2015"/>
+      <pc:contractingAuthority>
+         <gr:BusinessEntity rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/business-entity/b4f55b0e-3f2f-4c32-848f-da90ce9eae6c">
+            <gr:legalName>DB Station&amp;Service AG</gr:legalName>
+            <s:address>
+               <s:PostalAddress rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/postal-address/dee137d2-e894-4f7d-aae2-b00614b0d0a9">
+                  <s:streetAddress>Weilburger Str. 22</s:streetAddress>
+                  <s:addressLocality>Frankfurt am Main</s:addressLocality>
+                  <s:postalCode>60326</s:postalCode>
+                  <s:addressCountry>DE</s:addressCountry>
+               </s:PostalAddress>
+            </s:address>
+            <pc:mainActivity rdf:resource="http://purl.org/procurement/public-contracts-activities#RailwayServices"/>
+         </gr:BusinessEntity>
+      </pc:contractingAuthority>
+      <pc:contact>
+         <s:ContactPoint rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/contact-point/eb19a0c7-d699-4fbf-9c9b-806150f0e4c9">
+            <s:description>Mohammad Farahmand-Maheni</s:description>
+            <s:telephone>+49 6926543979</s:telephone>
+            <s:email>mohammad farahmand-maheni@deutschebahn.com</s:email>
+            <s:faxNumber>+49 6926545398</s:faxNumber>
+         </s:ContactPoint>
+      </pc:contact>
+      <dcterms:title xml:lang="DE">Ffm. Hbf. Bahnsteigerneuerung Gl. 4/5 und Gl. 10/11.</dcterms:title>
+      <pc:kind rdf:resource="http://purl.org/procurement/public-contracts-kinds#Works"/>
+      <pc:mainObject rdf:resource="http://linked.opendata.cz/resource/cpv-2008/concept/45213321"/>
+      <pc:agreedPrice>
+         <s:PriceSpecification rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001136-2015/agreed-price/1">
+            <s:price rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2827486.48</s:price>
+            <s:priceCurrency>EUR</s:priceCurrency>
+            <s:valueAddedTaxIncluded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</s:valueAddedTaxIncluded>
+         </s:PriceSpecification>
+      </pc:agreedPrice>
+      <pc:procedureType rdf:resource="http://purl.org/procurement/public-contracts-procedure-types#Open"/>
+      <pc:awardCriteriaCombination>
+         <pc:AwardCriteriaCombination rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001136-2015/combination-of-contract-award-criteria/1"/>
+      </pc:awardCriteriaCombination>
+      <pproc:ContractProcedureSpecification>
+         <pproc:ElectronicAuction rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/electronic-auction/1">
+            <pproc:electronicAuction rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</pproc:electronicAuction>
+         </pproc:ElectronicAuction>
+      </pproc:ContractProcedureSpecification>
+      <adms:identifier>
+         <adms:Identifier rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001136-2015/identifier/1">
+            <skos:notation>14TEI12746</skos:notation>
+         </adms:Identifier>
+      </adms:identifier>
+      <pc:numberOfTenders rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">3</pc:numberOfTenders>
+      <pc:awardedTender>
+         <pc:Tender rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001136-2015/tender/1">
+            <pc:bidder>
+               <s:Organization rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/business-entity/8ef18ab9-afd4-4b64-81b4-aa4576004b29">
+                  <gr:legalName>Hastrabau-Wegener GmbH &amp; Co. KG</gr:legalName>
+                  <s:address>
+                     <s:PostalAddress rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/postal-address/473bb3a7-319a-4e9e-97a7-33e0fee186ba">
+                        <s:streetAddress>Windkamp 1-7</s:streetAddress>
+                        <s:addressLocality>Langenhagen</s:addressLocality>
+                        <s:postalCode>30853</s:postalCode>
+                     </s:PostalAddress>
+                  </s:address>
+               </s:Organization>
+            </pc:bidder>
+            <pc:offeredPrice>
+               <s:PriceSpecification rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001136-2015/tender/1/offered-price/1">
+                  <s:price rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2827486.48</s:price>
+                  <s:priceCurrency>EUR</s:priceCurrency>
+                  <s:valueAddedTaxIncluded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</s:valueAddedTaxIncluded>
+               </s:PriceSpecification>
+            </pc:offeredPrice>
+         </pc:Tender>
+      </pc:awardedTender>
+      <pc:notice>
+         <pproc:ContractAwardNotice rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/001136-2015">
+            <pproc:noticeSentDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2014-12-29</pproc:noticeSentDate>
+         </pproc:ContractAwardNotice>
+      </pc:notice>
+   </pc:Contract>
+</rdf:RDF>

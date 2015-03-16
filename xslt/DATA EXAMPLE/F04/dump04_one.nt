@@ -1,0 +1,50 @@
+
+<http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/001152-2015> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/procurement/public-contracts#PriorInformationNotice> .
+<http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/001152-2015> <http://purl.org/procurement/public-contracts#publicationDate> "2015-01-02"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/procurement/public-contracts#Contract> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015> <http://purl.org/procurement/public-contracts#publicNotice> <http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/001152-2015> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015> <http://purl.org/procurement/public-contracts#kind> <http://purl.org/procurement/public-contracts-kinds#Supplies> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015> <http://purl.org/procurement/public-contracts#CompetitiveDialogue> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/71702ae9-8126-4319-a19f-230570a1063c> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/goodrelations/v1#BusinessEntity> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015> <http://purl.org/procurement/public-contracts#contractingAuthority> <http://linked.opendata.cz/resource/ted.europa.eu/business-entity/71702ae9-8126-4319-a19f-230570a1063c> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/71702ae9-8126-4319-a19f-230570a1063c> <http://purl.org/goodrelations/v1#legalName> "Compania de Apa Oltenia SA" .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/67dc081b-bf5e-4111-b6d3-f71f0166da3a> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/71702ae9-8126-4319-a19f-230570a1063c> <http://schema.org/address> <http://linked.opendata.cz/resource/ted.europa.eu/postal-address/67dc081b-bf5e-4111-b6d3-f71f0166da3a> .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/67dc081b-bf5e-4111-b6d3-f71f0166da3a> <http://schema.org/streetAddress> "Str. Brestei nr. 133" .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/67dc081b-bf5e-4111-b6d3-f71f0166da3a> <http://schema.org/addressLocality> "Craiova" .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/67dc081b-bf5e-4111-b6d3-f71f0166da3a> <http://schema.org/postalCode> "200177" .
+<http://linked.opendata.cz/resource/ted.europa.eu/postal-address/67dc081b-bf5e-4111-b6d3-f71f0166da3a> <http://schema.org/addressCountry> "RO" .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/71702ae9-8126-4319-a19f-230570a1063c> <http://purl.org/procurement/public-contracts#profile> "www.e-licitatie.ro"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/71702ae9-8126-4319-a19f-230570a1063c> <http://xmlns.com/foaf/0.1/page> "www.apaoltenia.ro"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<http://linked.opendata.cz/resource/ted.europa.eu/business-entity/71702ae9-8126-4319-a19f-230570a1063c> <http://purl.org/procurement/public-contracts#mainActivity> <http://purl.org/procurement/public-contracts-activities#Water> .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/5a73ee7a-5625-41bb-b57b-247d78f2b740> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/ContactPoint> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015> <http://purl.org/procurement/public-contracts#contact> <http://linked.opendata.cz/resource/ted.europa.eu/contact-point/5a73ee7a-5625-41bb-b57b-247d78f2b740> .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/5a73ee7a-5625-41bb-b57b-247d78f2b740> <http://schema.org/name> "Serviciul Achizitii Publice" .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/5a73ee7a-5625-41bb-b57b-247d78f2b740> <http://schema.org/telephone> "+40 251422117" .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/5a73ee7a-5625-41bb-b57b-247d78f2b740> <http://schema.org/email> "achizitii.apaoltenia@gmail.com" .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/5a73ee7a-5625-41bb-b57b-247d78f2b740> <http://schema.org/email> "achizitii.apaoltenia@yahoo.com" .
+<http://linked.opendata.cz/resource/ted.europa.eu/contact-point/5a73ee7a-5625-41bb-b57b-247d78f2b740> <http://schema.org/faxNumber> "+40 251422263" .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015> <http://purl.org/dc/terms/title> "Autocuratitoare combinate intretinere canale."@RO .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015> <http://purl.org/procurement/public-contracts#kind> <http://purl.org/procurement/public-contracts-kinds#Supplies> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015> <http://purl.org/dc/terms/description> "3 buc. autocuratitor combinat intretinere canale."@RO .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015> <http://purl.org/procurement/public-contracts#mainObject> <http://linked.opendata.cz/resource/cpv-2008/concept/34114000> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015> <http://purl.org/procurement/public-contracts#duration> "P6M"^^<http://www.w3.org/2001/XMLSchema#duration> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015/estimated-price/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PriceSpecification> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015> <http://purl.org/procurement/public-contracts#estimatedPrice> <http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015/estimated-price/1> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015/estimated-price/1> <http://schema.org/price> "4153380"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015/estimated-price/1> <http://schema.org/priceCurrency> "RON" .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015/estimated-price/1> <http://schema.org/valueAddedTaxIncluded> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015/estimated-price/1> <http://schema.org/description> "Fonduri externe, Programul Operational Sectorial de Mediu."@RO .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015> <http://purl.org/dc/terms/description> "Clauza suspensiva: Procedura de este initiata sub incidenta prezentei clauze suspensive, in sensul ca incheierea contractului de achizitie publica este conditionata de incheierea contractului de finantare cu autoritatea de management, semnarea contractului facandu-se cu respectarea dispozitiilor art. 94 din HG nr. 925/2006, cu modifi-carile si completarile ulterioare."@RO .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015/identifier/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/adms#Identifier> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015> <http://www.w3.org/ns/adms#identifier> <http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015/identifier/1> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015/identifier/1> <http://www.w3.org/2004/02/skos/core#notation> "CP03-2014" .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015> <http://purl.org/dc/terms/description> "Procedura de achizitie se va face prin licitatie deschisa, online."@RO .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015/agreed-price/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PriceSpecification> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015> <http://purl.org/procurement/public-contracts#agreedPrice> <http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015/agreed-price/1> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015/agreed-price/1> <http://schema.org/price> "4153380"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015/agreed-price/1> <http://schema.org/priceCurrency> "RON" .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015/agreed-price/1> <http://schema.org/valueAddedTaxIncluded> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/001152-2015> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://contsem.unizar.es/def/sector-publico/pproc#ContractAwardNotice> .
+<http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001152-2015> <http://purl.org/procurement/public-contracts#notice> <http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/001152-2015> .
+<http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/001152-2015> <http://contsem.unizar.es/def/sector-publico/pproc#noticeSentDate> "2014-12-29"^^<http://www.w3.org/2001/XMLSchema#date> .

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/"
+         xmlns:pc="http://purl.org/procurement/public-contracts#"
+         xmlns:gr="http://purl.org/goodrelations/v1#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:s="http://schema.org/"
+         xmlns:pceu="http://purl.org/procurement/public-contracts-eu#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+         xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+         xmlns:adms="http://www.w3.org/ns/adms#"
+         xmlns:pproc="http://contsem.unizar.es/def/sector-publico/pproc#"
+         xmlns:ProcurementRegulations="https://loted2.googlecode.com/svn/trunk/modules/ProcurementRegulations#"
+         xmlns:TenderDocuments="https://loted2.googlecode.com/svn/trunk/modules/TenderDocuments#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/">
+   <pc:ContractAwardNotice rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/001135-2015">
+      <pc:publicationDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2015-01-02</pc:publicationDate>
+   </pc:ContractAwardNotice>
+   <pc:Contract rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001135-2015">
+      <pc:publicNotice rdf:resource="http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/001135-2015"/>
+      <pc:contractingAuthority>
+         <gr:BusinessEntity rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/business-entity/8d3d19fd-ecc1-4ee6-b7da-8a677307b54f">
+            <adms:identifier>
+               <adms:Identifier rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/identifier/76b81400-e191-4a18-861f-ca53cac86311">
+                  <skos:notation>CZ70994234</skos:notation>
+               </adms:Identifier>
+            </adms:identifier>
+            <gr:legalName>Správa železniční dopravní cesty, státní organizace</gr:legalName>
+            <s:address>
+               <s:PostalAddress rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/postal-address/62bfa049-2213-49b2-a919-c390afd79938">
+                  <s:streetAddress>Dlážděná 1003/7</s:streetAddress>
+                  <s:addressLocality>Praha</s:addressLocality>
+                  <s:postalCode>110 00</s:postalCode>
+                  <s:addressCountry>CZ</s:addressCountry>
+               </s:PostalAddress>
+            </s:address>
+            <foaf:page rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">http://www.szdc.cz/index.html</foaf:page>
+            <pc:profile rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">https://www.vhodne-uverejneni.cz/profil/70994234</pc:profile>
+            <pc:mainActivity rdf:resource="http://purl.org/procurement/public-contracts-activities#RailwayServices"/>
+         </gr:BusinessEntity>
+      </pc:contractingAuthority>
+      <pc:contact>
+         <s:ContactPoint rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/contact-point/ddd45257-5978-4347-bf4b-ca04dae97cf9">
+            <s:name>Stavební správa východ, Nerudova 1, 772 58 Olomouc</s:name>
+            <s:description>Ing. Martin Knápek</s:description>
+            <s:telephone>+420 724932387</s:telephone>
+            <s:email>knapek@szdc.cz</s:email>
+            <s:faxNumber>+420 585754276</s:faxNumber>
+         </s:ContactPoint>
+      </pc:contact>
+      <dcterms:title xml:lang="CS">Železniční přejezdy na trati Trutnov – Teplice n. M.</dcterms:title>
+      <pc:kind rdf:resource="http://purl.org/procurement/public-contracts-kinds#Works"/>
+      <pc:location>
+         <s:Place rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001135-2015/location-place/1">
+            <s:description>Královehradecký kraj.</s:description>
+            <pceu:hasParentRegion rdf:resource="http://ec.europa.eu/eurostat/ramon/rdfdata/nuts2008/CZ052"/>
+         </s:Place>
+      </pc:location>
+      <pc:mainObject rdf:resource="http://linked.opendata.cz/resource/cpv-2008/concept/45234100"/>
+      <pc:additionalObject rdf:resource="http://linked.opendata.cz/resource/cpv-2008/concept/45234115"/>
+      <pc:additionalObject rdf:resource="http://linked.opendata.cz/resource/cpv-2008/concept/45234116"/>
+      <pc:additionalObject rdf:resource="http://linked.opendata.cz/resource/cpv-2008/concept/71320000"/>
+      <TenderDocuments:covers>
+         <ProcurementRegulations:GovernmentProcurementAgreement rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/government-procurement-agreement/1"/>
+      </TenderDocuments:covers>
+      <pc:agreedPrice>
+         <s:PriceSpecification rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001135-2015/agreed-price/1">
+            <s:price rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">97799103.47</s:price>
+            <s:priceCurrency>CZK</s:priceCurrency>
+            <s:valueAddedTaxIncluded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</s:valueAddedTaxIncluded>
+         </s:PriceSpecification>
+      </pc:agreedPrice>
+      <pc:procedureType rdf:resource="http://purl.org/procurement/public-contracts-procedure-types#Open"/>
+      <pc:awardCriteriaCombination>
+         <pc:AwardCriteriaCombination rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001135-2015/combination-of-contract-award-criteria/1"/>
+      </pc:awardCriteriaCombination>
+      <pproc:ContractProcedureSpecification>
+         <pproc:ElectronicAuction rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/electronic-auction/1">
+            <pproc:electronicAuction rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</pproc:electronicAuction>
+         </pproc:ElectronicAuction>
+      </pproc:ContractProcedureSpecification>
+      <pc:numberOfTenders rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2</pc:numberOfTenders>
+      <pc:awardedTender>
+         <pc:Tender rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001135-2015/tender/1">
+            <pc:bidder>
+               <s:Organization rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/business-entity/0d2fd773-aea4-48dc-bc4d-462d27951369">
+                  <gr:legalName>AŽD Praha s.r.o.</gr:legalName>
+                  <s:address>
+                     <s:PostalAddress rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/postal-address/9814f715-43a6-4d6e-b266-e96fc06355c2">
+                        <s:streetAddress>Žirovnická 2/3146</s:streetAddress>
+                        <s:addressLocality>Praha 10</s:addressLocality>
+                        <s:postalCode>106 17</s:postalCode>
+                        <s:addressCountry>CZ</s:addressCountry>
+                     </s:PostalAddress>
+                  </s:address>
+               </s:Organization>
+            </pc:bidder>
+            <pc:offeredPrice>
+               <s:PriceSpecification rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/public-contract/001135-2015/tender/1/offered-price/1">
+                  <s:price rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">97799103.47</s:price>
+                  <s:priceCurrency>CZK</s:priceCurrency>
+                  <s:valueAddedTaxIncluded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</s:valueAddedTaxIncluded>
+               </s:PriceSpecification>
+            </pc:offeredPrice>
+         </pc:Tender>
+      </pc:awardedTender>
+      <pc:notice>
+         <pproc:ContractAwardNotice rdf:about="http://linked.opendata.cz/resource/ted.europa.eu/contract-notice/001135-2015">
+            <pproc:noticeSentDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2014-12-31</pproc:noticeSentDate>
+         </pproc:ContractAwardNotice>
+      </pc:notice>
+   </pc:Contract>
+</rdf:RDF>
