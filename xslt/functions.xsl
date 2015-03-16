@@ -33,6 +33,13 @@
         <xsl:sequence select="uuid:randomUUID()"/>
     </xsl:function>
     
+    <!-- normalize literal -->
+    <xsl:function name="f:unaccentedLiteral">
+        <xsl:param name="stringInput" as="xsd:string"/>
+        <xsl:value-of select="replace(normalize-unicode($stringInput,'NFKD'),'\P{IsBasicLatin}','')"/>
+    </xsl:function>
+    
+    
     <!-- format decimal number -->
     <xsl:function name="f:formatDecimal" as="xsd:decimal">
         <xsl:param name="number" as="xsd:string"/>
