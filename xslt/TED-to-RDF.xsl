@@ -66,6 +66,7 @@
     <xsl:variable name="xsd_gYearMonth_uri" select="concat($xsd_nm, 'gYearMonth')"/>
     <xsl:variable name="xsd_non_negative_integer_uri" select="concat($xsd_nm, 'nonNegativeInteger')"/>
     <xsl:variable name="xsd_time_uri" select="concat($xsd_nm, 'time')"/>
+    <xsl:variable name="xsd_anyURI" select="concat($xsd_nm,'anyURI')"/>
     <xsl:variable name="pcdt_percentage_uri" select="concat($pcdt_nm, 'percentage')"/>
     <xsl:variable name="contract_notice_uri" select="concat($ted_contract_notice_nm,$doc_id)"/>
     <xsl:variable name="pc_uri" select="concat($ted_pc_nm, $doc_id)"/>
@@ -801,7 +802,7 @@
     <xsl:template match="NAME_ADDRESSES_CONTACT_PERIODIC_INDICATIVE_UTILITIES"
         mode="contractingAuthority">
         <pc:contractingAuthority>
-            <s:GovernmentOrganization rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
+            <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
                 <xsl:call-template name="organizationId">
                     <xsl:with-param name="nationalId"
                         select="CA_CE_CONCESSIONAIRE_PROFILE/ORGANISATION/NATIONALID"/>
@@ -819,7 +820,7 @@
                 <!-- internet_addresses schema part -->
 
                 <xsl:apply-templates select="../ACTIVITIES_OF_CONTRACTING_ENTITY"/>
-            </s:GovernmentOrganization>
+            </gr:BusinessEntity>
         </pc:contractingAuthority>
     </xsl:template>
 
@@ -1016,17 +1017,17 @@
     <!-- contracting authority -->
     <xsl:template match="NAME_ADDRESSES_CONTACT_CONTRACT_UTILITIES" mode="contractingAuthority">
         <pc:contractingAuthority>
-            <s:GovernmentOrganization rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
+            <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
                 <xsl:call-template name="organizationId">
                     <xsl:with-param name="nationalId"
                         select="CA_CE_CONCESSIONAIRE_PROFILE/ORGANISATION/NATIONALID"/>
                     <xsl:with-param name="country"
                         select="(CA_CE_CONCESSIONAIRE_PROFILE/COUNTRY/@VALUE, $country_code)[1]"/>
                 </xsl:call-template>
-                <s:PostalAddress>
+                
                 <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE"
                     mode="legalNameAndAddress"/>
-                </s:PostalAddress>
+                
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_UTILITIES/URL_GENERAL"/>
                 <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_UTILITIES/URL_BUYER"/>
@@ -1034,7 +1035,7 @@
                 <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_UTILITIES/URL_PARTICIPATE"/>
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates select="../ACTIVITIES_OF_CONTRACTING_ENTITY"/>
-            </s:GovernmentOrganization>
+            </gr:BusinessEntity>
         </pc:contractingAuthority>
     </xsl:template>
     
@@ -1304,7 +1305,7 @@
     <xsl:template match="NAME_ADDRESSES_CONTACT_CONTRACT_AWARD_UTILITIES"
         mode="contractingAuthority">
         <pc:contractingAuthority>
-            <s:GovernmentOrganization rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
+            <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
                 <xsl:call-template name="organizationId">
                     <xsl:with-param name="nationalId"
                         select="CA_CE_CONCESSIONAIRE_PROFILE/ORGANISATION/NATIONALID"/>
@@ -1322,7 +1323,7 @@
                 <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_AWARD_UTILITIES/URL_PARTICIPATE"/>
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates select="../ACTIVITIES_OF_CONTRACTING_ENTITY"/>
-            </s:GovernmentOrganization>
+            </gr:BusinessEntity>
         </pc:contractingAuthority>
     </xsl:template>
 
@@ -1578,7 +1579,7 @@
     <xsl:template match="NAME_ADDRESSES_CONTACT_QUALIFICATION_SYSTEM_UTILITIES"
         mode="contractingAuthority">
         <pc:contractingAuthority>
-            <s:GovernmentOrganization rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
+            <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
                 <xsl:call-template name="organizationId">
                     <xsl:with-param name="nationalId"
                         select="CA_CE_CONCESSIONAIRE_PROFILE/ORGANISATION/NATIONALID"/>
@@ -1599,7 +1600,7 @@
                     select="INTERNET_ADDRESSES_QUALIFICATION_SYSTEM_UTILITIES/URL_PARTICIPATE"/>
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates select="../ACTIVITIES_OF_CONTRACTING_ENTITY"/>
-            </s:GovernmentOrganization>
+            </gr:BusinessEntity>
         </pc:contractingAuthority>
     </xsl:template>
 
@@ -1740,7 +1741,7 @@
     <!-- contracting authority -->
     <xsl:template match="NAME_ADDRESSES_CONTACT_BUYER_PROFILE" mode="contractingAuthority">
         <pc:contractingAuthority>
-            <s:GovernmentOrganization rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
+            <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
                 <xsl:call-template name="organizationId">
                     <xsl:with-param name="nationalId"
                         select="CA_CE_CONCESSIONAIRE_PROFILE/ORGANISATION/NATIONALID"/>
@@ -1760,7 +1761,7 @@
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates
                     select="../TYPE_AND_ACTIVITIES_OR_CONTRACTING_ENTITY_AND_PURCHASING_ON_BEHALF"/>
-            </s:GovernmentOrganization>
+            </gr:BusinessEntity>
         </pc:contractingAuthority>
     </xsl:template>
 
@@ -1863,7 +1864,7 @@
     <!-- contracting authority -->
     <xsl:template match="NAME_ADDRESSES_CONTACT_SIMPLIFIED_CONTRACT" mode="contractingAuthority">
         <pc:contractingAuthority>
-            <s:Organization rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
+            <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
                 <xsl:call-template name="organizationId">
                     <xsl:with-param name="nationalId"
                         select="CA_CE_CONCESSIONAIRE_PROFILE/ORGANISATION/NATIONALID"/>
@@ -1883,7 +1884,7 @@
                 <xsl:apply-templates
                     select="../TYPE_AND_ACTIVITIES_OR_CONTRACTING_ENTITY_AND_PURCHASING_ON_BEHALF/ACTIVITIES_OF_CONTRACTING_ENTITY"/>
                 <!-- TYPE AND ACTIVITIES part -->
-            </s:Organization>
+            </gr:BusinessEntity>
         </pc:contractingAuthority>
     </xsl:template>
 
@@ -2018,7 +2019,7 @@
     <!-- contracting authority -->
     <xsl:template match="NAME_ADDRESSES_CONTACT_VEAT" mode="contractingAuthority">
         <pc:contractingAuthority>
-            <s:Organization rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
+            <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
                 <xsl:call-template name="organizationId">
                     <xsl:with-param name="nationalId"
                         select="CA_CE_CONCESSIONAIRE_PROFILE/ORGANISATION/NATIONALID"/>
@@ -2036,7 +2037,7 @@
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates
                     select="../TYPE_AND_ACTIVITIES_OR_CONTRACTING_ENTITY_AND_PURCHASING_ON_BEHALF"/>
-            </s:Organization>
+            </gr:BusinessEntity>
         </pc:contractingAuthority>
     </xsl:template>
 
@@ -2261,7 +2262,7 @@
     <!-- contracting authority -->
     <xsl:template match="NAME_ADDRESSES_CONTACT_PRIOR_INFORMATION" mode="contractingAuthority">
         <pc:contractingAuthority>
-            <s:GovernmentOrganization rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
+            <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
                 <xsl:call-template name="organizationId">
                     <xsl:with-param name="nationalId"
                         select="CA_CE_CONCESSIONAIRE_PROFILE/ORGANISATION/NATIONALID"/>
@@ -2277,7 +2278,7 @@
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates
                     select="../TYPE_AND_ACTIVITIES_OR_CONTRACTING_ENTITY_AND_PURCHASING_ON_BEHALF"/>
-            </s:GovernmentOrganization>
+            </gr:BusinessEntity>
         </pc:contractingAuthority>
     </xsl:template>
 
@@ -2412,7 +2413,7 @@
     <!-- contracting authority -->
     <xsl:template match="NAME_ADDRESSES_CONTACT_CONTRACT" mode="contractingAuthority1">
         <pc:contractingAuthority>
-            <s:GovernmentOrganization rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
+            <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
                 <xsl:call-template name="organizationId">
                     <xsl:with-param name="nationalId"
                         select="CA_CE_CONCESSIONAIRE_PROFILE/ORGANISATION/NATIONALID"/>
@@ -2428,7 +2429,7 @@
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates
                     select="../TYPE_AND_ACTIVITIES_OR_CONTRACTING_ENTITY_AND_PURCHASING_ON_BEHALF"/>
-            </s:GovernmentOrganization>
+            </gr:BusinessEntity>
         </pc:contractingAuthority>
     </xsl:template>
 
@@ -2611,7 +2612,7 @@
     <!-- contracting authority -->
     <xsl:template match="NAME_ADDRESSES_CONTACT_CONTRACT_AWARD" mode="contractingAuthority1">
         <pc:contractingAuthority>
-            <s:Organization rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
+            <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
                 <xsl:call-template name="organizationId">
                     <xsl:with-param name="nationalId"
                         select="CA_CE_CONCESSIONAIRE_PROFILE/ORGANISATION/NATIONALID"/>
@@ -2627,7 +2628,7 @@
                 <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_AWARD/URL_PARTICIPATE"/>
                 <xsl:apply-templates
                     select="../TYPE_AND_ACTIVITIES_OR_CONTRACTING_ENTITY_AND_PURCHASING_ON_BEHALF"/>
-            </s:Organization>
+            </gr:BusinessEntity>
         </pc:contractingAuthority>
     </xsl:template>
 
@@ -2724,9 +2725,9 @@
     -->
 
     <xsl:template name="legalName">
-        <s:legalName>
+        <gr:legalName>
             <xsl:value-of select="normalize-space(ORGANISATION/OFFICIALNAME/text())"/>
-        </s:legalName>
+        </gr:legalName>
     </xsl:template>
 
     <xsl:template name="postalAddress">
@@ -3142,8 +3143,8 @@
     <xsl:template match="URL_BUYER">
         <xsl:if test="text()">
             <xsl:for-each select="tokenize(text(),' ')">
-                <pc:profile>
-                    <xsl:value-of select="."/>
+                <pc:profile rdf:datatype="{$xsd_anyURI}">
+                    <xsl:value-of select="."></xsl:value-of>
                 </pc:profile>
             </xsl:for-each>
         </xsl:if>
@@ -3152,11 +3153,9 @@
     <!-- website with general information -->
     <xsl:template match="URL_GENERAL|URL_INFORMATION|URL_PARTICIPATE">
         <xsl:if test="text()">
-            <xsl:for-each select="tokenize(text(),' ')">
                 <foaf:page>
                     <xsl:value-of select="."/>
-                </foaf:page>
-            </xsl:for-each>
+                </foaf:page>     
         </xsl:if>
     </xsl:template>
 
