@@ -2,30 +2,24 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns:f="http://opendata.cz/xslt/functions#" 
+    
     xmlns:uuid="java:java.util.UUID"
     exclude-result-prefixes="xsd f uuid"
     version="2.0">
-    
+  
     <!-- NAMESPACES -->
     <xsl:variable name="authority_kinds_nm" select="'http://purl.org/procurement/public-contracts-authority-kinds#'"/>
     <xsl:variable name="contract_kinds_nm" select="'http://purl.org/procurement/public-contracts-kinds#'"/>
     <xsl:variable name="authority_activities_nm" select="'http://purl.org/procurement/public-contracts-activities#'"/>
     <xsl:variable name="procedure_type_nm" select="'http://purl.org/procurement/public-contracts-procedure-types#'"/>
     <xsl:variable name="pc_nm" select="'http://purl.org/procurement/public-contracts#'"/>
-    
-    
     <xsl:variable name="nuts_nm" select="'http://ec.europa.eu/eurostat/ramon/rdfdata/nuts2008/'"/>
     <xsl:variable name="cpv_nm" select="'http://linked.opendata.cz/resource/cpv-2008/concept/'"/>
-    
-    
-    
     <xsl:variable name="award_criteria_nmpcAwardCriteria" select="'http://purl.org/procurement/public-contracts-criteria#'"/>
     <xsl:variable name="lod_nm" select="'http://linked.opendata.cz/resource/'"/>
     <xsl:variable name="ted_nm" select="concat($lod_nm, 'ted.europa.eu/')"/>
     
 
-    
-    
     <!-- FUNCTIONS -->
     
     <!-- get UUID -->
@@ -33,14 +27,8 @@
         <xsl:sequence select="uuid:randomUUID()"/>
     </xsl:function>
     
-    <!-- normalize literal -->
-    <xsl:function name="f:unaccentedLiteral">
-        <xsl:param name="stringInput" as="xsd:string"/>
-        <xsl:value-of select="replace(normalize-unicode($stringInput,'NFKD'),'\P{IsBasicLatin}','')"/>
-    </xsl:function>
-    
-    
     <!-- format decimal number -->
+    
     <xsl:function name="f:formatDecimal" as="xsd:decimal">
         <xsl:param name="number" as="xsd:string"/>
         <xsl:value-of select="xsd:decimal(translate(replace($number, '\s', ''), ',', '.'))"/>
@@ -68,7 +56,9 @@
                 <xsl:when test="(string-length($kind) = 0) and (string-length($code) &gt; 0)">
                     <xsl:choose>
                         <xsl:when test="$code = ('1', 'N')">NationalAuthority</xsl:when>
+                        <xsl:when test="$code = '2'">NationalAuthority</xsl:when>
                         <xsl:when test="$code = ('3', 'R')">LocalAuthority</xsl:when>
+                        <xsl:when test="$code = '4'">PublicBody</xsl:when>
                         <xsl:when test="$code = '5'">InternationalOrganization</xsl:when>
                         <xsl:when test="$code = '6'">PublicBody</xsl:when>
                         <xsl:when test="$code = '8'">Other</xsl:when> <!-- Not in scheme! -->
@@ -122,16 +112,12 @@
         </xsl:variable>
         <xsl:choose>
             <!-- TED-to-RDF -->
-            <xsl:when test="(string-length($kind) &gt; 0) and (string-length($code) = 0)">
-                <xsl:if test="not($localname = '')">
+            <xsl:when test="(string-length($kind) &gt; 0) and (string-length($code) = 0) and not($localname = '')">
                     <xsl:value-of select="concat($contract_kinds_nm, $localname)"/>
-                </xsl:if>
             </xsl:when>
             <!-- META-XML-to-RDF -->
-            <xsl:when test="(string-length($kind) = 0) and (string-length($code) &gt; 0)">
-                <xsl:if test="not($localname = '')">
+            <xsl:when test="(string-length($kind) = 0) and (string-length($code) &gt; 0) and not($localname = '')">
                     <xsl:value-of select="concat($contract_kinds_nm, $localname)"/>
-                </xsl:if>
             </xsl:when>
         </xsl:choose>
     </xsl:function>
@@ -180,16 +166,12 @@
         </xsl:variable>
         <xsl:choose>
             <!-- TED-to-RDF -->
-            <xsl:when test="(string-length($procedureTypeElementName) &gt; 0) and (string-length($code) = 0)">
-                <xsl:if test="not($localname = '')">
+            <xsl:when test="(string-length($procedureTypeElementName) &gt; 0) and (string-length($code) = 0) and not($localname = '')">
                     <xsl:value-of select="concat($procedure_type_nm, $localname)" />
-                </xsl:if>
             </xsl:when>
             <!-- META-XML-to-RDF -->
-            <xsl:when test="(string-length($procedureTypeElementName) = 0) and (string-length($code) &gt; 0)">
-                <xsl:if test="not($localname = '')">
+            <xsl:when test="(string-length($procedureTypeElementName) = 0) and (string-length($code) &gt; 0) and not($localname = '')">
                     <xsl:value-of select="concat($procedure_type_nm, $localname)"/>
-                </xsl:if>
             </xsl:when>
         </xsl:choose>
     </xsl:function>
@@ -259,16 +241,12 @@
         </xsl:variable>
         <xsl:choose>
             <!-- TED-to-RDF -->
-            <xsl:when test="(string-length($activity) &gt; 0) and (string-length($code) = 0)">
-                <xsl:if test="not($localname = '')">
+            <xsl:when test="(string-length($activity) &gt; 0) and (string-length($code) = 0) and not($localname = '')">
                     <xsl:value-of select="concat($authority_activities_nm, $localname)"/>
-                </xsl:if>
             </xsl:when>
             <!-- META-XML-to-RDF -->
-            <xsl:when test="(string-length($activity) = 0) and (string-length($code) &gt; 0)">
-                <xsl:if test="not($localname = '')">
+            <xsl:when test="(string-length($activity) = 0) and (string-length($code) &gt; 0) and not($localname = '')">
                     <xsl:value-of select="concat($authority_activities_nm, $localname)"/>
-                </xsl:if>
             </xsl:when>
         </xsl:choose>
     </xsl:function>
@@ -294,31 +272,43 @@
                        <xsl:when test="$type = 'PRIOR_INFORMATION_NOTICE'">PriorInformationNotice</xsl:when>
                        <xsl:when test="$type = 'PERIODIC_INDICATIVE_NOTICE'">PeriodicIndicativeNotice</xsl:when>
                        <xsl:when test="$type = 'PRIOR_INFORMATION_NOTICE_DEFENCE'">PriorInformationNoticeDefence</xsl:when>
-                       <xsl:when test="$type = 'DIRECTIVE_2004_17'">Directive-2014-17</xsl:when>
-                       <xsl:when test="$type = 'DIRECTIVE_2004_17'">Directive-2004-18</xsl:when>
                    </xsl:choose>
                 </xsl:when>
                 <xsl:when test="(string-length($type) = 0) and (string-length($code) &gt; 0)">
                     <xsl:choose>
-                        <xsl:when test="$code = '3'">ContractNotice</xsl:when>
+                        
+                        <xsl:when test="$code = ('3', 'B', 'V', 'Q', 'O', 'F')">ContractNotice</xsl:when>
+                        <xsl:when test="$code = '7'">ContractAwardNotice</xsl:when>
+                        <xsl:when test="$code = ('M', 'P', '4', '0')">PriorInformationNotice</xsl:when>
+                        
                     </xsl:choose>
                 </xsl:when>
             </xsl:choose>
         </xsl:variable>
         <xsl:choose>
-            <xsl:when test="(string-length($type) &gt; 0) and (string-length($code) = 0)">
-                <xsl:if test="not($localname = '')">
+            <xsl:when test="(string-length($type) &gt; 0) and (string-length($code) = 0) and not($localname = '')">
                     <xsl:value-of select="concat($pc_nm, $localname)"/>
-                </xsl:if>
             </xsl:when>
-            <xsl:when test="(string-length($type) = 0) and (string-length($code) &gt; 0)">
-                <xsl:if test="not($localname = '')">
+            <xsl:when test="(string-length($type) = 0) and (string-length($code) &gt; 0) and not($localname = '')">
                     <xsl:value-of select="concat($pc_nm, $localname)"/>
-                </xsl:if>
             </xsl:when>
         </xsl:choose>
-        
     </xsl:function>
+        
+        <xsl:function name="f:getDirectiveType" as="xsd:anyURI">
+            <xsl:param name="type" as="xsd:string"/>
+                <xsl:variable name="localname">
+                        <xsl:if test="(string-length($type) &gt; 0)">
+                            <xsl:choose>
+                                <xsl:when test="$type = 'DIRECTIVE_2004_17'">Directive-2014-17</xsl:when>
+                                <xsl:when test="$type = 'DIRECTIVE_2004_17'">Directive-2004-18</xsl:when>
+                            </xsl:choose>
+                        </xsl:if> 
+                </xsl:variable>
+                    <xsl:if test="(string-length($type) &gt; 0) and not($localname = '')">
+                        <xsl:value-of select="concat($pc_nm, $localname)"/>
+                    </xsl:if>
+        </xsl:function>
         
     <xsl:function name="f:parseDateTime" as="xsd:string">
         <xsl:param name="dateTimeString" as="xsd:string"/>

@@ -13,9 +13,14 @@
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"  
     xmlns:s="http://schema.org/"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:gr="http://purl.org/goodrelations/v1#"
     xmlns:skos="http://www.w3.org/2004/02/skos/core#" 
     xmlns:adms="http://www.w3.org/ns/adms#"
     xmlns:f="http://opendata.cz/xslt/functions#"
+    xmlns:foaf="http://xmlns.com/foaf/0.1/" 
+    xmlns:pceu="http://purl.org/procurement/public-contracts-eu#"
+    xmlns:ProcurementRegulations="https://loted2.googlecode.com/svn/trunk/modules/ProcurementRegulations#"
+    xmlns:TenderDocuments="https://loted2.googlecode.com/svn/trunk/modules/TenderDocuments#"
     exclude-result-prefixes="f"
     version="2.0">
 
@@ -40,8 +45,15 @@
     <xsl:variable name="pcdt_percentage_uri" select="concat($pcdt_nm, 'percentage')"/>
     <xsl:variable name="pc_criterion_lowest_price_uri" select="concat($pcAwardCriteria, 'LowestPrice')"/>
     
+    <xsl:variable name="ted_business_entity_nm" select="concat($ted_nm, 'business-entity/')"/>
     <!-- Templates -->
     
+    
+    <!--
+    *********************************************************
+    *** ROOT TEMPLATE
+    *********************************************************
+    -->
     <xsl:template match="/">
         <rdf:RDF>
             <xsl:apply-templates select="part/doc[@t = 'O'][*[@category='orig']]"/>
@@ -74,12 +86,14 @@
         </pc:Contract>
     </xsl:template>
 
-    <xsl:template match="@ctype">
+   
+        
+   <!-- <xsl:template match="@ctype">
         <xsl:variable name="contractKind" select="f:getContractKind('',.)"/>
-        <if test="$contractKind">
+        <xsl:if test="$contractKind">
             <pc:contractKind rdf:resource="{$contractKind}"/>
-        </if>
-    </xsl:template>
+        </xsl:if>
+    </xsl:template>  -->
     
     <xsl:template match="refojs/datepub">
         <dcterms:issued rdf:datatype="{$xsd_date_uri}"><xsl:value-of select="f:parseDateTime(text())"/></dcterms:issued>
@@ -92,17 +106,18 @@
     <xsl:template match="sector">
         <xsl:param name="contracting_authority_uri" tunnel="yes"/>
         <pc:contractingAuthority>
-            <s:Organization rdf:about="{$contracting_authority_uri}">
+            <gr:BusinessEntity rdf:about="{$contracting_authority_uri}">
                 <xsl:variable name="authority_kind_uri" select="f:getAuthorityKind('',@code)"/>
                 <xsl:if test="$authority_kind_uri">
                     <pc:authorityKind rdf:resource="{$authority_kind_uri}"/>
                 </xsl:if>
-            </s:Organization>
+               
+            </gr:BusinessEntity>
         </pc:contractingAuthority>
     </xsl:template>
     
     <xsl:template match="natnotice">
-        <!-- <rdf:type rdf:resource="{f:getNoticeType(@code)}"/> -->
+       <!-- <rdf:type rdf:resource="{f:getNoticeType('',@code)}"/> -->
     </xsl:template>
     
     <xsl:template match="market">
@@ -147,6 +162,9 @@
     <xsl:template match="originalcpv[position() > 1]">
         <pc:additionalObject rdf:resource="{concat($cpv_nm, @code)}"/>
     </xsl:template>
+    
+ 
+    
     
     <xsl:template match="codenuts">
         <xsl:param name="contract_place_uri" tunnel="yes"/>
@@ -203,33 +221,42 @@
     <xsl:template match="mainactivities">
         <xsl:param name="contracting_authority_uri" tunnel="yes"/>
         <pc:contractingAuthority>
-            <s:Organization rdf:about="{$contracting_authority_uri}">
+            <gr:BusinessEntity rdf:about="{$contracting_authority_uri}"> 
                 <xsl:variable name="main_activity_uri" select="f:getAuthorityOrMainActivity('',@code)"/>
                 <xsl:if test="$main_activity_uri">
                     <pc:mainActivity rdf:resource="{$main_activity_uri}"/>
                 </xsl:if>
-            </s:Organization>
-        </pc:contractingAuthority>
+          </gr:BusinessEntity>
+        </pc:contractingAuthority> 
     </xsl:template>
     
     <xsl:template match="contents">
         <xsl:apply-templates/>
     </xsl:template>
     
-    <xsl:template match="grseq[tigrseq[contains(., 'CONTRACTING AUTHORITY')]]">
+    
+    <!--  
+    *********************************************************
+    *** SECTION I: CONTRACTING AUTHORITY
+    *********************************************************
+    -->
+    
+    <xsl:template match="grseq[tigrseq[contains(lower-case(.), 'contracting authority')]]">
         <xsl:param name="contracting_authority_uri" tunnel="yes"/>
         <pc:contractingAuthority>
-            <s:Organization rdf:about="{$contracting_authority_uri}">
+            <gr:BusinessEntity rdf:about="{$contracting_authority_uri}">
                 <xsl:apply-templates mode="contractingAuthority"/>
-            </s:Organization>
+            </gr:BusinessEntity>
         </pc:contractingAuthority>
+        <xsl:apply-templates mode="onBehalfOf"/>
     </xsl:template>
     
-    <xsl:template mode="contractingAuthority" match="marklist/mlioccur[timark[contains(., 'NAME, ADDRESSES AND CONTACT POINT(S)')]]/txtmark">
+    <xsl:template mode="contractingAuthority" match="marklist/mlioccur/timark[contains(lower-case(.), 'name, addresses and contact point(s):')]/txtmark">
         <xsl:apply-templates mode="contractingAuthority"/>
+     
     </xsl:template>
     
-    <xsl:template mode="contractingAuthority" match="p/addr[position() = 1]">
+    <xsl:template mode="contractingAuthority" match="p[position() = 1]/addr">
         <xsl:param name="contract_address_uri" tunnel="yes"/>
         <xsl:apply-templates mode="contractingAuthority"/>
         <s:address>
@@ -239,12 +266,72 @@
         </s:address>
     </xsl:template>
     
-    <xsl:template mode="contractingAuthority" match="p/txurl">
-        <s:url><xsl:value-of select="text()"/></s:url>
+    <xsl:template mode="onBehalfOf" match="marklist/mlioccur/txtmark/p[contains(lower-case(.), 'authorities: yes')]">
+        <xsl:param name="contract_address_uri" tunnel="yes"/>
+        
+        <xsl:if test="./p[position() = 1]/addr/organisation/officialname">
+            
+        <pc:onBehalfOf>
+            <xsl:for-each select="./p/addr">
+                <xsl:variable name="uuid"><xsl:value-of select="f:getUuid()"/></xsl:variable>
+                <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm,$uuid)}">
+                <xsl:apply-templates mode="behalfEntity"/>
+                <xsl:if test="./(address|postalcode|town|countrycode)">
+            <s:address>
+                <s:PostalAddress rdf:about="{$contract_address_uri}">
+                   <xsl:apply-templates mode="behalfAddress"/>
+                 </s:PostalAddress>
+            </s:address>
+                 </xsl:if>
+            </gr:BusinessEntity>
+                </xsl:for-each>
+        </pc:onBehalfOf>
+        </xsl:if>
+    </xsl:template>
+   
+    <xsl:template mode="behalfEntity" match="./organisation/officialname">
+       <xsl:if test="./text()">
+           <gr:legalName><xsl:value-of select="./text()"/></gr:legalName>
+       </xsl:if>
+   </xsl:template>
+   
+    <xsl:template mode="behalfAddress" match="./address">
+        <xsl:if test=".">
+            <s:description><xsl:value-of select="text()"/></s:description>
+        </xsl:if>
+    </xsl:template>
+   
+    <xsl:template mode="behalfAddress" match="./town">
+        <xsl:if test=".">
+            <s:addressLocality><xsl:value-of select="text()"/></s:addressLocality>
+        </xsl:if>
     </xsl:template>
     
-    <xsl:template mode="contractingAuthority" match="officialname">
-        <s:legalName><xsl:value-of select="text()"/></s:legalName>
+    <xsl:template mode="behalfAddress" match="./countrycode">
+        <xsl:if test=".">
+            <s:addressCountry><xsl:value-of select="text()"/></s:addressCountry>
+        </xsl:if>
+    </xsl:template>
+    
+    <xsl:template mode="behalfAddress" match="./postalcode">
+        <xsl:if test=".">
+            <s:postalCode><xsl:value-of select="text()"/></s:postalCode>
+        </xsl:if>
+    </xsl:template>
+   
+   
+   
+   
+   
+   
+    <xsl:template mode="contractingAuthority" match="p/txurl">
+        <pc:profile><xsl:value-of select="text()"/></pc:profile>
+    </xsl:template>
+    
+    <xsl:template mode="contractingAuthority" match="p[position() = 1]/organisation/officialname">
+        <xsl:if test="./text()">
+        <gr:legalName><xsl:value-of select="text()"/></gr:legalName>
+        </xsl:if>
     </xsl:template>
     
     <xsl:template mode="contractingAuthority" match="nationalid">
@@ -255,43 +342,68 @@
         </adms:identifier>    
     </xsl:template>
     
-    <xsl:template mode="contractingAuthority" match="organisation">
-        <s:name><xsl:value-of select="text()"/></s:name>
-    </xsl:template>
+  <!--  <xsl:template mode="contractingAuthority" match="organisation">
+        <xsl:if test="./text()">
+        <gr:legalName><xsl:value-of select="text()"/></gr:legalName>
+        </xsl:if>
+    </xsl:template> -->
     
     <xsl:template mode="postalAddress" match="address">
-        <s:description><xsl:value-of select="text()"/></s:description>    
+        <xsl:if test=".">
+        <s:description><xsl:value-of select="text()"/></s:description>
+        </xsl:if>
     </xsl:template>
     
     <xsl:template mode="postalAddress" match="attention">
-        <s:name><xsl:value-of select="text()"/></s:name>    
+        <xsl:if test=".">
+        <s:name><xsl:value-of select="text()"/></s:name>
+        </xsl:if>
     </xsl:template>
     
     <xsl:template mode="postalAddress" match="town">
+        <xsl:if test=".">
         <s:addressLocality><xsl:value-of select="text()"/></s:addressLocality>
+        </xsl:if>
     </xsl:template>
     
     <xsl:template mode="postalAddress" match="countrycode">
+        <xsl:if test=".">
         <s:addressCountry><xsl:value-of select="text()"/></s:addressCountry>
+        </xsl:if>
     </xsl:template>
     
     <xsl:template mode="postalAddress" match="postalcode">
+        <xsl:if test=".">
         <s:postalCode><xsl:value-of select="text()"/></s:postalCode>
+        </xsl:if>
     </xsl:template>
     
     <xsl:template mode="postalAddress" match="tel">
+        <xsl:if test=".">
         <s:telephone><xsl:value-of select="text()"/></s:telephone>
+        </xsl:if>
     </xsl:template>
     
     <xsl:template mode="postalAddress" match="*[self::email or self::emails]/txemail">
+        <xsl:if test=".">
         <s:email><xsl:value-of select="text()"/></s:email>
+        </xsl:if>
     </xsl:template>
     
     <xsl:template mode="postalAddress" match="fax">
+        <xsl:if test=".">
         <s:faxNumber><xsl:value-of select="text()"/></s:faxNumber>
+        </xsl:if>
     </xsl:template>
     
-    <xsl:template match="grseq[tigrseq[contains(., 'OBJECT OF THE CONTRACT')]]">
+    
+    <!--  
+    *********************************************************
+    *** SECTION II: Object of the Contract
+    *********************************************************
+    -->
+    
+    <xsl:template match="grseq[tigrseq[contains(lower-case(.), 'object of the contract')]]">
         <xsl:apply-templates mode="contractObject"/>
     </xsl:template>
     
@@ -369,7 +481,15 @@
         </xsl:if>
     </xsl:template>
     
+    
+    <!--  
+    *********************************************************
+    *** SECTION V: Awarded
+    *********************************************************
+    -->
+    
     <!-- Named templates -->
+      
     
     <xsl:template name="awardCriteriaCombination">
         <xsl:param name="code" as="xsd:string"/>

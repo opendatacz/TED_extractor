@@ -171,7 +171,7 @@
     <!-- contracting authority -->
     <xsl:template match="NAME_ADDRESSES_CONTACT_CONTRACT" mode="contractingAuthority">
         <pc:contractingAuthority>
-            <s:Organization rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
+            <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
                 <xsl:call-template name="organizationId">
                     <xsl:with-param name="nationalId"
                         select="CA_CE_CONCESSIONAIRE_PROFILE/ORGANISATION/NATIONALID"/>
@@ -186,7 +186,7 @@
                 <xsl:apply-templates
                     select="../TYPE_AND_ACTIVITIES_AND_PURCHASING_ON_BEHALF/TYPE_AND_ACTIVITIES"/>
                 <!-- TYPE AND ACTIVITIES part -->
-            </s:Organization>
+            </gr:BusinessEntity>
         </pc:contractingAuthority>
     </xsl:template>
 
@@ -557,7 +557,7 @@
     <!-- contracting authority -->
     <xsl:template match="NAME_ADDRESSES_CONTACT_CONTRACT_AWARD" mode="contractingAuthority">
         <pc:contractingAuthority>
-            <s:Organization rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
+            <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
                 <xsl:call-template name="organizationId">
                     <xsl:with-param name="nationalId"
                         select="CA_CE_CONCESSIONAIRE_PROFILE/ORGANISATION/NATIONALID"/>
@@ -570,7 +570,7 @@
                 <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_AWARD/URL_BUYER"/>
                 <xsl:apply-templates
                     select="../TYPE_AND_ACTIVITIES_AND_PURCHASING_ON_BEHALF/TYPE_AND_ACTIVITIES"/>
-            </s:Organization>
+            </gr:BusinessEntity>
         </pc:contractingAuthority>
     </xsl:template>
 
@@ -926,7 +926,7 @@
 
     <xsl:template match="MAIN_FINANCIAL_CONDITIONS">
         <xsl:if test="./text()">
-            <s:description xml:lang="{$lang}">
+            <s:description xml:lang="{lower-case($lang)}">
                 <xsl:value-of select="normalize-space(.)"/>
             </s:description>
         </xsl:if>
@@ -1029,10 +1029,10 @@
                     mode="legalNameAndAddress"/>
                 
                 <!-- internet_addresses schema part -->
-                <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_UTILITIES/URL_GENERAL"/>
+                <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_UTILITIES/URL_GENERAL"/> 
                 <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_UTILITIES/URL_BUYER"/>
                 <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_UTILITIES/URL_INFORMATION"/>
-                <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_UTILITIES/URL_PARTICIPATE"/>
+                <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_UTILITIES/URL_PARTICIPATE"/> 
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates select="../ACTIVITIES_OF_CONTRACTING_ENTITY"/>
             </gr:BusinessEntity>
@@ -1316,9 +1316,10 @@
                 <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE"
                     mode="legalNameAndAddress"/>
                 <!-- internet_addresses schema part -->
-                <xsl:apply-templates
-                    select="INTERNET_ADDRESSES_CONTRACT_AWARD_UTILITIES/URL_GENERAL"/>
+                
                 <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_AWARD_UTILITIES/URL_BUYER"/>
+              <xsl:apply-templates
+                    select="INTERNET_ADDRESSES_CONTRACT_AWARD_UTILITIES/URL_GENERAL"/>
                 <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_AWARD_UTILITIES/URL_INFORMATION"/>
                 <xsl:apply-templates select="INTERNET_ADDRESSES_CONTRACT_AWARD_UTILITIES/URL_PARTICIPATE"/>
                 <!-- internet_addresses schema part -->
@@ -1592,7 +1593,7 @@
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates
                     select="INTERNET_ADDRESSES_QUALIFICATION_SYSTEM_UTILITIES/URL_BUYER"/>
-                <xsl:apply-templates
+              <xsl:apply-templates
                     select="INTERNET_ADDRESSES_QUALIFICATION_SYSTEM_UTILITIES/URL_GENERAL"/>
                 <xsl:apply-templates
                     select="INTERNET_ADDRESSES_QUALIFICATION_SYSTEM_UTILITIES/URL_INFORMATION"/>
@@ -1875,8 +1876,9 @@
                 <xsl:apply-templates select="CA_CE_CONCESSIONAIRE_PROFILE"
                     mode="legalNameAndAddress"/>
                 <!-- internet_addresses schema part -->
-                <xsl:apply-templates select="INTERNET_ADDRESSES_SIMPLIFIED_CONTRACT/URL_GENERAL"/>
+              
                 <xsl:apply-templates select="INTERNET_ADDRESSES_SIMPLIFIED_CONTRACT/URL_BUYER"/>
+                <xsl:apply-templates select="INTERNET_ADDRESSES_SIMPLIFIED_CONTRACT/URL_GENERAL"/>
                 <xsl:apply-templates select="INTERNET_ADDRESSES_SIMPLIFIED_CONTRACT/URL_INFORMATION"/>
                 <xsl:apply-templates select="INTERNET_ADDRESSES_SIMPLIFIED_CONTRACT/URL_PARTICIPATE"/>
                 <!-- internet_addresses schema part -->
@@ -2033,7 +2035,7 @@
                 <xsl:apply-templates select="INTERNET_ADDRESSES_VEAT/URL_BUYER"/>
                 <xsl:apply-templates select="INTERNET_ADDRESSES_VEAT/URL_GENERAL"/>
                 <xsl:apply-templates select="INTERNET_ADDRESSES_VEAT/URL_INFORMATION"/>
-                <xsl:apply-templates select="INTERNET_ADDRESSES_VEAT/URL_PARTICIPATE"/>
+                <xsl:apply-templates select="INTERNET_ADDRESSES_VEAT/URL_PARTICIPATE"/> 
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates
                     select="../TYPE_AND_ACTIVITIES_OR_CONTRACTING_ENTITY_AND_PURCHASING_ON_BEHALF"/>
@@ -2274,7 +2276,7 @@
                     mode="legalNameAndAddress"/>
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates select="INTERNET_ADDRESSES_PRIOR_INFORMATION/URL_BUYER"/>
-                <xsl:apply-templates select="INTERNET_ADDRESSES_PRIOR_INFORMATION/URL_GENERAL"/>
+                <xsl:apply-templates select="INTERNET_ADDRESSES_PRIOR_INFORMATION/URL_GENERAL"/> 
                 <!-- internet_addresses schema part -->
                 <xsl:apply-templates
                     select="../TYPE_AND_ACTIVITIES_OR_CONTRACTING_ENTITY_AND_PURCHASING_ON_BEHALF"/>
@@ -2762,7 +2764,7 @@
 
     <xsl:template name="description">
         <xsl:if test="text()">
-            <dcterms:description xml:lang="{$lang}">
+            <dcterms:description xml:lang="{lower-case($lang)}">
                 <xsl:value-of select="normalize-space(.)"/>
             </dcterms:description>
         </xsl:if>
@@ -2770,7 +2772,7 @@
 
     <xsl:template name="legalDescription">
         <xsl:if test="text()">
-            <dcterms:legalDescription xml:lang="{$lang}">
+            <dcterms:legalDescription xml:lang="{lower-case($lang)}">
                 <xsl:value-of select="normalize-space(.)"/>
             </dcterms:legalDescription>
         </xsl:if>
@@ -2841,7 +2843,7 @@
                     <xsl:otherwise>
                         <pc:weightedCriterion>
                             <skos:Concept rdf:about="{concat($pc_weighted_criterion_nm, $id)}">
-                                <skos:prefLabel xml:lang="{$lang}">
+                                <skos:prefLabel xml:lang="{lower-case($lang)}">
                                     <xsl:value-of select="$name"/>
                                 </skos:prefLabel>
                             </skos:Concept>
@@ -2913,7 +2915,9 @@
     </xsl:template>
 
     <xsl:template name="basicBusinessEntity">
-        <s:Organization rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
+       
+        
+        <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm, f:getUuid())}">
             <xsl:call-template name="organizationId">
                 <xsl:with-param name="nationalId" select="ORGANISATION/NATIONALID"/>
                 <xsl:with-param name="country" select="(COUNTRY/@VALUE, $country_code)[1]"/>
@@ -2922,7 +2926,7 @@
             <xsl:call-template name="legalName"/>
             <xsl:call-template name="postalAddress"/>
             <xsl:call-template name="contactPoint"/>
-        </s:Organization>
+        </gr:BusinessEntity>
     </xsl:template>
 
     <xsl:template name="contactPoint">
@@ -3043,7 +3047,6 @@
     <xsl:template name="organizationId">
         <xsl:param name="nationalId"/>
         <xsl:param name="country"/>
-
         <xsl:if test="not(empty($nationalId))">
             <adms:identifier>
                 <adms:Identifier rdf:about="{concat($ted_identifier_nm, f:getUuid())}">
@@ -3053,6 +3056,9 @@
                 </adms:Identifier>
             </adms:identifier>
         </xsl:if>
+       
+                 
+        
     </xsl:template>
 
     <!--
@@ -3139,23 +3145,14 @@
         <xsl:call-template name="postalAddress"/>
     </xsl:template>
 
-    <!-- contracting authority buyer profile url -->
-    <xsl:template match="URL_BUYER">
+    <!-- contracting authority buyer profile url and other urls -->
+    <xsl:template match="URL_BUYER|URL_GENERAL|URL_INFORMATION|URL_PARTICIPATE">
         <xsl:if test="text()">
             <xsl:for-each select="tokenize(text(),' ')">
                 <pc:profile rdf:datatype="{$xsd_anyURI}">
                     <xsl:value-of select="."></xsl:value-of>
                 </pc:profile>
             </xsl:for-each>
-        </xsl:if>
-    </xsl:template>
-
-    <!-- website with general information -->
-    <xsl:template match="URL_GENERAL|URL_INFORMATION|URL_PARTICIPATE">
-        <xsl:if test="text()">
-                <foaf:page>
-                    <xsl:value-of select="."/>
-                </foaf:page>     
         </xsl:if>
     </xsl:template>
 
@@ -3215,9 +3212,6 @@
                 </xsl:if>
             </xsl:when>
         </xsl:choose>
-
-
-
     </xsl:template>
 
     <!-- contracting authority kind and main activity  -->
@@ -3309,8 +3303,6 @@
         </xsl:if>
     </xsl:template>
     
-    
-    
     <xsl:template match="ATTENTION">
         <xsl:if test="text()">
             <s:description>
@@ -3346,7 +3338,7 @@
     <!-- contract title -->
     <xsl:template
         match="TITLE_CONTRACT|CONTRACT_TITLE|LOT_TITLE|TITLE_NOTICE_BUYER_PROFILE|TITLE_QUALIFICATION_SYSTEM">
-        <dcterms:title xml:lang="{$lang}">
+        <dcterms:title xml:lang="{lower-case($lang)}">
             <xsl:value-of select="normalize-space(.)"/>
         </dcterms:title>
     </xsl:template>
