@@ -3345,20 +3345,24 @@
 
     <!-- contract location -->
     <xsl:template match="LOCATION_NUTS">
-        <xsl:if test="LOCATION">
-            <pc:location>
-                <s:Place rdf:about="{$pc_location_place_uri}">
-                    <s:description>
-                        <xsl:value-of select="normalize-space(LOCATION)"/>
-                    </s:description>
-                    <xsl:if test="NUTS">
-                        <pceu:hasParentRegion rdf:resource="{f:getNutsUri(NUTS[1]/@CODE)}"/>
-                    </xsl:if>
-                </s:Place>
-            </pc:location>
-        </xsl:if>
+        <xsl:apply-templates select="LOCATION"/>
     </xsl:template>
 
+    <xsl:template match="LOCATION">
+        <pc:location>
+            <s:Place rdf:about="{$pc_location_place_uri}">
+                <s:description>
+                    <xsl:value-of select="normalize-space(.)"/>
+                </s:description>
+                <xsl:apply-templates select="../NUTS[1]"/>               
+            </s:Place>
+        </pc:location>
+    </xsl:template>
+    
+    <xsl:template match="NUTS">
+        <pceu:hasParentRegion rdf:resource="{f:getNutsUri(@CODE)}"/>
+    </xsl:template>
+  
     <!-- contract description -->
     <xsl:template
         match="DESCRIPTION_OF_CONTRACT|SHORT_CONTRACT_DESCRIPTION|SHORT_DESCRIPTION_CONTRACT|LOT_DESCRIPTION|DESCRIPTION">
@@ -3423,7 +3427,7 @@
                     <xsl:value-of select="$id_pre"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="f:slugify($id_pre,'TED')"/>
+                    <xsl:value-of select="f:slugify($id_pre)"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>

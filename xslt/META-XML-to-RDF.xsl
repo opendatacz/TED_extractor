@@ -182,12 +182,12 @@
     
     <xsl:template match="datedisp">
         <!-- Document dispatch -->
-        <dcterms:dateSubmitted rdf:datatype="{$xsd_date_uri}"><xsl:value-of select="f:parseDateTime(text())"/></dcterms:dateSubmitted>
+        <dcterms:dateSubmitted rdf:datatype="{$xsd_date_uri}"><xsl:value-of select="f:parseDate(text())"/></dcterms:dateSubmitted>
     </xsl:template>
     
     <xsl:template match="refnotice">
         <adms:identifier>
-            <adms:Identifier rdf:about="{f:getClassInstanceURI('Identifier', f:slugify(text(),'META'))}">
+            <adms:Identifier rdf:about="{f:getClassInstanceURI('Identifier', f:slugify(text()))}">
                 <skos:notation><xsl:value-of select="text()"/></skos:notation>
             </adms:Identifier>
         </adms:identifier>
@@ -267,27 +267,27 @@
     </xsl:template>
     
     <xsl:template mode="onBehalfOf" match="marklist/mlioccur/txtmark/p[contains(lower-case(.), 'authorities: yes')]">
-        <xsl:param name="contract_address_uri" tunnel="yes"/>
-        
-        <xsl:if test="./p[position() = 1]/addr/organisation/officialname">
-            
+        <xsl:if test="./p[position() = 1]/addr/organisation/officialname"> 
         <pc:onBehalfOf>
-            <xsl:for-each select="./p/addr">
-                <xsl:variable name="uuid"><xsl:value-of select="f:getUuid()"/></xsl:variable>
-                <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm,$uuid)}">
-                <xsl:apply-templates mode="behalfEntity"/>
-                <xsl:if test="./(address|postalcode|town|countrycode)">
-            <s:address>
-                <s:PostalAddress rdf:about="{$contract_address_uri}">
-                   <xsl:apply-templates mode="behalfAddress"/>
-                 </s:PostalAddress>
-            </s:address>
-                 </xsl:if>
-            </gr:BusinessEntity>
-                </xsl:for-each>
+            <xsl:apply-templates select="./p/addr"/>
         </pc:onBehalfOf>
         </xsl:if>
     </xsl:template>
+   
+   <xsl:template match="addr">
+       <xsl:param name="contract_address_uri" tunnel="yes"/>
+       <xsl:variable name="uuid"><xsl:value-of select="f:getUuid()"/></xsl:variable>
+       <gr:BusinessEntity rdf:about="{concat($ted_business_entity_nm,$uuid)}">
+           <xsl:apply-templates mode="behalfEntity"/>
+           <xsl:if test="./(address|postalcode|town|countrycode)">
+               <s:address>
+                   <s:PostalAddress rdf:about="{$contract_address_uri}">
+                       <xsl:apply-templates mode="behalfAddress"/>
+                   </s:PostalAddress>
+               </s:address>
+           </xsl:if>
+       </gr:BusinessEntity>
+   </xsl:template>
    
     <xsl:template mode="behalfEntity" match="./organisation/officialname">
        <xsl:if test="./text()">
@@ -443,7 +443,7 @@
             <xsl:analyze-string select="$text" regex="^value\s([\d\s]+,?\d*)\s*([a-z]{{3}})$">
                 <xsl:matching-substring>
                     <s:price rdf:datatype="{$xsd_decimal_uri}">
-                        <xsl:value-of select="f:formatDecimal(regex-group(1))"/>
+                        <xsl:value-of select="f:parseDecimal(regex-group(1))"/>
                     </s:price>
                     <s:priceCurrency>
                         <xsl:value-of select="upper-case(regex-group(2))"/>
@@ -465,10 +465,10 @@
             <xsl:analyze-string select="$text" regex="^lowest offer ([\d\s]+,?\d*) and highest offer ([\d\s]+,?\d*)\s*([a-z]{{3}})$">
                 <xsl:matching-substring>
                     <s:minPrice rdf:datatype="{$xsd_decimal_uri}">
-                        <xsl:value-of select="f:formatDecimal(regex-group(1))"/>
+                        <xsl:value-of select="f:parseDecimal(regex-group(1))"/>
                     </s:minPrice>
                     <s:maxPrice rdf:datatype="{$xsd_decimal_uri}">
-                        <xsl:value-of select="f:formatDecimal(regex-group(2))"/>
+                        <xsl:value-of select="f:parseDecimal(regex-group(2))"/>
                     </s:maxPrice>
                     <s:priceCurrency>
                         <xsl:value-of select="upper-case(regex-group(3))"/>

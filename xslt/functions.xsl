@@ -29,7 +29,7 @@
     
     <!-- format decimal number -->
     
-    <xsl:function name="f:formatDecimal" as="xsd:decimal">
+    <xsl:function name="f:parseDecimal" as="xsd:decimal">
         <xsl:param name="number" as="xsd:string"/>
         <xsl:value-of select="xsd:decimal(translate(replace($number, '\s', ''), ',', '.'))"/>
     </xsl:function> 
@@ -254,7 +254,7 @@
     <xsl:function name="f:getClassInstanceURI" as="xsd:anyURI">
         <xsl:param name="class" as="xsd:string"/>
         <xsl:param name="key" as="xsd:string"/>
-        <xsl:value-of select="concat($ted_nm, f:slugify($class,'META'), '/', $key)"/>
+        <xsl:value-of select="concat($ted_nm, f:slugify($class), '/', $key)"/>
     </xsl:function>
     
     <xsl:function name="f:getClassInstanceURI" as="xsd:anyURI">
@@ -343,17 +343,17 @@
 <!-- slugify  -->
     <xsl:function name="f:slugify" as="xsd:anyURI">
         <xsl:param name="text" as="xsd:string"/>
-        <xsl:param name="type" as="xsd:string"/>
-        <xsl:choose>
+       <!-- <xsl:param name="type" as="xsd:string"/> -->
+      
             <!-- TED-to-RDF -->
-            <xsl:when test="$type = 'TED'">
+            
                 <xsl:value-of select="encode-for-uri(translate(replace(lower-case(normalize-unicode($text, 'NFKD')), '\P{IsBasicLatin}', ''), ' ', '-'))" />
-            </xsl:when>
-            <!-- META-XML-to-RDF -->
+            
+            <!-- META-XML-to-RDF 
              <xsl:when test="$type = 'META'">
                      <xsl:value-of select="encode-for-uri(replace(lower-case($text), '\s', '-'))"/>
-             </xsl:when>
-        </xsl:choose>
+             </xsl:when>-->
+        
     </xsl:function>
   
     <!-- get business entity id -->
